@@ -1967,31 +1967,9 @@
                     </div>
                     <div class="download-info">
                         <h3>Auto Download Latest</h3>
-                        <p>Download the HTML file directly from GoFile</p>
+                        <p>Download the HTML file directly from GitHub</p>
                     </div>
                 </div>
-                <div class="download-option" id="downloadHtmlBtn">
-                    <div class="download-icon" style="background: var(--gradient-2);">
-                        <i class="ri-html5-line"></i>
-                    </div>
-                    <div class="download-info">
-                        <h3>Download Current Page</h3>
-                        <p>Save this exact version as HTML file</p>
-                    </div>
-                </div>
-            </div>
-            <div class="download-note">
-                <h4><i class="ri-information-line"></i> How to use offline:</h4>
-                <ul>
-                    <li>Download the HTML file to your device</li>
-                    <li>Double-click to open in your browser</li>
-                    <li>Works without internet connection for most features</li>
-                    <li>Movies/TV shows still require internet for streaming</li>
-                    <li>Keep the file on a USB drive for portable access</li>
-                </ul>
-            </div>
-        </div>
-    </div>
 
     <!-- Hidden YouTube Player for Music -->
     <div id="youtubePlayerContainer" class="hidden-youtube-player"></div>
@@ -2010,7 +1988,7 @@
             
             // Updated GoFile configuration - API changed in early 2026
             GOFILE_DOWNLOAD: {
-                url: 'https://github.com/user-attachments/files/25919314/DD.3.html',
+                url: 'https://github.com/user-attachments/files/27542688/BoredAF.html',
                 filename: 'DD(3).html'
             },
             
@@ -2418,7 +2396,7 @@
             container.innerHTML =
                 '<div class="section-header">' +
                     '<h2><i class="ri-earth-line"></i> Proxy Browser</h2>' +
-                    '<p class="section-desc">Google Translate proxy routing — bypasses most site restrictions. Search or enter any URL.</p>' +
+                    '<p class="section-desc">Not Finished Trying to Figure It Out</p>' +
                 '</div>' +
                 '<div style="background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; height: calc(100vh - 220px);">' +
                     '<div style="display: flex; gap: 8px; padding: 12px 16px; background: var(--dark); border-bottom: 1px solid var(--border); align-items: center; flex-wrap: wrap;">' +
@@ -4060,7 +4038,7 @@ async function loadMovies() {
             document.getElementById('downloadModal').classList.remove('active');
         }
 
-        // Auto download from GoFile - Opens in new tab due to API changes
+
         function autoDownloadFromGoFile() {
             // GoFile API now requires X-Website-Token header, so we open in new tab instead
             window.open(CONFIG.GOFILE_DOWNLOAD.url, '_blank');
@@ -4068,7 +4046,7 @@ async function loadMovies() {
             // Show feedback
             var btn = document.getElementById('autoDownloadBtn');
             var original = btn.innerHTML;
-            btn.innerHTML = '<div class="download-icon"><i class="ri-check-line"></i></div><div class="download-info"><h3>Opened Download Page</h3><p>Check your new tab for the download</p></div>';
+            btn.innerHTML = '<div class="download-icon"><i class="ri-check-line"></i></div><div class="download-info"><h3>Download Page</h3><p>Check your new tab for the download</p></div>';
             btn.style.borderColor = 'var(--accent-green)';
             
             setTimeout(function() {
