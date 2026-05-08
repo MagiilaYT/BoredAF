@@ -1752,6 +1752,85 @@
             pointer-events: none;
         }
 
+        
+        /* AI 101 Page Styles */
+        .ai-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .ai-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 1.25rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ai-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-1);
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 0;
+        }
+
+        .ai-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+            box-shadow: var(--glow-blue);
+        }
+
+        .ai-card:hover::before {
+            opacity: 0.05;
+        }
+
+        .ai-title {
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 0.5rem;
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .ai-title i { color: var(--primary); }
+
+        .ai-url {
+            color: var(--accent-blue);
+            font-size: 0.8rem;
+            word-break: break-all;
+            opacity: 0.9;
+            font-family: 'Courier New', monospace;
+            position: relative;
+            z-index: 1;
+        }
+
+        .ai-card:hover .ai-url {
+            color: var(--primary);
+            opacity: 1;
+        }
+
+        .game-container canvas {
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+        }
+
         @media (max-width: 1024px) {
             .modal-body {
                 flex-direction: column;
@@ -1784,28 +1863,17 @@
             }
         }
 
-        @media (max-width: 768px) {
-            .nav-container { width: 70px; }
-            .search-box { width: 200px; }
-            .cards-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
-            .link-grid { grid-template-columns: 1fr; }
-            .games-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-            .modal-content { width: 100%; height: 100%; border-radius: 0; }
-            .modal-header { padding: 15px 20px; }
-            .modal-poster-thumb { display: none; }
-            .theme-grid { grid-template-columns: repeat(3, 1fr); }
-            .settings-grid { grid-template-columns: 1fr; }
-            .music-player-info h3 { font-size: 1.5rem; }
-        }
     </style>
+<base target="_blank">
+<base target="_blank">
+<base target="_blank">
+<base target="_blank">
 </head>
 <body>
     <div class="particles" id="particles"></div>
-
     <div class="app-container" id="appContainer"> 
         <nav class="nav-container">
-            <div class="nav-logo" id="navLogo" title="BoredAF - Home">
-                <img src="https://i.postimg.cc/7ZP9t1MP/drop-dead-3line-d-fixed.png" alt="BoredAF Logo">
+            <div>
             </div>
             <ul class="nav-list" id="navList"></ul>
             <div class="side-actions">
@@ -1822,19 +1890,6 @@
                     <input type="text" id="searchInput" placeholder="Search movies & TV shows...">
                 </div>
                 <div class="top-actions">
-                    <div class="api-status" id="apiStatus">
-                        <i class="ri-wifi-line"></i>
-                        <span>Ready</span>
-                    </div>
-                    <button class="top-btn primary" id="moviesBtn">
-                        <i class="ri-movie-2-line btn-icon"></i>Movies
-                    </button>
-                    <button class="top-btn primary" id="tvBtn">
-                        <i class="ri-tv-line btn-icon"></i>TV Shows
-                    </button>
-                    <button class="top-btn secondary" id="sitesBtn">
-                        <i class="ri-gamepad-line btn-icon"></i>Sites
-                    </button>
                 </div>
             </div>
 
@@ -1861,7 +1916,8 @@
             </div>
             <div class="modal-body">
                 <div class="player-container">
-                    <iframe class="player-frame" id="playerFrame" allowfullscreen sandbox="allow-scripts allow-same-origin allow-presentation"></iframe>
+                    <iframe class="player-frame" id="playerFrame" allowfullscreen></iframe>
+                    <div id="gameContainer" class="game-container" style="display:none;flex:1;width:100%;height:100%;background:#000;overflow:hidden;position:relative;"></div>
                     <div class="iframe-loader" id="iframeLoader"><i class="ri-loader-4-line"></i></div>
                     <div class="player-controls">
                         <button class="control-btn" id="reloadBtn">
@@ -1896,7 +1952,7 @@
                     <div class="modal-title-info">
                         <h2>Download BoredAF</h2>
                     </div>
-                </div>
+            </div>
                 <button class="modal-close" id="downloadCloseBtn">
                     <i class="ri-close-line"></i>
                 </button>
@@ -1937,31 +1993,9 @@
         </div>
     </div>
 
-    <!-- Secret Modal for Rylee -->
-    <div class="modal-overlay" id="secretModal">
-        <div class="modal-content secret-modal-content">
-            <div class="modal-header">
-                <div class="modal-title-section">
-                    <div class="modal-title-info">
-                        <h2 style="font-family: 'Orbitron', monospace; color: var(--accent-pink);">💕 Secret Message 💕</h2>
-                    </div>
-                </div>
-                <button class="modal-close" id="secretCloseBtn">
-                    <i class="ri-close-line"></i>
-                </button>
-            </div>
-            <div class="secret-heart">❤️</div>
-            <div class="secret-title">For Rylee</div>
-            <div class="secret-message">
-                Rylee, as you know I love you and to show how much I love you I made this in here so please never leave me. Idk what else to say except always remember that I'll always want you to be happy and never want to leave you and you're the prettiest girl I've even met.
-            </div>
-        </div>
-    </div>
-
     <!-- Hidden YouTube Player for Music -->
     <div id="youtubePlayerContainer" class="hidden-youtube-player"></div>
 
-    <script src="https://www.youtube.com/iframe_api"></script>
     <script>
         // Prevent multiple initializations
         if (window.dropDeadInitialized) {
@@ -1976,53 +2010,39 @@
             
             // Updated GoFile configuration - API changed in early 2026
             GOFILE_DOWNLOAD: {
-                url: 'https://github.com/user-attachments/files/25988680/BoredAF.html',
-                filename: 'BoredAF.html'
+                url: 'https://github.com/user-attachments/files/25919314/DD.3.html',
+                filename: 'DD(3).html'
             },
             
             // Updated embed sources with working URLs as of 2025
             embedSources: [
                 { 
-                    name: 'VidSrc.to', 
+                    name: 'VidSrc Embed', 
                     type: 'direct', 
-                    url: 'https://vidsrc.to/embed/',
-                    icon: 'ri-movie-line',
-                    description: 'Primary streaming source (vidsrc.to)'
-                },
-                { 
-                    name: 'VidSrc.cc', 
-                    type: 'direct', 
-                    url: 'https://vidsrc.cc/v2/embed/',
+                    url: 'https://vidsrc-embed.ru/embed/',
                     icon: 'ri-clapperboard-line',
-                    description: 'CC v2 Server (backup)'
-                },
-                { 
-                    name: 'AutoEmbed', 
-                    type: 'direct', 
-                    url: 'https://player.autoembed.cc/embed/',
-                    icon: 'ri-flashlight-line',
-                    description: 'AutoEmbed - requires IMDB ID'
+                    description: 'Primary source'
                 },
                 { 
                     name: 'VidLink Pro', 
                     type: 'direct', 
                     url: 'https://vidlink.pro/',
                     icon: 'ri-link',
-                    description: 'Pro streaming'
+                    description: '4K support'
                 },
                 { 
-                    name: 'Vidora', 
+                    name: '2Embed', 
                     type: 'direct', 
-                    url: 'https://vidora.su/embed/',
-                    icon: 'ri-movie-2-line',
-                    description: 'Vidora stream'
-                },
-                { 
-                    name: 'VidSrc.icu', 
-                    type: 'direct', 
-                    url: 'https://vidsrc.icu/embed/',
+                    url: 'https://www.2embed.cc/embed/',
                     icon: 'ri-vidicon-line',
-                    description: 'ICU streaming (backup)'
+                    description: 'reliable'
+                },
+                { 
+                    name: 'VidSrc.me', 
+                    type: 'direct', 
+                    url: 'https://vidsrc.me/embed/',
+                    icon: 'ri-film-line',
+                    description: 'VidSrc mirror'
                 }
             ],
 
@@ -2030,65 +2050,11 @@
                 { id: 'home', name: 'Home', icon: 'ri-home-4-line' },
                 { id: 'movies', name: 'Movies', icon: 'ri-movie-2-line' },
                 { id: 'tv', name: 'TV Shows', icon: 'ri-tv-line' },
-                { id: 'games', name: 'Games', icon: 'ri-gamepad-line' },
                 { id: 'sites', name: 'Sites', icon: 'ri-links-line' },
                 { id: 'music', name: 'Music', icon: 'ri-music-2-line' },
                 { id: 'ai', name: 'AI 101', icon: 'ri-brain-line' },
+                { id: 'proxy', name: 'Proxy', icon: 'ri-earth-line' },
                 { id: 'settings', name: 'Settings', icon: 'ri-settings-3-line' }
-            ],
-
-            // Popular unblocked games organized by category
-            games: [
-                // Action Games
-                { name: 'Subway Surfers', category: 'Action', icon: 'ri-train-line', url: 'https://poki.com/en/g/subway-surfers', popular: true },
-                { name: 'Temple Run 2', category: 'Action', icon: 'ri-run-line', url: 'https://poki.com/en/g/temple-run-2' },
-                { name: 'Stickman Hook', category: 'Action', icon: 'ri-links-line', url: 'https://poki.com/en/g/stickman-hook' },
-                { name: 'Vex 7', category: 'Action', icon: 'ri-arrow-up-line', url: 'https://poki.com/en/g/vex-7' },
-                { name: 'Moto X3M', category: 'Action', icon: 'ri-motorbike-line', url: 'https://poki.com/en/g/moto-x3m' },
-                
-                // Puzzle Games
-                { name: '2048', category: 'Puzzle', icon: 'ri-grid-line', url: 'https://poki.com/en/g/2048', popular: true },
-                { name: 'Cut the Rope', category: 'Puzzle', icon: 'ri-scissors-cut-line', url: 'https://poki.com/en/g/cut-the-rope' },
-                { name: 'Tetris', category: 'Puzzle', icon: 'ri-square-line', url: 'https://tetris.com/play-tetris' },
-                { name: 'Sudoku', category: 'Puzzle', icon: 'ri-number-9', url: 'https://sudoku.com/' },
-                { name: 'Crossword', category: 'Puzzle', icon: 'ri-edit-line', url: 'https://www.nytimes.com/crosswords/game/mini' },
-                
-                // Racing Games
-                { name: 'Drift Hunters', category: 'Racing', icon: 'ri-car-line', url: 'https://drift-hunters.com/', popular: true },
-                { name: 'Smash Karts', category: 'Racing', icon: 'ri-taxi-line', url: 'https://smashkarts.io/' },
-                { name: 'Madalin Stunt Cars 2', category: 'Racing', icon: 'ri-roadster-line', url: 'https://madalinstuntcars2.com/' },
-                { name: 'Burnout Drift', category: 'Racing', icon: 'ri-fire-line', url: 'https://poki.com/en/g/burnout-drift' },
-                
-                // Sports Games
-                { name: 'Basketball Stars', category: 'Sports', icon: 'ri-basketball-line', url: 'https://poki.com/en/g/basketball-stars', popular: true },
-                { name: 'Soccer Skills', category: 'Sports', icon: 'ri-football-line', url: 'https://poki.com/en/g/soccer-skills-euro-cup' },
-                { name: '8 Ball Pool', category: 'Sports', icon: 'ri-billiards-line', url: 'https://poki.com/en/g/8-ball-pool' },
-                { name: 'Retro Bowl', category: 'Sports', icon: 'ri-football-line', url: 'https://retrobowl.me/' },
-                
-                // Multiplayer/IO Games
-                { name: 'Agar.io', category: 'Multiplayer', icon: 'ri-circle-line', url: 'https://agar.io/', popular: true },
-                { name: 'Slither.io', category: 'Multiplayer', icon: 'ri-snake-line', url: 'https://slither.io/' },
-                { name: 'Krunker.io', category: 'Multiplayer', icon: 'ri-shooting-line', url: 'https://krunker.io/' },
-                { name: 'Shell Shockers', category: 'Multiplayer', icon: 'ri-egg-line', url: 'https://shellshock.io/' },
-                { name: 'Zombs Royale', category: 'Multiplayer', icon: 'ri-user-star-line', url: 'https://zombsroyale.io/' },
-                
-                // Strategy Games
-                { name: 'Chess', category: 'Strategy', icon: 'ri-vip-crown-line', url: 'https://www.chess.com/play/computer', popular: true },
-                { name: 'Bloons TD 6', category: 'Strategy', icon: 'ri-bubble-chart-line', url: 'https://ninjakiwi.com/Games/Tower-Defense/Bloons-TD-6.html' },
-                { name: 'Clash Royale', category: 'Strategy', icon: 'ri-sword-line', url: 'https://clashroyale.com/' },
-                { name: 'Paper.io 2', category: 'Strategy', icon: 'ri-file-paper-line', url: 'https://paper-io.com/' },
-                
-                // Arcade/Classic
-                { name: 'Pac-Man', category: 'Arcade', icon: 'ri-emotion-happy-line', url: 'https://www.google.com/logos/2010/pacman10-i.html', popular: true },
-                { name: 'Tetris', category: 'Arcade', icon: 'ri-apps-line', url: 'https://tetris.com/play-tetris' },
-                { name: 'Snake', category: 'Arcade', icon: 'ri-snake-line', url: 'https://www.google.com/search?q=snake+game' },
-                { name: 'Space Invaders', category: 'Arcade', icon: 'ri-space-ship-line', url: 'https://www.classicgame.com/space-invaders' },
-                
-                // Educational
-                { name: 'Cool Math Games', category: 'Educational', icon: 'ri-calculator-line', url: 'https://www.coolmathgames.com/', popular: true },
-                { name: 'Hooda Math', category: 'Educational', icon: 'ri-functions-line', url: 'https://www.hoodamath.com/' },
-                { name: 'ABCya', category: 'Educational', icon: 'ri-abc-line', url: 'https://www.abcya.com/' },
-                { name: 'Funbrain', category: 'Educational', icon: 'ri-brain-line', url: 'https://www.funbrain.com/' }
             ],
 
             // 30 Different Themes - Fixed gradient syntax errors
@@ -2127,7 +2093,7 @@
 
             // Tab Cloak Options
             cloaks: {
-                default: { title: 'BoredAF V7.2', icon: 'https://i.postimg.cc/7ZP9t1MP/drop-dead-3line-d-fixed.png' },
+                default: { title: 'BoredAF V1', icon: 'https://i.postimg.cc/7ZP9t1MP/drop-dead-3line-d-fixed.png' },
                 classroom: { title: 'Google Classroom', icon: 'https://ssl.gstatic.com/classroom/ic_product_classroom_32.png' },
                 google: { title: 'Google', icon: 'https://www.google.com/favicon.ico' },
                 youtube: { title: 'YouTube', icon: 'https://www.youtube.com/s/desktop/28b67e7f/img/favicon.ico' }
@@ -2152,7 +2118,6 @@
                 { title: "Who Dat Boy", artist: "Tyler, The Creator", id: "FUXX55WqYZs", duration: "3:25" },
                 { title: "Igor's Theme", artist: "Tyler, The Creator", id: "9JQDPjpfiGw", duration: "3:20" },
                 { title: "New Magic Wand", artist: "Tyler, The Creator", id: "2w8KUgIkAuY", duration: "3:15" },
-                { title: "A Boy is a Gun*", artist: "Tyler, The Creator", id: "9JQDPjpfiGw", duration: "3:30" },
                 { title: "Lumberjack", artist: "Tyler, The Creator", id: "R4Y7JIQlv20", duration: "2:18" },
                 { title: "WUSYANAME", artist: "Tyler, The Creator", id: "N2Y2vFQ--1w", duration: "2:01" }
             ]
@@ -2172,6 +2137,7 @@
         let secretBuffer = '';
         let currentGame = null;
         let currentSite = null;
+        let musicProgressInterval = null;
         
         // Music player state
         let youtubePlayer = null;
@@ -2318,9 +2284,6 @@
 
         function initEventListeners() {
             document.getElementById('navLogo').addEventListener('click', function() { showSection('home'); });
-            document.getElementById('moviesBtn').addEventListener('click', function() { showSection('movies'); });
-            document.getElementById('tvBtn').addEventListener('click', function() { showSection('tv'); });
-            document.getElementById('sitesBtn').addEventListener('click', function() { showSection('sites'); });
             document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
             document.getElementById('reloadBtn').addEventListener('click', reloadPlayer);
             document.getElementById('fullscreenBtn').addEventListener('click', toggleFullscreen);
@@ -2439,6 +2402,9 @@
                 case 'ai':
                     renderAI(container);
                     break;
+                case 'proxy':
+                    renderProxy(container);
+                    break;
                 case 'settings':
                     renderSettings(container);
                     break;
@@ -2492,6 +2458,66 @@
             document.head.appendChild(link);
         }
 
+        function renderProxy(container) {
+            container.innerHTML = 
+                '<div class="section-header">' +
+                    '<h2><i class="ri-earth-line"></i> Proxy Browser</h2>' +
+                    '<p class="section-desc">DuckDuckGo-powered stealth browsing. Type a URL or just search.</p>' +
+                '</div>' +
+                '<div style="background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; height: calc(100vh - 220px);">' +
+                    '<div style="display: flex; gap: 10px; padding: 16px; background: var(--dark); border-bottom: 1px solid var(--border); align-items: center; flex-wrap: wrap;">' +
+                        '<button class="control-btn" id="proxyBack" title="Back" style="padding: 8px 12px;"><i class="ri-arrow-left-line"></i></button>' +
+                        '<button class="control-btn" id="proxyForward" title="Forward" style="padding: 8px 12px;"><i class="ri-arrow-right-line"></i></button>' +
+                        '<button class="control-btn" id="proxyReload" title="Reload" style="padding: 8px 12px;"><i class="ri-refresh-line"></i></button>' +
+                        '<button class="control-btn" id="proxyHome" title="DuckDuckGo Home" style="padding: 8px 12px;"><i class="ri-home-4-line"></i></button>' +
+                        '<input type="text" id="proxyUrl" placeholder="Search DuckDuckGo or enter URL" style="flex: 1; min-width: 200px; background: var(--darker); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; color: var(--text); font-family: Inter, sans-serif; font-size: 14px; outline: none;">' +
+                        '<button class="top-btn primary" id="proxyGo"><i class="ri-search-line"></i> Search</button>' +
+                    '</div>' +
+                    '<div style="flex: 1; position: relative; background: #000; overflow: hidden;">' +
+                        '<iframe id="proxyFrame" style="width: 100%; height: 100%; border: none;"></iframe>' +
+                    '</div>' +
+                '</div>';
+
+            const proxyFrame = document.getElementById('proxyFrame');
+            const proxyUrl = document.getElementById('proxyUrl');
+            const DDG_HOME = 'https://lite.duckduckgo.com/lite/';
+
+            // URL = starts with http(s)://, OR looks like a domain (has a dot, no spaces). Otherwise = search query.
+            function resolveInput(raw) {
+                const q = (raw || '').trim();
+                if (!q) return DDG_HOME;
+                if (/^https?:\/\//i.test(q)) return q;
+                const looksLikeDomain = /^[^\s]+\.[^\s]{2,}(\/.*)?$/.test(q) && !/\s/.test(q);
+                if (looksLikeDomain) return 'https://' + q;
+                return 'https://lite.duckduckgo.com/lite/?q=' + encodeURIComponent(q);
+            }
+
+            function loadProxyUrl(input) {
+                const target = resolveInput(input);
+                proxyUrl.value = target;
+
+                const html = '<!DOCTYPE html><html><head><title>Proxy</title>' +
+                    '<style>*{margin:0;padding:0;box-sizing:border-box;}html,body{width:100%;height:100%;overflow:hidden;background:#0f0f1a;}iframe{width:100%;height:100%;border:none;}</style>' +
+                    '</head><body><iframe src="' + target.replace(/"/g, '&quot;') + '" ' +
+                    'sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation" ' +
+                    'allowfullscreen referrerpolicy="no-referrer"></iframe></body></html>';
+                const blob = new Blob([html], {type: 'text/html'});
+                if (proxyFrame._lastBlob) URL.revokeObjectURL(proxyFrame._lastBlob);
+                proxyFrame._lastBlob = URL.createObjectURL(blob);
+                proxyFrame.src = proxyFrame._lastBlob;
+            }
+
+            document.getElementById('proxyGo').addEventListener('click', function() { loadProxyUrl(proxyUrl.value); });
+            proxyUrl.addEventListener('keypress', function(e) { if (e.key === 'Enter') loadProxyUrl(proxyUrl.value); });
+            document.getElementById('proxyReload').addEventListener('click', function() { loadProxyUrl(proxyUrl.value || DDG_HOME); });
+            document.getElementById('proxyHome').addEventListener('click', function() { proxyUrl.value = ''; loadProxyUrl(DDG_HOME); });
+            document.getElementById('proxyBack').addEventListener('click', function() { try { proxyFrame.contentWindow.history.back(); } catch(e) {} });
+            document.getElementById('proxyForward').addEventListener('click', function() { try { proxyFrame.contentWindow.history.forward(); } catch(e) {} });
+
+            // Auto-launch DuckDuckGo on open
+            loadProxyUrl(DDG_HOME);
+        }
+
         function renderSettings(container) {
             var html = 
                 '<div class="section-header">' +
@@ -2506,7 +2532,7 @@
                                 '<div class="cloak-icon" style="background: var(--gradient-1);"><i class="ri-skull-line" style="color: white;"></i></div>' +
                                 '<div class="cloak-info">' +
                                     '<h4>Default</h4>' +
-                                    '<p>BoredAF V7.2</p>' +
+                                    '<p>BoredAF V1</p>' +
                                 '</div>' +
                             '</div>' +
                             '<div class="cloak-option ' + (currentCloak === 'classroom' ? 'active' : '') + '" data-cloak="classroom">' +
@@ -2600,105 +2626,27 @@
         function renderHome(container) {
             container.innerHTML = 
                 '<div class="section-header">' +
-                    '<div class="version-badge">BoredAF V7.2</div>' +
+                    '<div class="version-badge">BoredAF V1</div>' +
                     '<h2><i class="ri-home-4-line"></i> Welcome to BoredAF</h2>' +
                     '<p class="section-desc">Made by a person for people for some reason while watching family guy.</p>' +
                 '</div>' +
                 '<div class="updates">' +
-                    '<h3><i class="ri-flashlight-line"></i>Latest Updates</h3>' +
+                    '<h3><i class="ri-flashlight-line"></i> Latest Updates</h3>' +
                     '<div class="update-item">V1: Made site rename</div>' +
-                '</div>' +
-                '<div class="category">' +
-                    '<div class="category-header">' +
-                        '<div class="category-icon"><i class="ri-rocket-line cat-icon-white"></i></div>' +
-                        '<h3>Quick Access</h3>' +
-                    '</div>' +
-                    '<div class="link-grid">' +
-                        '<div class="link-card nav-to-movies">' +
-                            '<div class="link-title"><i class="ri-movie-2-line"></i> Movies</div>' +
-                            '<div class="link-url">Cinema Mode Enabled</div>' +
-                            '<div class="link-note">Watch with 6 streaming sources</div>' +
-                        '</div>' +
-                        '<div class="link-card nav-to-tv">' +
-                            '<div class="link-title"><i class="ri-tv-line accent-purple"></i> TV Shows</div>' +
-                            '<div class="link-url">Binge-watch series</div>' +
-                            '<div class="link-note">Popular shows & seasons</div>' +
-                        '</div>' +
-                        '<div class="link-card nav-to-games">' +
-                            '<div class="link-title"><i class="ri-gamepad-line accent-green"></i> Games</div>' +
-                            '<div class="link-url">Play unblocked games</div>' +
-                            '<div class="link-note">Action, puzzle, racing & more</div>' +
-                        '</div>' +
-                        '<div class="link-card nav-to-sites">' +
-                            '<div class="link-title"><i class="ri-links-line"></i> Game Sites</div>' +
-                            '<div class="link-url">All known and unknown sites</div>' +
-                            '<div class="link-note">Curated collection of working proxies</div>' +
-                        '</div>' +
-                        '<div class="link-card nav-to-music">' +
-                            '<div class="link-title"><i class="ri-music-2-line accent-pink"></i> Music</div>' +
-                            '<div class="link-url">Built-in music player</div>' +
-                            '<div class="link-note">Kanye West & Tyler, The Creator</div>' +
-                        '</div>' +
-                        '<div class="link-card nav-to-ai">' +
-                            '<div class="link-title"><i class="ri-brain-line accent-green"></i> AI 101</div>' +
-                            '<div class="link-url">AI tools & humanizers</div>' +
-                            '<div class="link-note">For educational purposes</div>' +
-                        '</div>' +
-                        '<div class="link-card nav-to-settings">' +
-                            '<div class="link-title"><i class="ri-settings-3-line accent-yellow"></i> Settings</div>' +
-                            '<div class="link-url">Tab cloak & themes</div>' +
-                            '<div class="link-note">Customize your experience</div>' +
-                        '</div>' +
-                    '</div>' +
-                '</div>' +
-                '<div class="category">' +
-                    '<div class="category-header">' +
-                        '<div class="category-icon cat-gradient-2"><i class="ri-sparkling-line cat-icon-white"></i></div>' +
-                        '<h3>BoredAF Features</h3>' +
-                    '</div>' +
-                    '<div class="link-grid">' +
-                        '<div class="link-card">' +
-                            '<div class="link-title"><i class="ri-tv-line accent-purple"></i> Cinema Mode</div>' +
-                            '<div class="link-url">Integrated iframe player</div>' +
-                            '<div class="link-note">No more popups, watch inline</div>' +
-                        '</div>' +
-                        '<div class="link-card">' +
-                            '<div class="link-title"><i class="ri-switch-line accent-yellow"></i> Multi-Source</div>' +
-                            '<div class="link-url">6 streaming options</div>' +
-                            '<div class="link-note">Switch sources without closing</div>' +
-                        '</div>' +
-                        '<div class="link-card">' +
-                            '<div class="link-title"><i class="ri-eye-off-line accent-pink"></i> Tab Cloak</div>' +
-                            '<div class="link-url">Hide from teachers/parents</div>' +
-                            '<div class="link-note">Looks like Google Classroom</div>' +
-                        '</div>' +
-                        '<div class="link-card">' +
-                            '<div class="link-title"><i class="ri-palette-line accent-green"></i> 30 Themes</div>' +
-                            '<div class="link-url">Customize colors</div>' +
-                            '<div class="link-note">Make it yours</div>' +
-                        '</div>' +
-                    '</div>' +
+                    '<div class="update-item">Updated Movie/TV Shows Thing</div>' +
                 '</div>';
-            
-            container.querySelector('.nav-to-movies').addEventListener('click', function() { showSection('movies'); });
-            container.querySelector('.nav-to-tv').addEventListener('click', function() { showSection('tv'); });
-            container.querySelector('.nav-to-games').addEventListener('click', function() { showSection('games'); });
-            container.querySelector('.nav-to-sites').addEventListener('click', function() { showSection('sites'); });
-            container.querySelector('.nav-to-music').addEventListener('click', function() { showSection('music'); });
-            container.querySelector('.nav-to-ai').addEventListener('click', function() { showSection('ai'); });
-            container.querySelector('.nav-to-settings').addEventListener('click', function() { showSection('settings'); });
         }
 
         async function renderMovies(container) {
             container.innerHTML = 
                 '<div class="section-header">' +
                     '<h2><i class="ri-movie-2-line"></i> Popular Movies</h2>' +
-                    '<p class="section-desc">Click any movie to open in Cinema Mode with 6 streaming sources.</p>' +
+                    '<p class="section-desc">Sorry Theres Ads I Cant Remove Them.</p>' +
                 '</div>' +
                 '<div class="cards-grid" id="itemsGrid">' +
                     '<div class="loading-container">' +
                         '<i class="ri-loader-4-line loading-spinner"></i>' +
-                        '<p>Loading popular movies from TMDB...</p>' +
+                        '<p>Loading Movies...</p>' +
                     '</div>' +
                 '</div>';
             
@@ -2709,12 +2657,12 @@
             container.innerHTML = 
                 '<div class="section-header">' +
                     '<h2><i class="ri-tv-line"></i> Popular TV Shows</h2>' +
-                    '<p class="section-desc">Click any show to watch episodes with 6 streaming sources.</p>' +
+                    '<p class="section-desc">Sorry Theres Ads I Cant Remove Them.</p>' +
                 '</div>' +
                 '<div class="cards-grid" id="itemsGrid">' +
                     '<div class="loading-container">' +
                         '<i class="ri-loader-4-line loading-spinner"></i>' +
-                        '<p>Loading popular TV shows from TMDB...</p>' +
+                        '<p>LoadingTV Shows...</p>' +
                     '</div>' +
                 '</div>';
             
@@ -2725,32 +2673,37 @@
             container.innerHTML = 
                 '<div class="section-header">' +
                     '<h2><i class="ri-gamepad-line"></i> Games</h2>' +
-                    '<p class="section-desc">Popular Unblocked Games (Some Work Will Fix Soon)</p>' +
+                    '<p class="section-desc">HTML5 games run natively. External games open in a new tab.</p>' +
                 '</div>' +
                 '<div class="cards-grid" id="gamesGrid"></div>';
-            
+
             var grid = document.getElementById('gamesGrid');
             var html = '';
-            
+
             CONFIG.games.forEach(function(game, index) {
+                var modeBadge = game.mode === 'html5' 
+                    ? '<div class="card-badge" style="position: absolute; top: 12px; left: 12px; background: linear-gradient(135deg, var(--accent-green), #00cc66);">HTML5</div>'
+                    : '<div class="card-badge" style="position: absolute; top: 12px; left: 12px; background: linear-gradient(135deg, var(--accent-blue), #0066ff);">EXTERNAL</div>';
+
                 html += 
                     '<div class="content-card game-card-item" data-game-index="' + index + '">' +
                         '<div style="width: 100%; height: 260px; background: linear-gradient(135deg, var(--dark), var(--card-bg)); display: flex; align-items: center; justify-content: center; font-size: 64px; position: relative;">' +
                             '<i class="' + game.icon + '" style="color: var(--accent-green);"></i>' +
+                            modeBadge +
                             (game.popular ? '<div class="card-badge" style="position: absolute; top: 12px; right: 12px; background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));">POPULAR</div>' : '') +
                         '</div>' +
                         '<div class="card-info">' +
                             '<div class="card-title">' + game.name + '</div>' +
                             '<div class="card-meta">' +
                                 '<span style="color: var(--accent-green);">' + game.category + '</span>' +
-                                '<span><i class="ri-play-circle-line"></i> Play</span>' +
+                                '<span><i class="ri-play-circle-line"></i> ' + (game.mode === 'html5' ? 'Play' : 'Open') + '</span>' +
                             '</div>' +
                         '</div>' +
                     '</div>';
             });
-            
+
             grid.innerHTML = html;
-            
+
             // Add click handlers
             grid.querySelectorAll('.game-card-item').forEach(function(card) {
                 card.addEventListener('click', function() {
@@ -2760,36 +2713,870 @@
             });
         }
 
-        function openGameModal(game) {
+        function renderHTML5Game(gameId, container) {
+            container.innerHTML = '';
+            var canvas = document.createElement('canvas');
+            canvas.id = 'gameCanvas';
+            canvas.style.width = '100%';
+            canvas.style.height = '100%';
+            canvas.style.display = 'block';
+            container.appendChild(canvas);
+
+            // Set actual canvas size to match display size for crisp rendering
+            var rect = container.getBoundingClientRect();
+            canvas.width = rect.width || 800;
+            canvas.height = rect.height || 600;
+
+            var ctx = canvas.getContext('2d');
+            var animationId = null;
+            var gameLoop = null;
+            var cleanup = null;
+
+            // ========== SNAKE ==========
+            if (gameId === 'snake') {
+                var gridSize = 20;
+                var tileCountX = Math.floor(canvas.width / gridSize);
+                var tileCountY = Math.floor(canvas.height / gridSize);
+                var snake = [{x: 10, y: 10}];
+                var food = {x: 15, y: 15};
+                var dx = 1, dy = 0;
+                var score = 0;
+                var gameOver = false;
+                var speed = 100;
+                var lastTime = 0;
+
+                function placeFood() {
+                    food = {
+                        x: Math.floor(Math.random() * tileCountX),
+                        y: Math.floor(Math.random() * tileCountY)
+                    };
+                }
+
+                function updateSnake(timestamp) {
+                    if (gameOver) return;
+                    if (timestamp - lastTime < speed) {
+                        animationId = requestAnimationFrame(updateSnake);
+                        return;
+                    }
+                    lastTime = timestamp;
+
+                    var head = {x: snake[0].x + dx, y: snake[0].y + dy};
+
+                    if (head.x < 0 || head.x >= tileCountX || head.y < 0 || head.y >= tileCountY) {
+                        gameOver = true;
+                        return;
+                    }
+
+                    for (var i = 0; i < snake.length; i++) {
+                        if (head.x === snake[i].x && head.y === snake[i].y) {
+                            gameOver = true;
+                            return;
+                        }
+                    }
+
+                    snake.unshift(head);
+
+                    if (head.x === food.x && head.y === food.y) {
+                        score += 10;
+                        speed = Math.max(50, 100 - score);
+                        placeFood();
+                    } else {
+                        snake.pop();
+                    }
+
+                    drawSnake();
+                    animationId = requestAnimationFrame(updateSnake);
+                }
+
+                function drawSnake() {
+                    ctx.fillStyle = '#0f0f1a';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                    ctx.fillStyle = '#00ff88';
+                    for (var i = 0; i < snake.length; i++) {
+                        ctx.fillRect(snake[i].x * gridSize, snake[i].y * gridSize, gridSize - 2, gridSize - 2);
+                    }
+
+                    ctx.fillStyle = '#ff6b6b';
+                    ctx.fillRect(food.x * gridSize, food.y * gridSize, gridSize - 2, gridSize - 2);
+
+                    ctx.fillStyle = '#fff';
+                    ctx.font = '20px Orbitron';
+                    ctx.fillText('Score: ' + score, 10, 30);
+
+                    if (gameOver) {
+                        ctx.fillStyle = 'rgba(0,0,0,0.7)';
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                        ctx.fillStyle = '#ff6b6b';
+                        ctx.font = '40px Orbitron';
+                        ctx.textAlign = 'center';
+                        ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 - 20);
+                        ctx.font = '20px Inter';
+                        ctx.fillStyle = '#fff';
+                        ctx.fillText('Score: ' + score, canvas.width / 2, canvas.height / 2 + 20);
+                        ctx.fillText('Press Space to restart', canvas.width / 2, canvas.height / 2 + 50);
+                        ctx.textAlign = 'left';
+                    }
+                }
+
+                var keyHandler = function(e) {
+                    if (gameOver && e.code === 'Space') {
+                        snake = [{x: 10, y: 10}];
+                        dx = 1; dy = 0;
+                        score = 0;
+                        gameOver = false;
+                        speed = 100;
+                        placeFood();
+                        animationId = requestAnimationFrame(updateSnake);
+                        return;
+                    }
+                    if (['ArrowUp','w','W'].includes(e.key) && dy === 0) { dx = 0; dy = -1; }
+                    else if (['ArrowDown','s','S'].includes(e.key) && dy === 0) { dx = 0; dy = 1; }
+                    else if (['ArrowLeft','a','A'].includes(e.key) && dx === 0) { dx = -1; dy = 0; }
+                    else if (['ArrowRight','d','D'].includes(e.key) && dx === 0) { dx = 1; dy = 0; }
+                };
+                document.addEventListener('keydown', keyHandler);
+                cleanup = function() { document.removeEventListener('keydown', keyHandler); };
+
+                placeFood();
+                animationId = requestAnimationFrame(updateSnake);
+            }
+
+            // ========== 2048 ==========
+            else if (gameId === 'game2048') {
+                var gridSize = 4;
+                var cellSize = Math.min(canvas.width, canvas.height) * 0.8 / gridSize;
+                var offsetX = (canvas.width - cellSize * gridSize) / 2;
+                var offsetY = (canvas.height - cellSize * gridSize) / 2;
+                var board = [];
+                var score = 0;
+                var gameOver = false;
+                var won = false;
+
+                var colors = {
+                    0: '#1a1a2e', 2: '#eee4da', 4: '#ede0c8', 8: '#f2b179',
+                    16: '#f59563', 32: '#f67c5f', 64: '#f65e3b', 128: '#edcf72',
+                    256: '#edcc61', 512: '#edc850', 1024: '#edc53f', 2048: '#edc22e'
+                };
+
+                function initBoard() {
+                    board = [];
+                    for (var i = 0; i < gridSize; i++) {
+                        board[i] = [];
+                        for (var j = 0; j < gridSize; j++) board[i][j] = 0;
+                    }
+                    addRandomTile();
+                    addRandomTile();
+                }
+
+                function addRandomTile() {
+                    var empty = [];
+                    for (var i = 0; i < gridSize; i++)
+                        for (var j = 0; j < gridSize; j++)
+                            if (board[i][j] === 0) empty.push({x: i, y: j});
+                    if (empty.length > 0) {
+                        var tile = empty[Math.floor(Math.random() * empty.length)];
+                        board[tile.x][tile.y] = Math.random() < 0.9 ? 2 : 4;
+                    }
+                }
+
+                function move(direction) {
+                    if (gameOver) return;
+                    var moved = false;
+                    var newBoard = JSON.parse(JSON.stringify(board));
+
+                    function slideLine(line) {
+                        var filtered = line.filter(function(v) { return v !== 0; });
+                        for (var i = 0; i < filtered.length - 1; i++) {
+                            if (filtered[i] === filtered[i + 1]) {
+                                filtered[i] *= 2;
+                                score += filtered[i];
+                                if (filtered[i] === 2048) won = true;
+                                filtered[i + 1] = 0;
+                            }
+                        }
+                        filtered = filtered.filter(function(v) { return v !== 0; });
+                        while (filtered.length < gridSize) filtered.push(0);
+                        return filtered;
+                    }
+
+                    if (direction === 'left') {
+                        for (var i = 0; i < gridSize; i++) {
+                            var oldLine = newBoard[i].slice();
+                            newBoard[i] = slideLine(newBoard[i]);
+                            if (oldLine.join(',') !== newBoard[i].join(',')) moved = true;
+                        }
+                    } else if (direction === 'right') {
+                        for (var i = 0; i < gridSize; i++) {
+                            var oldLine = newBoard[i].slice();
+                            newBoard[i] = slideLine(newBoard[i].reverse()).reverse();
+                            if (oldLine.join(',') !== newBoard[i].join(',')) moved = true;
+                        }
+                    } else if (direction === 'up') {
+                        for (var j = 0; j < gridSize; j++) {
+                            var col = [];
+                            for (var i = 0; i < gridSize; i++) col.push(newBoard[i][j]);
+                            var oldCol = col.slice();
+                            col = slideLine(col);
+                            for (var i = 0; i < gridSize; i++) newBoard[i][j] = col[i];
+                            if (oldCol.join(',') !== col.join(',')) moved = true;
+                        }
+                    } else if (direction === 'down') {
+                        for (var j = 0; j < gridSize; j++) {
+                            var col = [];
+                            for (var i = 0; i < gridSize; i++) col.push(newBoard[i][j]);
+                            var oldCol = col.slice();
+                            col = slideLine(col.reverse()).reverse();
+                            for (var i = 0; i < gridSize; i++) newBoard[i][j] = col[i];
+                            if (oldCol.join(',') !== col.join(',')) moved = true;
+                        }
+                    }
+
+                    if (moved) {
+                        board = newBoard;
+                        addRandomTile();
+                        checkGameOver();
+                    }
+                    draw2048();
+                }
+
+                function checkGameOver() {
+                    for (var i = 0; i < gridSize; i++)
+                        for (var j = 0; j < gridSize; j++)
+                            if (board[i][j] === 0) return;
+                    for (var i = 0; i < gridSize; i++)
+                        for (var j = 0; j < gridSize; j++) {
+                            if (j < gridSize - 1 && board[i][j] === board[i][j + 1]) return;
+                            if (i < gridSize - 1 && board[i][j] === board[i + 1][j]) return;
+                        }
+                    gameOver = true;
+                }
+
+                function draw2048() {
+                    ctx.fillStyle = '#0f0f1a';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                    for (var i = 0; i < gridSize; i++) {
+                        for (var j = 0; j < gridSize; j++) {
+                            var val = board[i][j];
+                            ctx.fillStyle = colors[val] || '#3c3a32';
+                            ctx.fillRect(offsetX + j * cellSize + 4, offsetY + i * cellSize + 4, cellSize - 8, cellSize - 8);
+                            if (val !== 0) {
+                                ctx.fillStyle = val <= 4 ? '#776e65' : '#f9f6f2';
+                                ctx.font = 'bold ' + (cellSize * 0.4) + 'px Inter';
+                                ctx.textAlign = 'center';
+                                ctx.textBaseline = 'middle';
+                                ctx.fillText(val, offsetX + j * cellSize + cellSize / 2, offsetY + i * cellSize + cellSize / 2);
+                            }
+                        }
+                    }
+
+                    ctx.fillStyle = '#fff';
+                    ctx.font = '24px Orbitron';
+                    ctx.textAlign = 'left';
+                    ctx.textBaseline = 'alphabetic';
+                    ctx.fillText('Score: ' + score, 20, 40);
+
+                    if (won) {
+                        ctx.fillStyle = 'rgba(0,255,136,0.3)';
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                        ctx.fillStyle = '#00ff88';
+                        ctx.font = '50px Orbitron';
+                        ctx.textAlign = 'center';
+                        ctx.fillText('YOU WIN!', canvas.width / 2, canvas.height / 2);
+                    }
+
+                    if (gameOver) {
+                        ctx.fillStyle = 'rgba(0,0,0,0.7)';
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                        ctx.fillStyle = '#ff6b6b';
+                        ctx.font = '40px Orbitron';
+                        ctx.textAlign = 'center';
+                        ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2);
+                        ctx.font = '18px Inter';
+                        ctx.fillStyle = '#fff';
+                        ctx.fillText('Press Space to restart', canvas.width / 2, canvas.height / 2 + 40);
+                    }
+                    ctx.textAlign = 'left';
+                }
+
+                var keyHandler = function(e) {
+                    if (gameOver && e.code === 'Space') {
+                        initBoard();
+                        gameOver = false;
+                        won = false;
+                        score = 0;
+                        draw2048();
+                        return;
+                    }
+                    if (['ArrowLeft','a','A'].includes(e.key)) move('left');
+                    else if (['ArrowRight','d','D'].includes(e.key)) move('right');
+                    else if (['ArrowUp','w','W'].includes(e.key)) move('up');
+                    else if (['ArrowDown','s','S'].includes(e.key)) move('down');
+                };
+                document.addEventListener('keydown', keyHandler);
+                cleanup = function() { document.removeEventListener('keydown', keyHandler); };
+
+                initBoard();
+                draw2048();
+            }
+
+            // ========== TETRIS ==========
+            else if (gameId === 'tetris') {
+                var cols = 10, rows = 20;
+                var cellSize = Math.min(canvas.width / cols, canvas.height / rows);
+                var offsetX = (canvas.width - cols * cellSize) / 2;
+                var offsetY = (canvas.height - rows * cellSize) / 2;
+                var board = [];
+                var currentPiece = null;
+                var currentX = 0, currentY = 0;
+                var score = 0;
+                var lines = 0;
+                var gameOver = false;
+                var dropInterval = 800;
+                var lastDrop = 0;
+
+                var shapes = [
+                    [[1,1,1,1]],
+                    [[1,1],[1,1]],
+                    [[0,1,0],[1,1,1]],
+                    [[1,0,0],[1,1,1]],
+                    [[0,0,1],[1,1,1]],
+                    [[0,1,1],[1,1,0]],
+                    [[1,1,0],[0,1,1]]
+                ];
+                var shapeColors = ['#00d4ff','#ffd43b','#c77dff','#ff6b9d','#ff9e00','#00ff88','#ff6b6b'];
+
+                function newPiece() {
+                    var idx = Math.floor(Math.random() * shapes.length);
+                    currentPiece = {
+                        shape: shapes[idx],
+                        color: shapeColors[idx]
+                    };
+                    currentX = Math.floor((cols - currentPiece.shape[0].length) / 2);
+                    currentY = 0;
+                    if (!isValidPosition(currentX, currentY, currentPiece.shape)) {
+                        gameOver = true;
+                    }
+                }
+
+                function isValidPosition(x, y, shape) {
+                    for (var i = 0; i < shape.length; i++)
+                        for (var j = 0; j < shape[i].length; j++)
+                            if (shape[i][j]) {
+                                var nx = x + j, ny = y + i;
+                                if (nx < 0 || nx >= cols || ny >= rows) return false;
+                                if (ny >= 0 && board[ny][nx]) return false;
+                            }
+                    return true;
+                }
+
+                function mergePiece() {
+                    for (var i = 0; i < currentPiece.shape.length; i++)
+                        for (var j = 0; j < currentPiece.shape[i].length; j++)
+                            if (currentPiece.shape[i][j] && currentY + i >= 0)
+                                board[currentY + i][currentX + j] = currentPiece.color;
+                }
+
+                function clearLines() {
+                    var cleared = 0;
+                    for (var i = rows - 1; i >= 0; i--) {
+                        if (board[i].every(function(c) { return c !== 0; })) {
+                            board.splice(i, 1);
+                            board.unshift(new Array(cols).fill(0));
+                            cleared++;
+                            i++;
+                        }
+                    }
+                    if (cleared > 0) {
+                        lines += cleared;
+                        score += [0, 100, 300, 500, 800][cleared];
+                        dropInterval = Math.max(100, 800 - lines * 10);
+                    }
+                }
+
+                function rotatePiece() {
+                    var rows = currentPiece.shape.length;
+                    var cols = currentPiece.shape[0].length;
+                    var rotated = [];
+                    for (var j = 0; j < cols; j++) {
+                        rotated[j] = [];
+                        for (var i = rows - 1; i >= 0; i--) rotated[j].push(currentPiece.shape[i][j]);
+                    }
+                    if (isValidPosition(currentX, currentY, rotated)) currentPiece.shape = rotated;
+                }
+
+                function updateTetris(timestamp) {
+                    if (gameOver) return;
+                    if (timestamp - lastDrop > dropInterval) {
+                        lastDrop = timestamp;
+                        if (isValidPosition(currentX, currentY + 1, currentPiece.shape)) {
+                            currentY++;
+                        } else {
+                            mergePiece();
+                            clearLines();
+                            newPiece();
+                        }
+                    }
+                    drawTetris();
+                    animationId = requestAnimationFrame(updateTetris);
+                }
+
+                function drawTetris() {
+                    ctx.fillStyle = '#0f0f1a';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                    for (var i = 0; i < rows; i++)
+                        for (var j = 0; j < cols; j++)
+                            if (board[i][j]) {
+                                ctx.fillStyle = board[i][j];
+                                ctx.fillRect(offsetX + j * cellSize, offsetY + i * cellSize, cellSize - 1, cellSize - 1);
+                            }
+
+                    if (currentPiece) {
+                        ctx.fillStyle = currentPiece.color;
+                        for (var i = 0; i < currentPiece.shape.length; i++)
+                            for (var j = 0; j < currentPiece.shape[i].length; j++)
+                                if (currentPiece.shape[i][j] && currentY + i >= 0)
+                                    ctx.fillRect(offsetX + (currentX + j) * cellSize, offsetY + (currentY + i) * cellSize, cellSize - 1, cellSize - 1);
+                    }
+
+                    ctx.fillStyle = '#fff';
+                    ctx.font = '20px Orbitron';
+                    ctx.fillText('Score: ' + score, 20, 30);
+                    ctx.fillText('Lines: ' + lines, 20, 55);
+
+                    if (gameOver) {
+                        ctx.fillStyle = 'rgba(0,0,0,0.7)';
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                        ctx.fillStyle = '#ff6b6b';
+                        ctx.font = '40px Orbitron';
+                        ctx.textAlign = 'center';
+                        ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 - 20);
+                        ctx.font = '18px Inter';
+                        ctx.fillStyle = '#fff';
+                        ctx.fillText('Score: ' + score, canvas.width / 2, canvas.height / 2 + 20);
+                        ctx.fillText('Press Space to restart', canvas.width / 2, canvas.height / 2 + 50);
+                        ctx.textAlign = 'left';
+                    }
+                }
+
+                var keyHandler = function(e) {
+                    if (gameOver && e.code === 'Space') {
+                        board = [];
+                        for (var i = 0; i < rows; i++) board.push(new Array(cols).fill(0));
+                        score = 0; lines = 0; dropInterval = 800; gameOver = false;
+                        newPiece();
+                        animationId = requestAnimationFrame(updateTetris);
+                        return;
+                    }
+                    if (gameOver) return;
+                    if (['ArrowLeft','a','A'].includes(e.key) && isValidPosition(currentX - 1, currentY, currentPiece.shape)) currentX--;
+                    else if (['ArrowRight','d','D'].includes(e.key) && isValidPosition(currentX + 1, currentY, currentPiece.shape)) currentX++;
+                    else if (['ArrowDown','s','S'].includes(e.key) && isValidPosition(currentX, currentY + 1, currentPiece.shape)) currentY++;
+                    else if (['ArrowUp','w','W'].includes(e.key)) rotatePiece();
+                };
+                document.addEventListener('keydown', keyHandler);
+                cleanup = function() { document.removeEventListener('keydown', keyHandler); };
+
+                for (var i = 0; i < rows; i++) board.push(new Array(cols).fill(0));
+                newPiece();
+                animationId = requestAnimationFrame(updateTetris);
+            }
+
+            // ========== PONG ==========
+            else if (gameId === 'pong') {
+                var paddleW = 15, paddleH = 100;
+                var ballSize = 15;
+                var playerY = canvas.height / 2 - paddleH / 2;
+                var aiY = canvas.height / 2 - paddleH / 2;
+                var ballX = canvas.width / 2, ballY = canvas.height / 2;
+                var ballDX = 5, ballDY = 3;
+                var playerScore = 0, aiScore = 0;
+                var upPressed = false, downPressed = false;
+                var gameOver = false;
+
+                function updatePong() {
+                    if (gameOver) return;
+
+                    if (upPressed && playerY > 0) playerY -= 6;
+                    if (downPressed && playerY < canvas.height - paddleH) playerY += 6;
+
+                    var aiCenter = aiY + paddleH / 2;
+                    if (aiCenter < ballY - 10) aiY += 4;
+                    else if (aiCenter > ballY + 10) aiY -= 4;
+                    aiY = Math.max(0, Math.min(canvas.height - paddleH, aiY));
+
+                    ballX += ballDX;
+                    ballY += ballDY;
+
+                    if (ballY <= 0 || ballY >= canvas.height - ballSize) ballDY = -ballDY;
+
+                    if (ballX <= paddleW && ballY + ballSize > playerY && ballY < playerY + paddleH) {
+                        ballDX = -ballDX * 1.05;
+                        ballDY += (ballY - (playerY + paddleH / 2)) * 0.1;
+                    }
+                    if (ballX >= canvas.width - paddleW - ballSize && ballY + ballSize > aiY && ballY < aiY + paddleH) {
+                        ballDX = -ballDX * 1.05;
+                        ballDY += (ballY - (aiY + paddleH / 2)) * 0.1;
+                    }
+
+                    if (ballX < 0) { aiScore++; resetBall(); }
+                    if (ballX > canvas.width) { playerScore++; resetBall(); }
+
+                    if (playerScore >= 10 || aiScore >= 10) gameOver = true;
+
+                    drawPong();
+                    animationId = requestAnimationFrame(updatePong);
+                }
+
+                function resetBall() {
+                    ballX = canvas.width / 2;
+                    ballY = canvas.height / 2;
+                    ballDX = (Math.random() > 0.5 ? 5 : -5);
+                    ballDY = (Math.random() - 0.5) * 6;
+                }
+
+                function drawPong() {
+                    ctx.fillStyle = '#0f0f1a';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                    ctx.strokeStyle = '#2a2a40';
+                    ctx.setLineDash([10, 10]);
+                    ctx.beginPath();
+                    ctx.moveTo(canvas.width / 2, 0);
+                    ctx.lineTo(canvas.width / 2, canvas.height);
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+
+                    ctx.fillStyle = '#00d4ff';
+                    ctx.fillRect(10, playerY, paddleW, paddleH);
+                    ctx.fillStyle = '#ff6b6b';
+                    ctx.fillRect(canvas.width - 10 - paddleW, aiY, paddleW, paddleH);
+
+                    ctx.fillStyle = '#fff';
+                    ctx.fillRect(ballX, ballY, ballSize, ballSize);
+
+                    ctx.font = '40px Orbitron';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(playerScore, canvas.width / 4, 60);
+                    ctx.fillText(aiScore, canvas.width * 3 / 4, 60);
+
+                    if (gameOver) {
+                        ctx.fillStyle = 'rgba(0,0,0,0.7)';
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                        ctx.fillStyle = playerScore >= 10 ? '#00ff88' : '#ff6b6b';
+                        ctx.font = '40px Orbitron';
+                        ctx.fillText(playerScore >= 10 ? 'YOU WIN!' : 'AI WINS!', canvas.width / 2, canvas.height / 2 - 20);
+                        ctx.fillStyle = '#fff';
+                        ctx.font = '18px Inter';
+                        ctx.fillText('Press Space to restart', canvas.width / 2, canvas.height / 2 + 20);
+                    }
+                    ctx.textAlign = 'left';
+                }
+
+                var keyDown = function(e) {
+                    if (gameOver && e.code === 'Space') {
+                        playerScore = 0; aiScore = 0; gameOver = false;
+                        resetBall();
+                        animationId = requestAnimationFrame(updatePong);
+                        return;
+                    }
+                    if (['ArrowUp','w','W'].includes(e.key)) upPressed = true;
+                    if (['ArrowDown','s','S'].includes(e.key)) downPressed = true;
+                };
+                var keyUp = function(e) {
+                    if (['ArrowUp','w','W'].includes(e.key)) upPressed = false;
+                    if (['ArrowDown','s','S'].includes(e.key)) downPressed = false;
+                };
+                document.addEventListener('keydown', keyDown);
+                document.addEventListener('keyup', keyUp);
+                cleanup = function() { 
+                    document.removeEventListener('keydown', keyDown); 
+                    document.removeEventListener('keyup', keyUp); 
+                };
+
+                animationId = requestAnimationFrame(updatePong);
+            }
+
+            // ========== DINO RUN ==========
+            else if (gameId === 'dino') {
+                var dinoY = canvas.height - 100;
+                var dinoX = 80;
+                var dinoH = 50, dinoW = 40;
+                var velocityY = 0;
+                var gravity = 0.8;
+                var jumpPower = -15;
+                var groundY = canvas.height - 50;
+                var obstacles = [];
+                var score = 0;
+                var gameOver = false;
+                var speed = 6;
+                var frameCount = 0;
+
+                function spawnObstacle() {
+                    obstacles.push({
+                        x: canvas.width,
+                        y: groundY - 40,
+                        w: 30 + Math.random() * 20,
+                        h: 40 + Math.random() * 30
+                    });
+                }
+
+                function updateDino() {
+                    if (gameOver) return;
+                    frameCount++;
+
+                    velocityY += gravity;
+                    dinoY += velocityY;
+                    if (dinoY > groundY - dinoH) {
+                        dinoY = groundY - dinoH;
+                        velocityY = 0;
+                    }
+
+                    if (frameCount % 90 === 0) spawnObstacle();
+
+                    for (var i = obstacles.length - 1; i >= 0; i--) {
+                        obstacles[i].x -= speed;
+                        if (obstacles[i].x + obstacles[i].w < 0) {
+                            obstacles.splice(i, 1);
+                            score += 10;
+                            if (score % 100 === 0) speed += 0.5;
+                            continue;
+                        }
+                        if (dinoX < obstacles[i].x + obstacles[i].w &&
+                            dinoX + dinoW > obstacles[i].x &&
+                            dinoY < obstacles[i].y + obstacles[i].h &&
+                            dinoY + dinoH > obstacles[i].y) {
+                            gameOver = true;
+                        }
+                    }
+
+                    drawDino();
+                    animationId = requestAnimationFrame(updateDino);
+                }
+
+                function drawDino() {
+                    ctx.fillStyle = '#0f0f1a';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                    ctx.fillStyle = '#2a2a40';
+                    ctx.fillRect(0, groundY, canvas.width, canvas.height - groundY);
+
+                    ctx.fillStyle = '#00ff88';
+                    ctx.fillRect(dinoX, dinoY, dinoW, dinoH);
+                    ctx.fillStyle = '#fff';
+                    ctx.fillRect(dinoX + 25, dinoY + 8, 6, 6);
+
+                    ctx.fillStyle = '#ff6b6b';
+                    for (var i = 0; i < obstacles.length; i++) {
+                        ctx.fillRect(obstacles[i].x, obstacles[i].y, obstacles[i].w, obstacles[i].h);
+                    }
+
+                    ctx.fillStyle = '#fff';
+                    ctx.font = '20px Orbitron';
+                    ctx.fillText('Score: ' + score, 20, 40);
+
+                    if (gameOver) {
+                        ctx.fillStyle = 'rgba(0,0,0,0.7)';
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                        ctx.fillStyle = '#ff6b6b';
+                        ctx.font = '40px Orbitron';
+                        ctx.textAlign = 'center';
+                        ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 - 20);
+                        ctx.font = '18px Inter';
+                        ctx.fillStyle = '#fff';
+                        ctx.fillText('Score: ' + score, canvas.width / 2, canvas.height / 2 + 20);
+                        ctx.fillText('Press Space to restart', canvas.width / 2, canvas.height / 2 + 50);
+                        ctx.textAlign = 'left';
+                    }
+                }
+
+                var keyHandler = function(e) {
+                    if (gameOver && e.code === 'Space') {
+                        dinoY = canvas.height - 100;
+                        velocityY = 0;
+                        obstacles = [];
+                        score = 0;
+                        speed = 6;
+                        frameCount = 0;
+                        gameOver = false;
+                        animationId = requestAnimationFrame(updateDino);
+                        return;
+                    }
+                    if ((e.code === 'Space' || e.code === 'ArrowUp') && dinoY >= groundY - dinoH - 2) {
+                        velocityY = jumpPower;
+                    }
+                };
+                document.addEventListener('keydown', keyHandler);
+                cleanup = function() { document.removeEventListener('keydown', keyHandler); };
+
+                animationId = requestAnimationFrame(updateDino);
+            }
+
+            // ========== FLAPPY BIRD ==========
+            else if (gameId === 'flappy') {
+                var birdX = 80;
+                var birdY = canvas.height / 2;
+                var birdSize = 24;
+                var velocity = 0;
+                var gravity = 0.4;
+                var jump = -7;
+                var pipes = [];
+                var score = 0;
+                var gameOver = false;
+                var pipeGap = 160;
+                var pipeWidth = 60;
+                var frame = 0;
+
+                function spawnPipe() {
+                    var minHeight = 50;
+                    var maxHeight = canvas.height - pipeGap - minHeight;
+                    var topHeight = Math.floor(Math.random() * (maxHeight - minHeight) + minHeight);
+                    pipes.push({
+                        x: canvas.width,
+                        topH: topHeight,
+                        bottomY: topHeight + pipeGap,
+                        passed: false
+                    });
+                }
+
+                function updateFlappy() {
+                    if (gameOver) return;
+                    frame++;
+
+                    velocity += gravity;
+                    birdY += velocity;
+
+                    if (frame % 120 === 0) spawnPipe();
+
+                    for (var i = pipes.length - 1; i >= 0; i--) {
+                        pipes[i].x -= 3;
+
+                        if (!pipes[i].passed && pipes[i].x + pipeWidth < birdX) {
+                            pipes[i].passed = true;
+                            score++;
+                        }
+
+                        if (pipes[i].x + pipeWidth < 0) {
+                            pipes.splice(i, 1);
+                            continue;
+                        }
+
+                        if (birdX + birdSize > pipes[i].x && birdX < pipes[i].x + pipeWidth) {
+                            if (birdY < pipes[i].topH || birdY + birdSize > pipes[i].bottomY) {
+                                gameOver = true;
+                            }
+                        }
+                    }
+
+                    if (birdY < 0 || birdY + birdSize > canvas.height) gameOver = true;
+
+                    drawFlappy();
+                    animationId = requestAnimationFrame(updateFlappy);
+                }
+
+                function drawFlappy() {
+                    ctx.fillStyle = '#0f0f1a';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                    ctx.fillStyle = '#00ff88';
+                    ctx.fillRect(birdX, birdY, birdSize, birdSize);
+                    ctx.fillStyle = '#fff';
+                    ctx.fillRect(birdX + 16, birdY + 6, 5, 5);
+                    ctx.fillStyle = '#ff9e00';
+                    ctx.fillRect(birdX + 20, birdY + 12, 8, 5);
+
+                    ctx.fillStyle = '#00d4ff';
+                    for (var i = 0; i < pipes.length; i++) {
+                        ctx.fillRect(pipes[i].x, 0, pipeWidth, pipes[i].topH);
+                        ctx.fillRect(pipes[i].x, pipes[i].bottomY, pipeWidth, canvas.height - pipes[i].bottomY);
+                    }
+
+                    ctx.fillStyle = '#fff';
+                    ctx.font = '30px Orbitron';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(score, canvas.width / 2, 60);
+
+                    if (gameOver) {
+                        ctx.fillStyle = 'rgba(0,0,0,0.7)';
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                        ctx.fillStyle = '#ff6b6b';
+                        ctx.font = '40px Orbitron';
+                        ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 - 20);
+                        ctx.font = '18px Inter';
+                        ctx.fillStyle = '#fff';
+                        ctx.fillText('Score: ' + score, canvas.width / 2, canvas.height / 2 + 20);
+                        ctx.fillText('Press Space to restart', canvas.width / 2, canvas.height / 2 + 50);
+                    }
+                    ctx.textAlign = 'left';
+                }
+
+                var keyHandler = function(e) {
+                    if (gameOver && e.code === 'Space') {
+                        birdY = canvas.height / 2;
+                        velocity = 0;
+                        pipes = [];
+                        score = 0;
+                        frame = 0;
+                        gameOver = false;
+                        animationId = requestAnimationFrame(updateFlappy);
+                        return;
+                    }
+                    if (e.code === 'Space' || e.code === 'ArrowUp') {
+                        velocity = jump;
+                    }
+                };
+                document.addEventListener('keydown', keyHandler);
+                cleanup = function() { document.removeEventListener('keydown', keyHandler); };
+
+                animationId = requestAnimationFrame(updateFlappy);
+            }
+
+            // Store cleanup on container for closeModal to call
+            container._gameCleanup = cleanup;
+        }
+function openGameModal(game) {
             currentGame = game;
             currentItem = null;
             currentSite = null;
-            
+
+            // External link games open in new tab
+            if (game.mode === 'external') {
+                window.open(game.url, '_blank');
+                return;
+            }
+
             var modal = document.getElementById('movieModal');
             modal.classList.add('active');
-            
+
             // Hide source sidebar for games
             document.getElementById('sourceSidebar').style.display = 'none';
-            
+
             document.getElementById('modalTitle').textContent = game.name;
             document.getElementById('modalPosterThumb').querySelector('img').src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="90"><rect fill="%2312121a" width="60" height="90"/><text x="50%" y="50%" font-size="30" fill="%2300ff88" text-anchor="middle" dominant-baseline="middle"><i class="' + game.icon + '"></i></text></svg>';
-            
+
             document.getElementById('modalMeta').innerHTML = 
                 '<span><i class="ri-gamepad-line"></i> ' + game.category + '</span>' +
-                '<span><i class="ri-global-line"></i> Online Game</span>';
-            
-            var iframe = document.getElementById('playerFrame');
-            var loader = document.getElementById('iframeLoader');
-            
-            loader.classList.add('active');
-            iframe.src = game.url;
-            
-            setTimeout(function() {
-                loader.classList.remove('active');
-            }, 2000);
-        }
+                '<span><i class="ri-code-box-line"></i> HTML5</span>';
 
-        async function loadMovies() {
+            var iframe = document.getElementById('playerFrame');
+            var gameContainer = document.getElementById('gameContainer');
+            var loader = document.getElementById('iframeLoader');
+
+            // Show game container, hide iframe
+            iframe.style.display = 'none';
+            gameContainer.style.display = 'flex';
+
+            loader.classList.add('active');
+
+            // Render the HTML5 game
+            setTimeout(function() {
+                renderHTML5Game(game.gameId, gameContainer);
+                loader.classList.remove('active');
+            }, 300);
+        }
+async function loadMovies() {
             try {
                 var response = await fetch(
                     CONFIG.TMDB_BASE_URL + '/movie/popular?api_key=' + CONFIG.TMDB_API_KEY + '&page=1'
@@ -2811,7 +3598,6 @@
                 });
                 
                 displayItems();
-                updateStatus('active', currentItems.length + ' movies loaded');
             } catch (error) {
                 console.error('Error:', error);
                 document.getElementById('itemsGrid').innerHTML = 
@@ -2820,7 +3606,6 @@
                         '<p class="error-title">Failed to load movies</p>' +
                         '<p class="error-desc">Check your connection and try again.</p>' +
                     '</div>';
-                updateStatus('error', 'Failed to load');
             }
         }
 
@@ -2846,7 +3631,6 @@
                 });
                 
                 displayItems();
-                updateStatus('active', currentItems.length + ' shows loaded');
             } catch (error) {
                 console.error('Error:', error);
                 document.getElementById('itemsGrid').innerHTML = 
@@ -2855,7 +3639,6 @@
                         '<p class="error-title">Failed to load TV shows</p>' +
                         '<p class="error-desc">Check your connection and try again.</p>' +
                     '</div>';
-                updateStatus('error', 'Failed to load');
             }
         }
 
@@ -2962,7 +3745,6 @@
                     });
                     
                     displayItems();
-                    updateStatus('active', 'Found ' + currentItems.length + ' results');
                     
                     var header = container.querySelector('.section-header h2');
                     header.innerHTML = '<i class="' + typeIcon + '"></i> Search Results (' + currentItems.length + ' found)';
@@ -2973,7 +3755,6 @@
                             '<p style="color: var(--text); font-weight: 600; margin-bottom: 8px;">No ' + typeLabel.toLowerCase() + ' found</p>' +
                             '<p>No results for "' + escapeHtml(query) + '". Try a different search term.</p>' +
                         '</div>';
-                    updateStatus('active', 'No results');
                 }
             } catch (error) {
                 console.error('Search error:', error);
@@ -2983,7 +3764,6 @@
                         '<p style="color: var(--text); font-weight: 600; margin-bottom: 8px;">Search failed</p>' +
                         '<p>Could not search TMDB. Check your connection.</p>' +
                     '</div>';
-                updateStatus('error', 'Search failed');
             }
         }
 
@@ -3028,7 +3808,7 @@
             
             renderSourceList();
             
-            // Fetch IMDB ID for AutoEmbed if needed
+            // Fetch external IDs if needed
             if (currentItem.type === 'movie' || currentItem.type === 'tv') {
                 try {
                     var response = await fetch(
@@ -3081,14 +3861,27 @@
             var type = currentItem.type === 'movie' ? 'movie' : 'tv';
             var url;
             
-            // Special handling for AutoEmbed which requires IMDB ID
-            if (source.name === 'AutoEmbed' && currentItem.imdb_id) {
+            // VidSrc Embed uses IMDB ID instead of TMDB ID
+            if (source.name === 'VidSrc Embed' && currentItem.imdb_id) {
                 url = source.url + type + '/' + currentItem.imdb_id;
-            } else if (source.name === 'AutoEmbed' && !currentItem.imdb_id) {
-                // Fallback to TMDB ID if IMDB not available
-                url = source.url + 'tmdb/' + currentItem.id;
+            } else if (source.name === 'VidSrc Embed' && !currentItem.imdb_id) {
+                // VidSrc Embed uses IMDB ID instead of TMDB ID
+                if (source.name === 'VidSrc Embed' && currentItem.imdb_id) {
+                    url = source.url + type + '/' + currentItem.imdb_id;
+                } else if (source.name === 'VidSrc Embed' && !currentItem.imdb_id) {
+                    url = source.url + type + '/' + currentItem.id;
+                } else {
+                    url = source.url + type + '/' + currentItem.id;
+                }
             } else {
-                url = source.url + type + '/' + currentItem.id;
+                // VidSrc Embed uses IMDB ID instead of TMDB ID
+                if (source.name === 'VidSrc Embed' && currentItem.imdb_id) {
+                    url = source.url + type + '/' + currentItem.imdb_id;
+                } else if (source.name === 'VidSrc Embed' && !currentItem.imdb_id) {
+                    url = source.url + type + '/' + currentItem.id;
+                } else {
+                    url = source.url + type + '/' + currentItem.id;
+                }
             }
             
             iframe.src = url;
@@ -3099,14 +3892,17 @@
         }
 
         function reloadPlayer() {
-            if (currentGame) {
-                var iframe = document.getElementById('playerFrame');
+            if (currentGame && currentGame.mode === 'html5') {
+                var gameContainer = document.getElementById('gameContainer');
                 var loader = document.getElementById('iframeLoader');
                 loader.classList.add('active');
-                iframe.src = currentGame.url;
+                gameContainer.innerHTML = '';
                 setTimeout(function() {
+                    renderHTML5Game(currentGame.gameId, gameContainer);
                     loader.classList.remove('active');
-                }, 2000);
+                }, 300);
+            } else if (currentGame && currentGame.mode === 'external') {
+                window.open(currentGame.url, '_blank');
             } else if (currentSite) {
                 var iframe = document.getElementById('playerFrame');
                 var loader = document.getElementById('iframeLoader');
@@ -3121,8 +3917,11 @@
         }
 
         function openInNewTab() {
-            if (currentGame) {
+            if (currentGame && currentGame.mode === 'external') {
                 window.open(currentGame.url, '_blank');
+            } else if (currentGame && currentGame.mode === 'html5') {
+                // For HTML5 games, open a data URL with the game
+                alert('HTML5 games run natively in BoredAF. No external tab needed!');
             } else if (currentSite) {
                 window.open(currentSite.url, '_blank');
             } else if (currentItem) {
@@ -3130,13 +3929,28 @@
                 var type = currentItem.type === 'movie' ? 'movie' : 'tv';
                 var url;
                 
-                if (source.name === 'AutoEmbed' && currentItem.imdb_id) {
+                // VidSrc Embed uses IMDB ID instead of TMDB ID
+            if (source.name === 'VidSrc Embed' && currentItem.imdb_id) {
+                url = source.url + type + '/' + currentItem.imdb_id;
+            } else if (source.name === 'VidSrc Embed' && !currentItem.imdb_id) {
+                // VidSrc Embed uses IMDB ID instead of TMDB ID
+                if (source.name === 'VidSrc Embed' && currentItem.imdb_id) {
                     url = source.url + type + '/' + currentItem.imdb_id;
-                } else if (source.name === 'AutoEmbed' && !currentItem.imdb_id) {
-                    url = source.url + 'tmdb/' + currentItem.id;
+                } else if (source.name === 'VidSrc Embed' && !currentItem.imdb_id) {
+                    url = source.url + type + '/' + currentItem.id;
                 } else {
                     url = source.url + type + '/' + currentItem.id;
                 }
+            } else {
+                // VidSrc Embed uses IMDB ID instead of TMDB ID
+                if (source.name === 'VidSrc Embed' && currentItem.imdb_id) {
+                    url = source.url + type + '/' + currentItem.imdb_id;
+                } else if (source.name === 'VidSrc Embed' && !currentItem.imdb_id) {
+                    url = source.url + type + '/' + currentItem.id;
+                } else {
+                    url = source.url + type + '/' + currentItem.id;
+                }
+            }
                 
                 window.open(url, '_blank');
             }
@@ -3144,18 +3958,28 @@
 
         function toggleFullscreen() {
             var iframe = document.getElementById('playerFrame');
-            if (iframe.requestFullscreen) {
-                iframe.requestFullscreen();
-            } else if (iframe.webkitRequestFullscreen) {
-                iframe.webkitRequestFullscreen();
-            } else if (iframe.msRequestFullscreen) {
-                iframe.msRequestFullscreen();
+            var gameContainer = document.getElementById('gameContainer');
+            var target = gameContainer.style.display !== 'none' ? gameContainer : iframe;
+            if (target.requestFullscreen) {
+                target.requestFullscreen();
+            } else if (target.webkitRequestFullscreen) {
+                target.webkitRequestFullscreen();
+            } else if (target.msRequestFullscreen) {
+                target.msRequestFullscreen();
             }
         }
 
         function closeModal() {
+            var gameContainer = document.getElementById('gameContainer');
+            if (gameContainer && gameContainer._gameCleanup) {
+                gameContainer._gameCleanup();
+                gameContainer._gameCleanup = null;
+            }
             document.getElementById('movieModal').classList.remove('active');
             document.getElementById('playerFrame').src = 'about:blank';
+            document.getElementById('playerFrame').style.display = 'block';
+            gameContainer.style.display = 'none';
+            gameContainer.innerHTML = '';
             document.getElementById('sourceSidebar').style.display = 'flex';
             currentItem = null;
             currentGame = null;
@@ -3216,7 +4040,7 @@
             var url = URL.createObjectURL(blob);
             var a = document.createElement('a');
             a.href = url;
-            a.download = 'DropDead_V7.2.html';
+            a.download = 'BoredAF_V7.2.html';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -3555,7 +4379,7 @@
                 </head>
                 <body>
                     <div class="loading" id="loading">Loading site...</div>
-                    <iframe src="${url}" sandbox="allow-scripts allow-same-origin allow-popups allow-forms" onload="document.getElementById('loading').style.display='none'"></iframe>
+                    <iframe src="${url}" onload="document.getElementById('loading').style.display='none'"></iframe>
                 </body>
                 </html>
             `;
@@ -3621,47 +4445,53 @@
                 '</div>';
             
             renderMusicPlaylist();
-            
-            // Add event listeners for progress bar and volume
+
+            if (musicProgressInterval) clearInterval(musicProgressInterval);
+
             setTimeout(() => {
                 const progressBar = document.getElementById('progressBar');
                 const volumeSlider = document.getElementById('volumeSlider');
-                
+
                 if (progressBar) {
                     progressBar.addEventListener('click', function(e) {
                         const rect = this.getBoundingClientRect();
                         const percent = (e.clientX - rect.left) / rect.width;
                         if (youtubePlayer && youtubePlayer.seekTo) {
                             const duration = youtubePlayer.getDuration();
-                            youtubePlayer.seekTo(duration * percent, true);
+                            if (duration) youtubePlayer.seekTo(duration * percent, true);
                         }
                     });
                 }
-                
+
                 if (volumeSlider) {
                     volumeSlider.addEventListener('click', function(e) {
                         const rect = this.getBoundingClientRect();
                         const percent = (e.clientX - rect.left) / rect.width;
-                        document.getElementById('volumeFill').style.width = (percent * 100) + '%';
+                        const volFill = document.getElementById('volumeFill');
+                        if (volFill) volFill.style.width = (percent * 100) + '%';
                         if (youtubePlayer && youtubePlayer.setVolume) {
                             youtubePlayer.setVolume(percent * 100);
                         }
                     });
                 }
-                
-                // Update progress bar
-                setInterval(() => {
-                    if (youtubePlayer && youtubePlayer.getCurrentTime && isPlaying) {
+
+                musicProgressInterval = setInterval(() => {
+                    if (!isPlaying || !youtubePlayer || !youtubePlayer.getCurrentTime) return;
+                    try {
                         const current = youtubePlayer.getCurrentTime();
                         const duration = youtubePlayer.getDuration();
                         if (duration > 0) {
                             const percent = (current / duration) * 100;
-                            document.getElementById('progressFill').style.width = percent + '%';
-                            document.getElementById('progressHandle').style.left = percent + '%';
-                            document.getElementById('currentTime').textContent = formatTime(current);
-                            document.getElementById('totalTime').textContent = formatTime(duration);
+                            const progressFill = document.getElementById('progressFill');
+                            const progressHandle = document.getElementById('progressHandle');
+                            const currentTimeEl = document.getElementById('currentTime');
+                            const totalTimeEl = document.getElementById('totalTime');
+                            if (progressFill) progressFill.style.width = percent + '%';
+                            if (progressHandle) progressHandle.style.left = percent + '%';
+                            if (currentTimeEl) currentTimeEl.textContent = formatTime(current);
+                            if (totalTimeEl) totalTimeEl.textContent = formatTime(duration);
                         }
-                    }
+                    } catch (e) {}
                 }, 1000);
             }, 100);
         }
@@ -3716,14 +4546,14 @@
                         '<h3>AI Tools</h3>' +
                     '</div>' +
                     '<div class="ai-grid">' +
-                        createAICard('Kimi', 'https://www.kimi.com/') +
+                        createAICard('Kimi', 'https://kimi.com/') +
                         createAICard('ChatGPT', 'https://chatgpt.com/') +
                         createAICard('Perplexity', 'https://www.perplexity.ai/') +
                         createAICard('Claude', 'https://claude.ai/login') +
                         createAICard('Gemini', 'https://gemini.google.com/') +
                         createAICard('Poe', 'https://poe.com/login?redirect_url=%2F') +
                         createAICard('Photomath', 'https://photomath.com/') +
-                        createAICard('Mathway', 'https://www.mathway.com/Algebra') +
+                        createAICard('Mathway', 'https://www.mathway.com/') +
                         createAICard('Symbolab', 'https://www.symbolab.com/') +
                         createAICard('Chegg', 'https://www.chegg.com/') +
                         createAICard('Course Hero', 'https://www.coursehero.com/') +
@@ -3756,16 +4586,12 @@
                 '</div>';
         }
 
-        function updateStatus(type, message) {
-            var status = document.getElementById('apiStatus');
-            status.innerHTML = '<i class="ri-' + (type === 'active' ? 'wifi' : 'loader-4-line') + '"></i><span>' + message + '</span>';
-        }
-
         window.onbeforeunload = function() {
             if (document.getElementById('movieModal').classList.contains('active')) {
                 return "A movie is playing. Are you sure you want to leave?";
             }
         };
     </script>
+    <script src="https://www.youtube.com/iframe_api"></script>
 </body>
 </html>
