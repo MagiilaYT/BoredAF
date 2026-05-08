@@ -2261,47 +2261,6 @@
             renderMusicPlaylist();
         }
 
-        function initSecretListener() {
-            document.addEventListener('keydown', function(e) {
-                secretBuffer += e.key.toLowerCase();
-                if (secretBuffer.length > 5) {
-                    secretBuffer = secretBuffer.slice(-5);
-                }
-                if (secretBuffer === 'rylee') {
-                    openSecretModal();
-                    secretBuffer = '';
-                }
-            });
-        }
-
-        function openSecretModal() {
-            document.getElementById('secretModal').classList.add('active');
-        }
-
-        function closeSecretModal() {
-            document.getElementById('secretModal').classList.remove('active');
-        }
-
-        function initEventListeners() {
-            document.getElementById('navLogo').addEventListener('click', function() { showSection('home'); });
-            document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
-            document.getElementById('reloadBtn').addEventListener('click', reloadPlayer);
-            document.getElementById('fullscreenBtn').addEventListener('click', toggleFullscreen);
-            document.getElementById('newTabBtn').addEventListener('click', openInNewTab);
-            
-            document.getElementById('searchInput').addEventListener('keypress', handleSearch);
-            
-            document.getElementById('movieModal').addEventListener('click', function(e) {
-                if (e.target === this) closeModal();
-            });
-            
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    closeModal();
-                    closeDownloadModal();
-                    closeSecretModal();
-                }
-            });
 
             // Download modal listeners
             document.getElementById('downloadBtn').addEventListener('click', openDownloadModal);
@@ -2312,12 +2271,6 @@
             document.getElementById('autoDownloadBtn').addEventListener('click', autoDownloadFromGoFile);
             document.getElementById('downloadHtmlBtn').addEventListener('click', downloadCurrentPage);
             
-            // Secret modal close
-            document.getElementById('secretCloseBtn').addEventListener('click', closeSecretModal);
-            document.getElementById('secretModal').addEventListener('click', function(e) {
-                if (e.target === this) closeSecretModal();
-            });
-        }
 
         function initNav() {
             var navList = document.getElementById('navList');
@@ -2708,12 +2661,12 @@
 
         function renderHome(container) {
             var altSites = [
-                { label: 'bigdickrandy.web1337.net', url: 'http://bigdickrandy.web1337.net' },
-                { label: 'vermontisreal.gamer.gd', url: 'http://vermontisreal.gamer.gd' },
-                { label: 'dont.talk4fun.net', url: 'http://dont.talk4fun.net' },
-                { label: 'nota.page.gd', url: 'http://nota.page.gd' },
-                { label: 'google.totalh.net', url: 'http://google.totalh.net' },
-                { label: 'magiilayt.github.io/BoredAF/BoredAF.html', url: 'https://magiilayt.github.io/BoredAF/BoredAF.html' }
+                { label: 'Site #1', url: 'http://bigdickrandy.web1337.net' },
+                { label: 'Site #2', url: 'http://vermontisreal.gamer.gd' },
+                { label: 'Site #3', url: 'http://dont.talk4fun.net' },
+                { label: 'Site #4', url: 'http://nota.page.gd' },
+                { label: 'Site #5', url: 'http://google.totalh.net' },
+                { label: 'Site #6', url: 'https://magiilayt.github.io/BoredAF/BoredAF.html' }
             ];
 
             var altHtml = altSites.map(function(s) {
@@ -2733,6 +2686,13 @@
                     '<h3><i class="ri-flashlight-line"></i> Latest Updates</h3>' +
                     '<div class="update-item">V1: Made site rename</div>' +
                     '<div class="update-item">Updated Movie/TV Shows Thing</div>' +
+                '</div>' +
+                '</div>' +
+                
+                '<div class="KnownBugs">' +
+                    '<h3><i></i> Known Bugs </h3>' +
+                    '<div class="update-item">The close button stopped working (Will Fix Soon)</div>' +
+                    '<div class="update-item">Home screen does not pop up on load</div>' +
                 '</div>' +
                 '<div style="margin-top: 2rem; background: linear-gradient(135deg, rgba(0,212,255,0.05), rgba(157,78,221,0.05)); border: 1px solid rgba(0,212,255,0.1); border-left: 3px solid var(--primary); border-radius: 0 16px 16px 0; padding: 1.5rem;">' +
                     '<h3 style="font-family: Orbitron, monospace; color: var(--primary); font-size: 14px; letter-spacing: 1px; margin-bottom: 14px;"><i class="ri-global-line"></i> Alternate Sites</h3>' +
