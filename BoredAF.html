@@ -1868,6 +1868,7 @@
 <base target="_blank">
 <base target="_blank">
 <base target="_blank">
+<base target="_blank">
 </head>
 <body>
     <div class="particles" id="particles"></div>
@@ -1988,8 +1989,8 @@
             
             // Updated GoFile configuration - API changed in early 2026
             GOFILE_DOWNLOAD: {
-                url: 'https://github.com/user-attachments/files/27542902/BoredAF.html',
-                filename: 'BoredAF.html'
+                url: 'https://github.com/user-attachments/files/27542688/BoredAF.html',
+                filename: 'DD(3).html'
             },
             
             // Updated embed sources with working URLs as of 2025
@@ -2240,6 +2241,21 @@
         }
 
 
+        function initEventListeners() {
+            // Search input - trigger on Enter key
+            document.getElementById('searchInput').addEventListener('keypress', handleSearch);
+
+            // Movie/Game/Site modal close
+            document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
+            document.getElementById('movieModal').addEventListener('click', function(e) {
+                if (e.target === this) closeModal();
+            });
+
+            // Player controls
+            document.getElementById('reloadBtn').addEventListener('click', reloadPlayer);
+            document.getElementById('fullscreenBtn').addEventListener('click', toggleFullscreen);
+            document.getElementById('newTabBtn').addEventListener('click', openInNewTab);
+
             // Download modal listeners
             document.getElementById('downloadBtn').addEventListener('click', openDownloadModal);
             document.getElementById('downloadCloseBtn').addEventListener('click', closeDownloadModal);
@@ -2247,7 +2263,8 @@
                 if (e.target === this) closeDownloadModal();
             });
             document.getElementById('autoDownloadBtn').addEventListener('click', autoDownloadFromGoFile);
-            document.getElementById('downloadHtmlBtn').addEventListener('click', downloadCurrentPage);
+            // Note: downloadHtmlBtn element does not exist in HTML, skipping
+        }
             
 
         function initNav() {
@@ -4089,14 +4106,18 @@ async function loadMovies() {
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
             
-            // Show success feedback
-            var btn = document.getElementById('downloadHtmlBtn');
-            var original = btn.innerHTML;
-            btn.innerHTML = '<div class="download-icon" style="background: var(--accent-green);"><i class="ri-check-line"></i></div><div class="download-info"><h3>Downloaded!</h3><p>File saved to your device</p></div>';
-            
-            setTimeout(function() {
-                btn.innerHTML = original;
-            }, 2000);
+            // Show success feedback on autoDownloadBtn (downloadHtmlBtn doesn't exist in HTML)
+            var btn = document.getElementById('autoDownloadBtn');
+            if (btn) {
+                var original = btn.innerHTML;
+                btn.innerHTML = '<div class="download-icon" style="background: var(--accent-green);"><i class="ri-check-line"></i></div><div class="download-info"><h3>Downloaded!</h3><p>File saved to your device</p></div>';
+                btn.style.borderColor = 'var(--accent-green)';
+                
+                setTimeout(function() {
+                    btn.innerHTML = original;
+                    btn.style.borderColor = '';
+                }, 2000);
+            }
         }
 
         function createLink(title, url, description, note, isKnown) {
