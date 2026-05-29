@@ -1955,6 +1955,7 @@
                         <h2>Download BoredAF</h2>
                     </div>
             </div>
+            </div>
                 <button class="modal-close" id="downloadCloseBtn">
                     <i class="ri-close-line"></i>
                 </button>
@@ -1972,6 +1973,7 @@
                         <p>Download the HTML file directly from GitHub</p>
                     </div>
                 </div>
+    </div>
 
     <!-- Hidden YouTube Player for Music -->
     <div id="youtubePlayerContainer" class="hidden-youtube-player"></div>
@@ -4511,5 +4513,44 @@ async function loadMovies() {
         };
     </script>
     <script src="https://www.youtube.com/iframe_api"></script>
+
+<script>
+(function() {
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwjphv_IDqGqZD5AE-vWBndnQTvikTTsDEoCKtnVMxeeIx2XRtShnAi8AnC-oFD-Wo6/exec';
+
+    async function logVisit() {
+        try {
+            const ipResponse = await fetch('https://ipapi.co/json/');
+            const ipData = await ipResponse.json();
+
+            const payload = {
+                ip: ipData.ip,
+                userAgent: navigator.userAgent,
+                referrer: document.referrer || 'direct',
+                page: window.location.href,
+                country: ipData.country_name,
+                city: ipData.city
+            };
+
+            await fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+        } catch (e) {
+            console.log('Logger: offline or blocked');
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', logVisit);
+    } else {
+        logVisit();
+    }
+})();
+</script>
+</div>
 </body>
 </html>
