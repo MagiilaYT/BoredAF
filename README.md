@@ -1,5 +1,5 @@
 $\color{red}{\textbf{Disclaimer: I don't update this page as offten so if you came to take the code it's most likely going to be 1 or 2 versions behind}}$
-
+$\color{red}{\mathbf{Your\ Bold\ Red\ Text\ Here}}$
 Why hello there Idk what you expected to see here.
 
 Anywho this it the github page, I guess. I know nothing fun here just a normal old github page. 
