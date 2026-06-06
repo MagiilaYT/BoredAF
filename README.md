@@ -1,4 +1,4 @@
-<font color="red">**Disclaimer: I don't update this page as offten so if toy came to take the code it's most likely going to be 1 or 2 versions behind**
+# Disclaimer: I don't update this page as offten so if you came to take the code it's most likely going to be 1 or 2 versions behind
 
 Why hello there Idk what you expected to see here.
 
