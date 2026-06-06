@@ -1,6 +1,10 @@
 Why hello there Idk what you expected to see here.
 
-Anywho this it the github page, I guess. Congrats you found it!!!! Well if you're here to steal the code its in the BoredAF.html file, but if your here to do something else that not that well have fun. :)
+Anywho this it the github page, I guess. I know nothing fun here just a normal old github page. 
+
+Well congrats you found the BoredAF GitHub page!!!! Well if you're here to steal the code its in the index.html file, but if your here to do something else that is not stealing the code well have fun. :)
+
+Just remember I know where you live
 
 
 
