@@ -40,7 +40,7 @@ Just remember: **I know where you live.**
 
 <img width="500" height="500" alt="BoredAF" src="https://github.com/user-attachments/assets/f0754b07-8afc-44de-bbd0-a9ed9bc59b4c" />
 
-*Pictured: The BoredAF logo. It's not much, but it's honest work. Unlike my commit history.*
+*The BoredAF logo. It's not much, but it's honest work. Unlike my commit history.*
 
 ---
 
