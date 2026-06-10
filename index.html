@@ -1864,18 +1864,507 @@
         }
 
     </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <base target="_blank">
-<base target="_blank">
-<base target="_blank">
-<base target="_blank">
-<base target="_blank">
+
+    <!-- Doodle CSS Theme Resources -->
+    <link href="https://fonts.googleapis.com/css2?family=Short+Stack&display=swap" rel="stylesheet">
+    <style id="doodleThemeStyle">
+        /* Doodle CSS - Notebook Paper Theme by chr15m */
+        .doodle-active {
+            font-family: 'Short Stack', cursive !important;
+            background-color: #F5F0E8 !important;
+            color: #3c3c3c !important;
+        }
+
+        /* Only apply hand-drawn font to text content, NOT icons */
+        .doodle-active body,
+        .doodle-active h1, .doodle-active h2, .doodle-active h3, .doodle-active h4, .doodle-active h5, .doodle-active h6,
+        .doodle-active p, .doodle-active span, .doodle-active div, .doodle-active a,
+        .doodle-active button, .doodle-active input, .doodle-active textarea, .doodle-active select,
+        .doodle-active label, .doodle-active li, .doodle-active td, .doodle-active th,
+        .doodle-active .card-title, .doodle-active .link-title, .doodle-active .ai-title,
+        .doodle-active .game-title, .doodle-active .source-name, .doodle-active .music-track-title,
+        .doodle-active .music-track-artist, .doodle-active .section-desc, .doodle-active .category-subtitle,
+        .doodle-active .update-item, .doodle-active .link-note, .doodle-active .source-desc,
+        .doodle-active .cloak-info h4, .doodle-active .cloak-info p,
+        .doodle-active .download-info h3, .doodle-active .download-info p,
+        .doodle-active .modal-title-info h2, .doodle-active .modal-meta,
+        .doodle-active .player-status, .doodle-active .search-info,
+        .doodle-active .music-player-info h3, .doodle-active .music-player-info p,
+        .doodle-active .music-time, .doodle-active .music-track-duration,
+        .doodle-active .secret-title, .doodle-active .secret-message {
+            font-family: 'Short Stack', cursive !important;
+        }
+
+        /* EXPLICITLY preserve remixicon for ALL icon elements */
+        .doodle-active [class^="ri-"],
+        .doodle-active [class*=" ri-"],
+        .doodle-active i,
+        .doodle-active .ri-search-line, .doodle-active .ri-home-4-line,
+        .doodle-active .ri-movie-2-line, .doodle-active .ri-tv-line,
+        .doodle-active .ri-gamepad-line, .doodle-active .ri-links-line,
+        .doodle-active .ri-music-2-line, .doodle-active .ri-brain-line,
+        .doodle-active .ri-settings-3-line, .doodle-active .ri-download-cloud-2-line,
+        .doodle-active .ri-close-line, .doodle-active .ri-refresh-line,
+        .doodle-active .ri-fullscreen-line, .doodle-active .ri-external-link-line,
+        .doodle-active .ri-list-radio, .doodle-active .ri-clapperboard-line,
+        .doodle-active .ri-link, .doodle-active .ri-vidicon-line,
+        .doodle-active .ri-film-line, .doodle-active .ri-star-fill,
+        .doodle-active .ri-calendar-line, .doodle-active .ri-play-circle-line,
+        .doodle-active .ri-error-warning-line, .doodle-active .ri-check-line,
+        .doodle-active .ri-pause-fill, .doodle-active .ri-play-fill,
+        .doodle-active .ri-skip-back-fill, .doodle-active .ri-skip-forward-fill,
+        .doodle-active .ri-album-fill, .doodle-active .ri-search-line,
+        .doodle-active .ri-volume-down-line, .doodle-active .ri-volume-up-line,
+        .doodle-active .ri-robot-2-line, .doodle-active .ri-robot-line,
+        .doodle-active .ri-shield-user-line, .doodle-active .ri-eye-line,
+        .doodle-active .ri-palette-line, .doodle-active .ri-edit-line,
+        .doodle-active .ri-google-fill, .doodle-active .ri-youtube-fill,
+        .doodle-active .ri-skull-line, .doodle-active .ri-flashlight-line,
+        .doodle-active .ri-global-line, .doodle-active .ri-folder-3-line,
+        .doodle-active .ri-archive-line, .doodle-active .ri-window-line,
+        .doodle-active .ri-gamepad-line, .doodle-active .ri-external-link-line,
+        .doodle-active .ri-link, .doodle-active .ri-check-line,
+        .doodle-active .ri-spy-line, .doodle-active .ri-brain-line,
+        .doodle-active .ri-music-2-line, .doodle-active .ri-settings-3-line,
+        .doodle-active .ri-home-4-line, .doodle-active .ri-movie-2-line,
+        .doodle-active .ri-tv-line, .doodle-active .ri-links-line,
+        .doodle-active .ri-download-cloud-line, .doodle-active .ri-download-cloud-2-line {
+            font-family: 'remixicon' !important;
+        }
+
+        /* Nav items keep Inter font */
+        .doodle-active .nav-item,
+        .doodle-active .nav-tooltip,
+        .doodle-active .side-action-btn {
+            font-family: 'Inter', sans-serif !important;
+        }
+
+        /* NOTEBOOK PAPER BACKGROUND */
+        .doodle-active .main-content {
+            background-color: #FFFFFF !important;
+            background-image: 
+                linear-gradient(#C8D4E0 1px, transparent 1px) !important;
+            background-size: 100% 32px !important;
+            background-position: 0 0 !important;
+        }
+
+        /* Red margin line - the vertical line separating nav from content */
+        .doodle-active .main-content::before {
+            content: '' !important;
+            position: absolute !important;
+            left: 80px !important;
+            top: 0 !important;
+            width: 2px !important;
+            height: 100% !important;
+            background: linear-gradient(to bottom, 
+                transparent 0%, 
+                #E74C3C 5%, 
+                #E74C3C 95%, 
+                transparent 100%) !important;
+            z-index: 50 !important;
+            pointer-events: none !important;
+        }
+
+        /* Content area transparent so lines show through */
+        .doodle-active .content-area {
+            background: transparent !important;
+            position: relative !important;
+            z-index: 1 !important;
+        }
+
+        /* Top bar - sits on top of lines */
+        .doodle-active .top-bar {
+            background: #FFFFFF !important;
+            border-bottom: 2px solid #3c3c3c !important;
+            border-image: none !important;
+            backdrop-filter: none !important;
+            position: relative !important;
+            z-index: 10 !important;
+        }
+
+        /* Nav sidebar - left margin area of notebook */
+        .doodle-active .nav-container {
+            background-color: #F5F0E8 !important;
+            border-right: none !important;
+            border-image: none !important;
+            position: relative !important;
+        }
+
+        /* Cards and containers with hand-drawn borders */
+        .doodle-active .content-card,
+        .doodle-active .game-card,
+        .doodle-active .link-card,
+        .doodle-active .ai-card,
+        .doodle-active .settings-card,
+        .doodle-active .source-item,
+        .doodle-active .music-track,
+        .doodle-active .download-option,
+        .doodle-active .cloak-option,
+        .doodle-active .search-box,
+        .doodle-active .modal-content,
+        .doodle-active .modal-header,
+        .doodle-active .player-controls,
+        .doodle-active .source-sidebar,
+        .doodle-active .source-header,
+        .doodle-active .music-player-container,
+        .doodle-active .music-player-header,
+        .doodle-active .music-player-body,
+        .doodle-active .top-btn,
+        .doodle-active .control-btn,
+        .doodle-active .modal-close,
+        .doodle-active .clear-search-btn,
+        .doodle-active .music-control-btn,
+        .doodle-active .music-search-btn,
+        .doodle-active .music-search-input,
+        .doodle-active .custom-cloak-input,
+        .doodle-active .music-volume-slider,
+        .doodle-active .music-progress-bar,
+        .doodle-active .secret-heart,
+        .doodle-active .version-badge,
+        .doodle-active .updates,
+        .doodle-active .KnownBugs,
+        .doodle-active .api-status,
+        .doodle-active .card-badges,
+        .doodle-active .card-badge,
+        .doodle-active .game-badge,
+        .doodle-active .download-icon,
+        .doodle-active .cloak-icon,
+        .doodle-active .music-player-art,
+        .doodle-active .music-track-number,
+        .doodle-active .music-track-play,
+        .doodle-active .modal-poster-thumb {
+            background-color: #FFFFFF !important;
+            color: #3c3c3c !important;
+            border-color: #3c3c3c !important;
+            border-style: solid !important;
+            border-width: 2px !important;
+            border-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMCIgaGVpZ2h0PSIzMCIgdmlld0JveD0iMCAwIDMwIDMwIj48cGF0aCBkPSJNMTAsMyBRMTUsMiAyMCwzIiBmaWxsPSJub25lIiBzdHJva2U9IiMzYzNjM2MiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNMTAsMjcgUTE1LDI4IDIwLDI3IiBmaWxsPSJub25lIiBzdHJva2U9IiMzYzNjM2MiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNMywxMCBRMiwxNSAzLDIwIiBmaWxsPSJub25lIiBzdHJva2U9IiMzYzNjM2MiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNMjcsMTAgUTI4LDE1IDI3LDIwIiBmaWxsPSJub25lIiBzdHJva2U9IiMzYzNjM2MiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNMywxMCBRMiw1IDMsMyBRNSwyIDEwLDMiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzNjM2MzNjYiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cGF0aCBkPSJNMTAsMyBRMTUsMiAyMCwzIiBmaWxsPSJub25lIiBzdHJva2U9IiMzYzNjM2MiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNMTAsMjcgUTE1LDI4IDIwLDI3IiBmaWxsPSJub25lIiBzdHJva2U9IiMzYzNjM2MiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNMywxMCBRMiwxNSAzLDIwIiBmaWxsPSJub25lIiBzdHJva2U9IiMzYzNjM2MiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNMjcsMTAgUTI4LDE1IDI3LDIwIiBmaWxsPSJub25lIiBzdHJva2U9IiMzYzNjM2MiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNMywxMCBRMiw1IDMsMyBRNSwyIDEwLDMiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzNjM2MzNjYiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L3N2Zz4=') 10 10 10 10 stretch stretch !important;
+            border-radius: 3px !important;
+            box-shadow: none !important;
+        }
+
+        /* Active/hover states */
+        .doodle-active .nav-item:hover,
+        .doodle-active .nav-item.active,
+        .doodle-active .source-item.active,
+        .doodle-active .source-item:hover,
+        .doodle-active .theme-option.active,
+        .doodle-active .cloak-option.active,
+        .doodle-active .music-track.active,
+        .doodle-active .music-track:hover,
+        .doodle-active .link-card:hover,
+        .doodle-active .ai-card:hover,
+        .doodle-active .content-card:hover,
+        .doodle-active .game-card:hover,
+        .doodle-active .download-option:hover,
+        .doodle-active .top-btn.primary,
+        .doodle-active .control-btn:hover,
+        .doodle-active .side-action-btn:hover,
+        .doodle-active .modal-close:hover,
+        .doodle-active .clear-search-btn:hover,
+        .doodle-active .music-control-btn:hover,
+        .doodle-active .music-search-btn:hover {
+            background-color: #FFF8F0 !important;
+            border-color: #3c3c3c !important;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .doodle-active .top-btn.primary {
+            background: #3c3c3c !important;
+            color: #FFFFFF !important;
+        }
+
+        /* Text styling */
+        .doodle-active .section-header h2,
+        .doodle-active .category h3,
+        .doodle-active .settings-card h3,
+        .doodle-active .source-header h3,
+        .doodle-active .music-player-info h3,
+        .doodle-active .secret-title,
+        .doodle-active .download-header h2,
+        .doodle-active .modal-title-info h2 {
+            background: none !important;
+            -webkit-text-fill-color: #3c3c3c !important;
+            color: #3c3c3c !important;
+            font-family: 'Short Stack', cursive !important;
+        }
+
+        /* Badges */
+        .doodle-active .card-badge.rating,
+        .doodle-active .card-badge.bogge,
+        .doodle-active .card-badge.popular,
+        .doodle-active .game-badge.popular {
+            background: #3c3c3c !important;
+            color: #FFFFFF !important;
+            border-image: none !important;
+        }
+
+        /* Muted text */
+        .doodle-active .link-url,
+        .doodle-active .ai-url,
+        .doodle-active .category-subtitle,
+        .doodle-active .section-desc,
+        .doodle-active .card-meta,
+        .doodle-active .text-muted,
+        .doodle-active .source-desc,
+        .doodle-active .music-track-artist,
+        .doodle-active .music-track-duration,
+        .doodle-active .music-time,
+        .doodle-active .player-status,
+        .doodle-active .search-info,
+        .doodle-active .update-item,
+        .doodle-active .link-note,
+        .doodle-active .cloak-info p,
+        .doodle-active .download-info p,
+        .doodle-active .download-note,
+        .doodle-active .music-player-info p {
+            color: #6b6b6b !important;
+        }
+
+        /* Nav icons */
+        .doodle-active .nav-item i,
+        .doodle-active .nav-item.active i,
+        .doodle-active .nav-item:hover i {
+            color: #3c3c3c !important;
+            text-shadow: none !important;
+        }
+
+        /* Scrollbar */
+        .doodle-active .content-area::-webkit-scrollbar-track {
+            background: #F0EEE8 !important;
+        }
+        .doodle-active .content-area::-webkit-scrollbar-thumb {
+            background: #3c3c3c !important;
+            border-radius: 3px !important;
+        }
+
+        /* Particles */
+        .doodle-active .particle {
+            background: #3c3c3c !important;
+            box-shadow: none !important;
+        }
+
+        /* Loaders */
+        .doodle-active .iframe-loader,
+        .doodle-active .loading-spinner {
+            color: #3c3c3c !important;
+        }
+
+        /* Nav tooltip */
+        .doodle-active .nav-tooltip {
+            background: #FFFFFF !important;
+            border: 2px solid #3c3c3c !important;
+            color: #3c3c3c !important;
+            border-radius: 3px !important;
+        }
+
+        /* Player */
+        .doodle-active .player-frame,
+        .doodle-active #gameContainer {
+            background: #FFFFFF !important;
+        }
+
+        /* Modal overlay */
+        .doodle-active .modal-overlay {
+            background: rgba(245, 240, 232, 0.98) !important;
+        }
+
+        /* Secret modal */
+        .doodle-active .secret-heart {
+            color: #3c3c3c !important;
+        }
+        .doodle-active .secret-message {
+            background: none !important;
+            -webkit-text-fill-color: #3c3c3c !important;
+            color: #3c3c3c !important;
+        }
+
+        /* Version badge */
+        .doodle-active .version-badge {
+            background: #FFFFFF !important;
+            border: 2px solid #3c3c3c !important;
+            color: #3c3c3c !important;
+            animation: none !important;
+            box-shadow: none !important;
+        }
+
+        /* Updates/Known Bugs boxes */
+        .doodle-active .updates,
+        .doodle-active .KnownBugs {
+            background: #FFFFFF !important;
+            border: 2px solid #3c3c3c !important;
+            border-left-width: 2px !important;
+            backdrop-filter: none !important;
+        }
+        .doodle-active .updates h3,
+        .doodle-active .KnownBugs h3 {
+            color: #3c3c3c !important;
+        }
+
+        /* Subcategory */
+        .doodle-active .subcategory {
+            color: #3c3c3c !important;
+            border-left-color: #3c3c3c !important;
+        }
+
+        /* Inputs */
+        .doodle-active input,
+        .doodle-active textarea,
+        .doodle-active select {
+            background-color: unset !important;
+            font-family: 'Short Stack', cursive !important;
+            color: #3c3c3c !important;
+        }
+
+        /* Focus states */
+        .doodle-active .search-box:focus-within,
+        .doodle-active .music-search-input:focus {
+            border-color: #3c3c3c !important;
+            box-shadow: none !important;
+        }
+
+        /* Theme options */
+        .doodle-active .theme-option {
+            border-width: 2px !important;
+        }
+        .doodle-active .theme-option.active::after {
+            color: #3c3c3c !important;
+            text-shadow: none !important;
+        }
+
+        /* Links */
+        .doodle-active a {
+            color: #1c1c1c !important;
+            font-weight: bold !important;
+        }
+
+        /* Nav items specific */
+        .doodle-active .nav-item {
+            background-color: transparent !important;
+            border: 2px solid transparent !important;
+            border-image: none !important;
+            border-radius: 14px !important;
+            font-family: 'Inter', sans-serif !important;
+        }
+        .doodle-active .nav-item:hover,
+        .doodle-active .nav-item.active {
+            background-color: #FFF8F0 !important;
+            border-color: #3c3c3c !important;
+            border-image: none !important;
+            transform: translateX(4px) !important;
+        }
+        .doodle-active .nav-item.active::before {
+            background: #E74C3C !important;
+            border-image: none !important;
+        }
+        .doodle-active .nav-logo {
+            background-color: #FFFFFF !important;
+            border: 2px solid #3c3c3c !important;
+            border-image: none !important;
+            box-shadow: none !important;
+        }
+        .doodle-active .nav-logo:hover {
+            box-shadow: none !important;
+            transform: scale(1.1) rotate(5deg) !important;
+        }
+        .doodle-active .side-action-btn {
+            background-color: transparent !important;
+            border: 2px solid #3c3c3c !important;
+            border-image: none !important;
+            color: #3c3c3c !important;
+            font-family: 'Inter', sans-serif !important;
+        }
+        .doodle-active .side-action-btn:hover {
+            background-color: #FFF8F0 !important;
+            border-color: #3c3c3c !important;
+            color: #3c3c3c !important;
+            transform: rotate(180deg) !important;
+        }
+
+        /* Active indicator line - red like notebook margin */
+        .doodle-active .nav-item.active::before {
+            background: #E74C3C !important;
+        }
+
+        /* Doodle HR */
+        .doodle-active .doodle-hr {
+            border-style: solid !important;
+            border-width: 0px 3px 6px 3px !important;
+            border-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMCIgaGVpZ2h0PSIzMCIgdmlld0JveD0iMCAwIDMwIDMwIj48cGF0aCBkPSJNMywyNCBRMTUsMjMgMjcsMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzNjM2MzNjIiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNMCwyNCBRMS41LDIzIDMsMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzNjM2MzNjYiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNMjcsMjQgUTI4LjUsMjMgMzAsMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzNjM2MzNjYiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L3N2Zz4=') 0 3 6 3 stretch stretch !important;
+        }
+    </style>
 <base target="_blank">
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" style="position:fixed;top:0;left:0;width:100%;height:100%;background:var(--darker);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.5s ease;">
+        <div id="loadingLogo" style="width:120px;height:120px;margin-bottom:30px;position:relative;">
+            <img src="https://boredaf.synergize.co/BoredAF.png" alt="BoredAF" style="width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 20px var(--primary));animation:pulse-logo 1.5s ease-in-out infinite;">
+        </div>
+        <div id="loadingText" style="font-family:'Orbitron',monospace;font-size:1.5rem;color:var(--primary);letter-spacing:4px;text-transform:uppercase;animation:glow-text 1.5s ease-in-out infinite alternate;">Loading BoredAF</div>
+        <div id="loadingBarContainer" style="width:200px;height:4px;background:var(--card-bg);border-radius:2px;margin-top:20px;overflow:hidden;border:1px solid var(--border);">
+            <div id="loadingBar" style="width:0%;height:100%;background:var(--gradient-1);border-radius:2px;transition:width 0.3s ease;"></div>
+        </div>
+    </div>
+    <style>
+        @keyframes pulse-logo {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 20px var(--primary)); }
+            50% { transform: scale(1.05); filter: drop-shadow(0 0 40px var(--primary)); }
+        }
+        @keyframes glow-text {
+            from { text-shadow: 0 0 10px var(--primary); opacity: 0.7; }
+            to { text-shadow: 0 0 30px var(--primary), 0 0 60px var(--accent-purple); opacity: 1; }
+        }
+        /* Doodle theme loading screen */
+        .doodle-loading {
+            background: #F5F0E8 !important;
+            font-family: 'Short Stack', cursive !important;
+        }
+        .doodle-loading #loadingLogo img {
+            filter: none !important;
+            animation: doodle-bounce 1s ease-in-out infinite !important;
+            border: 3px solid #3c3c3c !important;
+            border-radius: 12px !important;
+            padding: 8px !important;
+            background: #FFFFFF !important;
+        }
+        @keyframes doodle-bounce {
+            0%, 100% { transform: rotate(-3deg) scale(1); }
+            50% { transform: rotate(3deg) scale(1.05); }
+        }
+        .doodle-loading #loadingText {
+            font-family: 'Short Stack', cursive !important;
+            color: #3c3c3c !important;
+            text-shadow: none !important;
+            animation: doodle-wiggle 2s ease-in-out infinite !important;
+            letter-spacing: 2px !important;
+            text-transform: none !important;
+        }
+        @keyframes doodle-wiggle {
+            0%, 100% { transform: rotate(-1deg); }
+            25% { transform: rotate(1deg); }
+            50% { transform: rotate(-1deg); }
+            75% { transform: rotate(1deg); }
+        }
+        .doodle-loading #loadingBarContainer {
+            background: #FFFFFF !important;
+            border: 2px solid #3c3c3c !important;
+            border-radius: 3px !important;
+            height: 8px !important;
+        }
+        .doodle-loading #loadingBar {
+            background: #3c3c3c !important;
+            border-radius: 2px !important;
+        }
+    </style>
     <div class="particles" id="particles"></div>
     <div class="app-container" id="appContainer"> 
         <nav class="nav-container">
-            <div>
+            <div class="nav-logo" onclick="showSection('home')" style="cursor:pointer;">
+                <img src="https://boredaf.synergize.co/BoredAF.png" alt="BoredAF" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">
             </div>
             <ul class="nav-list" id="navList"></ul>
             <div class="side-actions">
@@ -1954,8 +2443,7 @@
                     <div class="modal-title-info">
                         <h2>Download BoredAF</h2>
                     </div>
-            </div>
-            </div>
+                </div>
                 <button class="modal-close" id="downloadCloseBtn">
                     <i class="ri-close-line"></i>
                 </button>
@@ -2032,10 +2520,10 @@
                 { id: 'home', name: 'Home', icon: 'ri-home-4-line' },
                 { id: 'movies', name: 'Movies', icon: 'ri-movie-2-line' },
                 { id: 'tv', name: 'TV Shows', icon: 'ri-tv-line' },
+                { id: 'games', name: 'Games', icon: 'ri-gamepad-line' },
                 { id: 'sites', name: 'Sites', icon: 'ri-links-line' },
-                { id: 'music', name: 'Music', icon: 'ri-music-2-line' },
                 { id: 'ai', name: 'AI 101', icon: 'ri-brain-line' },
-                                { id: 'settings', name: 'Settings', icon: 'ri-settings-3-line' }
+                { id: 'settings', name: 'Settings', icon: 'ri-settings-3-line' }
             ],
 
             // 30 Different Themes - Fixed gradient syntax errors
@@ -2069,7 +2557,8 @@
                 { name: 'Rainbow', primary: '#ff0000', dark: '#1a1a1a', darker: '#0d0d0d', card: '#2d2d2d', border: '#404040', gradient: 'linear-gradient(135deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3)' },
                 { name: 'Matrix', primary: '#00ff41', dark: '#0d0208', darker: '#050105', card: '#003b00', border: '#008f11', gradient: 'linear-gradient(135deg, #00ff41, #008f11)' },
                 { name: 'Peach', primary: '#fda4af', dark: '#4c0519', darker: '#2a0510', card: '#9f1239', border: '#be123c', gradient: 'linear-gradient(135deg, #fda4af, #f472b6)' },
-                { name: 'Void', primary: '#ffffff', dark: '#000000', darker: '#000000', card: '#0a0a0a', border: '#1a1a1a', gradient: 'linear-gradient(135deg, #ffffff, #808080)' }
+                { name: 'Void', primary: '#ffffff', dark: '#000000', darker: '#000000', card: '#0a0a0a', border: '#1a1a1a', gradient: 'linear-gradient(135deg, #ffffff, #808080)' },
+                { name: 'Doodle', primary: '#3c3c3c', dark: '#F8F6F0', darker: '#F0EEE8', card: '#FFFFFF', border: '#3c3c3c', gradient: 'linear-gradient(135deg, #3c3c3c, #6b6b6b)' }
             ],
 
             // Tab Cloak Options
@@ -2101,7 +2590,310 @@
                 { title: "New Magic Wand", artist: "Tyler, The Creator", id: "2w8KUgIkAuY", duration: "3:15" },
                 { title: "Lumberjack", artist: "Tyler, The Creator", id: "R4Y7JIQlv20", duration: "2:18" },
                 { title: "WUSYANAME", artist: "Tyler, The Creator", id: "N2Y2vFQ--1w", duration: "2:01" }
-            ]
+            ],
+
+            games: [
+            { name: '1.12', url: 'https://magiilayt.github.io/HTML-Game/offline/1.12.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: '1.5', url: 'https://magiilayt.github.io/HTML-Game/offline/1.5.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: '1.8', url: 'https://magiilayt.github.io/HTML-Game/offline/1.8.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: '10minutestilldawn', url: 'https://magiilayt.github.io/HTML-Game/offline/10minutestilldawn.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: '12minibattles', url: 'https://magiilayt.github.io/HTML-Game/offline/12minibattles.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: '1on1soccer', url: 'https://magiilayt.github.io/HTML-Game/offline/1on1soccer.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: '1on1tennis', url: 'https://magiilayt.github.io/HTML-Game/offline/1on1tennis.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: '1v1.lol', url: 'https://magiilayt.github.io/HTML-Game/offline/1v1.lol.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: '2048', url: 'https://magiilayt.github.io/HTML-Game/offline/2048.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: '2048cupcakes', url: 'https://magiilayt.github.io/HTML-Game/offline/2048cupcakes.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: '3dflightsimulator', url: 'https://magiilayt.github.io/HTML-Game/offline/3Dflightsimulator.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: '8ballclassic', url: 'https://magiilayt.github.io/HTML-Game/offline/8ballclassic.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Alpha 1.2.6', url: 'https://magiilayt.github.io/HTML-Game/offline/Alpha_1.2.6.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Beta 1.3', url: 'https://magiilayt.github.io/HTML-Game/offline/Beta_1.3.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Indev', url: 'https://magiilayt.github.io/HTML-Game/offline/Indev.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Agariolite', url: 'https://magiilayt.github.io/HTML-Game/offline/agariolite.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Ageofwar', url: 'https://magiilayt.github.io/HTML-Game/offline/ageofwar.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Ageofwar2', url: 'https://magiilayt.github.io/HTML-Game/offline/ageofwar2.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Agesofconflict', url: 'https://magiilayt.github.io/HTML-Game/offline/agesofconflict.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Amongus', url: 'https://magiilayt.github.io/HTML-Game/offline/amongus.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Angrybirds', url: 'https://magiilayt.github.io/HTML-Game/offline/angrybirds.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Angrybirdsshowdown', url: 'https://magiilayt.github.io/HTML-Game/offline/angrybirdsshowdown.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Angrybirdsspace', url: 'https://magiilayt.github.io/HTML-Game/offline/angrybirdsspace.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Awesometanks', url: 'https://magiilayt.github.io/HTML-Game/offline/awesometanks.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Awesometanks2', url: 'https://magiilayt.github.io/HTML-Game/offline/awesometanks2.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Backrooms', url: 'https://magiilayt.github.io/HTML-Game/offline/backrooms.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Baconmaydie', url: 'https://magiilayt.github.io/HTML-Game/offline/baconmaydie.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Badicecream', url: 'https://magiilayt.github.io/HTML-Game/offline/badicecream.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Badicecream2', url: 'https://magiilayt.github.io/HTML-Game/offline/badicecream2.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Badicecream3', url: 'https://magiilayt.github.io/HTML-Game/offline/badicecream3.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Badparenting', url: 'https://magiilayt.github.io/HTML-Game/offline/badparenting.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Badpiggies', url: 'https://magiilayt.github.io/HTML-Game/offline/badpiggies.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Baldisbasics', url: 'https://magiilayt.github.io/HTML-Game/offline/baldisbasics.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Baseballbros', url: 'https://magiilayt.github.io/HTML-Game/offline/baseballbros.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Basketballlegends', url: 'https://magiilayt.github.io/HTML-Game/offline/basketballlegends.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Basketballstars', url: 'https://magiilayt.github.io/HTML-Game/offline/basketballstars.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Basketbros', url: 'https://magiilayt.github.io/HTML-Game/offline/basketbros.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Basketrandom', url: 'https://magiilayt.github.io/HTML-Game/offline/basketrandom.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Bitlife', url: 'https://magiilayt.github.io/HTML-Game/offline/bitlife.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Bitplanes', url: 'https://magiilayt.github.io/HTML-Game/offline/bitplanes.htm', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Blockysnakes', url: 'https://magiilayt.github.io/HTML-Game/offline/blockysnakes.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Bloonstd', url: 'https://magiilayt.github.io/HTML-Game/offline/bloonsTD.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Bloonstd2', url: 'https://magiilayt.github.io/HTML-Game/offline/bloonsTD2.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Bloonstd3', url: 'https://magiilayt.github.io/HTML-Game/offline/bloonsTD3.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Bloonstd4', url: 'https://magiilayt.github.io/HTML-Game/offline/bloonsTD4.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Bloonstd5', url: 'https://magiilayt.github.io/HTML-Game/offline/bloonsTD5.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Bloxorz', url: 'https://magiilayt.github.io/HTML-Game/offline/bloxorz.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Blumgiracers', url: 'https://magiilayt.github.io/HTML-Game/offline/blumgiracers.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Blumgirocket', url: 'https://magiilayt.github.io/HTML-Game/offline/blumgirocket.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Bobtherobber', url: 'https://magiilayt.github.io/HTML-Game/offline/bobtherobber.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Bobtherobber2', url: 'https://magiilayt.github.io/HTML-Game/offline/bobtherobber2.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Bobtherobber5', url: 'https://magiilayt.github.io/HTML-Game/offline/bobtherobber5.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Bouncymotors', url: 'https://magiilayt.github.io/HTML-Game/offline/bouncymotors.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Bowmasters', url: 'https://magiilayt.github.io/HTML-Game/offline/bowmasters.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Boxingrandom', url: 'https://magiilayt.github.io/HTML-Game/offline/boxingrandom.htm', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Breakingthebank', url: 'https://magiilayt.github.io/HTML-Game/offline/breakingthebank.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Bubbleshooter', url: 'https://magiilayt.github.io/HTML-Game/offline/bubbleshooter.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Candycrush', url: 'https://magiilayt.github.io/HTML-Game/offline/candycrush.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Capybaraclicker', url: 'https://magiilayt.github.io/HTML-Game/offline/capybaraclicker.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Cardrawing', url: 'https://magiilayt.github.io/HTML-Game/offline/cardrawing.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Carkingarena', url: 'https://magiilayt.github.io/HTML-Game/offline/carkingarena.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Chess', url: 'https://magiilayt.github.io/HTML-Game/offline/chess.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Choppyorc', url: 'https://magiilayt.github.io/HTML-Game/offline/choppyorc.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Circloo', url: 'https://magiilayt.github.io/HTML-Game/offline/circloO.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Circloo2', url: 'https://magiilayt.github.io/HTML-Game/offline/circloO2.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Clashofvikings', url: 'https://magiilayt.github.io/HTML-Game/offline/clashofvikings.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Cleanupio', url: 'https://magiilayt.github.io/HTML-Game/offline/cleanupio.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Clusterrush', url: 'https://magiilayt.github.io/HTML-Game/offline/clusterrush.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Cookieclicker', url: 'https://magiilayt.github.io/HTML-Game/offline/cookieclicker.htm', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Crazycars', url: 'https://magiilayt.github.io/HTML-Game/offline/crazycars.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Crazycattle3d', url: 'https://magiilayt.github.io/HTML-Game/offline/crazycattle3D.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Crazycrashlanding', url: 'https://magiilayt.github.io/HTML-Game/offline/crazycrashlanding.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Crazymotorcycle', url: 'https://magiilayt.github.io/HTML-Game/offline/crazymotorcycle.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Crossyroad', url: 'https://magiilayt.github.io/HTML-Game/offline/crossyroad.htm', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Cuttherope', url: 'https://magiilayt.github.io/HTML-Game/offline/cuttherope.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Dadish', url: 'https://magiilayt.github.io/HTML-Game/offline/dadish.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Dadish2', url: 'https://magiilayt.github.io/HTML-Game/offline/dadish2.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Dadish3', url: 'https://magiilayt.github.io/HTML-Game/offline/dadish3.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Deathchase', url: 'https://magiilayt.github.io/HTML-Game/offline/deathchase.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Deathrun3d', url: 'https://magiilayt.github.io/HTML-Game/offline/deathrun3D.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Demolitionderbycrashracing', url: 'https://magiilayt.github.io/HTML-Game/offline/demolitionderbycrashracing.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Doodlejump', url: 'https://magiilayt.github.io/HTML-Game/offline/doodlejump.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Drawclimber', url: 'https://magiilayt.github.io/HTML-Game/offline/drawclimber.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Dreadheadparkour', url: 'https://magiilayt.github.io/HTML-Game/offline/dreadheadparkour.htm', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Driftboss', url: 'https://magiilayt.github.io/HTML-Game/offline/driftboss.htm', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Drivemad', url: 'https://magiilayt.github.io/HTML-Game/offline/drivemad.htm', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Ducklife', url: 'https://magiilayt.github.io/HTML-Game/offline/ducklife.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Ducklife2', url: 'https://magiilayt.github.io/HTML-Game/offline/ducklife2.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Ducklife3', url: 'https://magiilayt.github.io/HTML-Game/offline/ducklife3.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Ducklife4', url: 'https://magiilayt.github.io/HTML-Game/offline/ducklife4.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Ducklife5', url: 'https://magiilayt.github.io/HTML-Game/offline/ducklife5.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Ducklingsio', url: 'https://magiilayt.github.io/HTML-Game/offline/ducklingsio.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Eagleride', url: 'https://magiilayt.github.io/HTML-Game/offline/eagleride.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Earntodie', url: 'https://magiilayt.github.io/HTML-Game/offline/earntodie.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Earntodie2', url: 'https://magiilayt.github.io/HTML-Game/offline/earntodie2.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Eggycar', url: 'https://magiilayt.github.io/HTML-Game/offline/eggycar.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Elasticface', url: 'https://magiilayt.github.io/HTML-Game/offline/elasticface.htm', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Escaperoad', url: 'https://magiilayt.github.io/HTML-Game/offline/escaperoad.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Escaperoad2', url: 'https://magiilayt.github.io/HTML-Game/offline/escaperoad2.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Escapingtheprison', url: 'https://magiilayt.github.io/HTML-Game/offline/escapingtheprison.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Evilglitch', url: 'https://magiilayt.github.io/HTML-Game/offline/evilglitch.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Fancypantsadventure', url: 'https://magiilayt.github.io/HTML-Game/offline/fancypantsadventure.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Fancypantsadventure2', url: 'https://magiilayt.github.io/HTML-Game/offline/fancypantsadventure2.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Fireboyandwatergirl', url: 'https://magiilayt.github.io/HTML-Game/offline/fireboyandwatergirl.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Fireboyandwatergirl2', url: 'https://magiilayt.github.io/HTML-Game/offline/fireboyandwatergirl2.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Fireboyandwatergirl3', url: 'https://magiilayt.github.io/HTML-Game/offline/fireboyandwatergirl3.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Fireboyandwatergirl4', url: 'https://magiilayt.github.io/HTML-Game/offline/fireboyandwatergirl4.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Flappybird', url: 'https://magiilayt.github.io/HTML-Game/offline/flappybird.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Floodrunner2', url: 'https://magiilayt.github.io/HTML-Game/offline/floodrunner2.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Floodrunner3', url: 'https://magiilayt.github.io/HTML-Game/offline/floodrunner3.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Floodrunner4', url: 'https://magiilayt.github.io/HTML-Game/offline/floodrunner4.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'FNAF', url: 'https://magiilayt.github.io/HTML-Game/offline/fnaf.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Fnaf2', url: 'https://magiilayt.github.io/HTML-Game/offline/fnaf2.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Fnaf3', url: 'https://magiilayt.github.io/HTML-Game/offline/fnaf3.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Fnaf4', url: 'https://magiilayt.github.io/HTML-Game/offline/fnaf4.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Footballbros', url: 'https://magiilayt.github.io/HTML-Game/offline/footballbros.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Footballlegends', url: 'https://magiilayt.github.io/HTML-Game/offline/footballlegends.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Freerider3', url: 'https://magiilayt.github.io/HTML-Game/offline/freerider3.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Fruitninja', url: 'https://magiilayt.github.io/HTML-Game/offline/fruitninja.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Funnybattle', url: 'https://magiilayt.github.io/HTML-Game/offline/funnybattle.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Funnybattle2', url: 'https://magiilayt.github.io/HTML-Game/offline/funnybattle2.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Funnymadracing', url: 'https://magiilayt.github.io/HTML-Game/offline/funnymadracing.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Funnyshooter2', url: 'https://magiilayt.github.io/HTML-Game/offline/funnyshooter2.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Geometrydash', url: 'https://magiilayt.github.io/HTML-Game/offline/geometrydash.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Geometrydashlite', url: 'https://magiilayt.github.io/HTML-Game/offline/geometrydashlite.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Geometryvibes', url: 'https://magiilayt.github.io/HTML-Game/offline/geometryvibes.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Getawayshootout', url: 'https://magiilayt.github.io/HTML-Game/offline/getawayshootout.htm', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Getontop', url: 'https://magiilayt.github.io/HTML-Game/offline/getontop.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Gladihoppers', url: 'https://magiilayt.github.io/HTML-Game/offline/gladihoppers.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Googlebaseball', url: 'https://magiilayt.github.io/HTML-Game/offline/googlebaseball.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Googledino', url: 'https://magiilayt.github.io/HTML-Game/offline/googledino.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Granny', url: 'https://magiilayt.github.io/HTML-Game/offline/granny.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Granny2', url: 'https://magiilayt.github.io/HTML-Game/offline/granny2.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Guesstheiranswer', url: 'https://magiilayt.github.io/HTML-Game/offline/guesstheiranswer.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Hanger2', url: 'https://magiilayt.github.io/HTML-Game/offline/hanger2.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Happywheels', url: 'https://magiilayt.github.io/HTML-Game/offline/happywheels.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Helixjump', url: 'https://magiilayt.github.io/HTML-Game/offline/helixjump.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Highwaytraffic', url: 'https://magiilayt.github.io/HTML-Game/offline/highwaytraffic.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Hillclimbracinglite', url: 'https://magiilayt.github.io/HTML-Game/offline/hillclimbracinglite.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Holeio', url: 'https://magiilayt.github.io/HTML-Game/offline/holeio.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Houseofhazards', url: 'https://magiilayt.github.io/HTML-Game/offline/houseofhazards.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Hoverracerdrive', url: 'https://magiilayt.github.io/HTML-Game/offline/hoverracerdrive.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Idlebreakout', url: 'https://magiilayt.github.io/HTML-Game/offline/idlebreakout.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Ironsnout', url: 'https://magiilayt.github.io/HTML-Game/offline/ironsnout.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Jetpackjoyride', url: 'https://magiilayt.github.io/HTML-Game/offline/jetpackjoyride.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Johnnytrigger', url: 'https://magiilayt.github.io/HTML-Game/offline/johnnytrigger.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Jumpingshell', url: 'https://magiilayt.github.io/HTML-Game/offline/jumpingshell.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Karatebros', url: 'https://magiilayt.github.io/HTML-Game/offline/karatebros.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Kartbros', url: 'https://magiilayt.github.io/HTML-Game/offline/kartbros.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Learntofly', url: 'https://magiilayt.github.io/HTML-Game/offline/learntofly.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Learntofly2', url: 'https://magiilayt.github.io/HTML-Game/offline/learntofly2.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Learntofly3', url: 'https://magiilayt.github.io/HTML-Game/offline/learntofly3.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Learntoflyidle', url: 'https://magiilayt.github.io/HTML-Game/offline/learntoflyidle.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Leveldevil', url: 'https://magiilayt.github.io/HTML-Game/offline/leveldevil.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Madalinstuntcars2', url: 'https://magiilayt.github.io/HTML-Game/offline/madalinstuntcars2.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Melonplayground', url: 'https://magiilayt.github.io/HTML-Game/offline/melonplayground.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Mergeroundracers', url: 'https://magiilayt.github.io/HTML-Game/offline/mergeroundracers.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Minesweeper', url: 'https://magiilayt.github.io/HTML-Game/offline/minesweeper.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Monkeymart', url: 'https://magiilayt.github.io/HTML-Game/offline/monkeymart.htm', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Monstertracks', url: 'https://magiilayt.github.io/HTML-Game/offline/monstertracks.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Motox3m', url: 'https://magiilayt.github.io/HTML-Game/offline/motox3m.htm', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Motox3m2', url: 'https://magiilayt.github.io/HTML-Game/offline/motox3m2.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Motox3m3', url: 'https://magiilayt.github.io/HTML-Game/offline/motox3m3.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Motox3mpoolparty', url: 'https://magiilayt.github.io/HTML-Game/offline/motox3mpoolparty.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Motox3mspookyland', url: 'https://magiilayt.github.io/HTML-Game/offline/motox3mspookyland.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Motox3mwinter', url: 'https://magiilayt.github.io/HTML-Game/offline/motox3mwinter.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Noobminer', url: 'https://magiilayt.github.io/HTML-Game/offline/noobminer.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Oppositeday', url: 'https://magiilayt.github.io/HTML-Game/offline/oppositeday.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'OVO', url: 'https://magiilayt.github.io/HTML-Game/offline/ovo.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Ovo2', url: 'https://magiilayt.github.io/HTML-Game/offline/ovo2.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Ovo3dimensions', url: 'https://magiilayt.github.io/HTML-Game/offline/ovo3dimensions.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Pacman', url: 'https://magiilayt.github.io/HTML-Game/offline/pacman.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Papasbakeria', url: 'https://magiilayt.github.io/HTML-Game/offline/papasbakeria.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Papasburgeria', url: 'https://magiilayt.github.io/HTML-Game/offline/papasburgeria.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Papascheeseria', url: 'https://magiilayt.github.io/HTML-Game/offline/papascheeseria.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Papascupcakeria', url: 'https://magiilayt.github.io/HTML-Game/offline/papascupcakeria.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Papasdonuteria', url: 'https://magiilayt.github.io/HTML-Game/offline/papasdonuteria.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Papasfreezeria', url: 'https://magiilayt.github.io/HTML-Game/offline/papasfreezeria.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Papashotdoggeria', url: 'https://magiilayt.github.io/HTML-Game/offline/papashotdoggeria.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Papaspancakeria', url: 'https://magiilayt.github.io/HTML-Game/offline/papaspancakeria.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Papaspastaria', url: 'https://magiilayt.github.io/HTML-Game/offline/papaspastaria.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Papaspizzeria', url: 'https://magiilayt.github.io/HTML-Game/offline/papaspizzeria.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Papasscooperia', url: 'https://magiilayt.github.io/HTML-Game/offline/papasscooperia.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Papassushiria', url: 'https://magiilayt.github.io/HTML-Game/offline/papassushiria.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Papastacomia', url: 'https://magiilayt.github.io/HTML-Game/offline/papastacomia.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Papaswingeria', url: 'https://magiilayt.github.io/HTML-Game/offline/papaswingeria.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Paperio2', url: 'https://magiilayt.github.io/HTML-Game/offline/paperio2.htm', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Parkingfury', url: 'https://magiilayt.github.io/HTML-Game/offline/parkingfury.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Parkingfury2', url: 'https://magiilayt.github.io/HTML-Game/offline/parkingfury2.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Parkingfury3', url: 'https://magiilayt.github.io/HTML-Game/offline/parkingfury3.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Picosschool', url: 'https://magiilayt.github.io/HTML-Game/offline/picosschool.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Pingpongchaos', url: 'https://magiilayt.github.io/HTML-Game/offline/pingpongchaos.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Pixelspeedrun', url: 'https://magiilayt.github.io/HTML-Game/offline/pixelspeedrun.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Plantsvszombies', url: 'https://magiilayt.github.io/HTML-Game/offline/plantsvszombies.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Plonky', url: 'https://magiilayt.github.io/HTML-Game/offline/plonky.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Polytrack', url: 'https://magiilayt.github.io/HTML-Game/offline/polytrack.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Poorbunny', url: 'https://magiilayt.github.io/HTML-Game/offline/poorbunny.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Pou', url: 'https://magiilayt.github.io/HTML-Game/offline/pou.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Ragdollarchers', url: 'https://magiilayt.github.io/HTML-Game/offline/ragdollarchers.htm', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Ragdollhit', url: 'https://magiilayt.github.io/HTML-Game/offline/ragdollhit.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Ragdollsoccer', url: 'https://magiilayt.github.io/HTML-Game/offline/ragdollsoccer.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Redball4vol1', url: 'https://magiilayt.github.io/HTML-Game/offline/redball4vol1.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Redball4vol2', url: 'https://magiilayt.github.io/HTML-Game/offline/redball4vol2.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Redball4vol3', url: 'https://magiilayt.github.io/HTML-Game/offline/redball4vol3.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Retrobowl', url: 'https://magiilayt.github.io/HTML-Game/offline/retrobowl.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Retrobowlcollege', url: 'https://magiilayt.github.io/HTML-Game/offline/retrobowlcollege.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Retrohighway', url: 'https://magiilayt.github.io/HTML-Game/offline/retrohighway.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Retropingpong', url: 'https://magiilayt.github.io/HTML-Game/offline/retropingpong.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Riddleschool', url: 'https://magiilayt.github.io/HTML-Game/offline/riddleschool.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Riddleschool2', url: 'https://magiilayt.github.io/HTML-Game/offline/riddleschool2.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Riddleschool3', url: 'https://magiilayt.github.io/HTML-Game/offline/riddleschool3.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Riddleschool4', url: 'https://magiilayt.github.io/HTML-Game/offline/riddleschool4.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Riddleschool5', url: 'https://magiilayt.github.io/HTML-Game/offline/riddleschool5.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Riddletransfer', url: 'https://magiilayt.github.io/HTML-Game/offline/riddletransfer.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Riddletransfer2', url: 'https://magiilayt.github.io/HTML-Game/offline/riddletransfer2.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Rocketsoccerderby', url: 'https://magiilayt.github.io/HTML-Game/offline/rocketsoccerderby.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Rooftopsnipers', url: 'https://magiilayt.github.io/HTML-Game/offline/rooftopsnipers.htm', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Rooftopsnipers2', url: 'https://magiilayt.github.io/HTML-Game/offline/rooftopsnipers2.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Run', url: 'https://magiilayt.github.io/HTML-Game/offline/run.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Run2', url: 'https://magiilayt.github.io/HTML-Game/offline/run2.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Run3', url: 'https://magiilayt.github.io/HTML-Game/offline/run3.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Sandgame', url: 'https://magiilayt.github.io/HTML-Game/offline/sandgame.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Shortlife', url: 'https://magiilayt.github.io/HTML-Game/offline/shortlife.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Slope', url: 'https://magiilayt.github.io/HTML-Game/offline/slope.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Slope2player', url: 'https://magiilayt.github.io/HTML-Game/offline/slope2player.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Slope3', url: 'https://magiilayt.github.io/HTML-Game/offline/slope3.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Slowroads', url: 'https://magiilayt.github.io/HTML-Game/offline/slowroads.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Sm63', url: 'https://magiilayt.github.io/HTML-Game/offline/sm63.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Sm64', url: 'https://magiilayt.github.io/HTML-Game/offline/sm64.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Snowballio', url: 'https://magiilayt.github.io/HTML-Game/offline/snowballio.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Snowrider', url: 'https://magiilayt.github.io/HTML-Game/offline/snowrider.htm', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Snowroad', url: 'https://magiilayt.github.io/HTML-Game/offline/snowroad.htm', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Soccerbros', url: 'https://magiilayt.github.io/HTML-Game/offline/soccerbros.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Soccerrandom', url: 'https://magiilayt.github.io/HTML-Game/offline/soccerrandom.htm', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Spacebarclicker', url: 'https://magiilayt.github.io/HTML-Game/offline/spacebarclicker.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Spaceiskey', url: 'https://magiilayt.github.io/HTML-Game/offline/spaceiskey.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Spaceiskey2', url: 'https://magiilayt.github.io/HTML-Game/offline/spaceiskey2.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Spacewaves', url: 'https://magiilayt.github.io/HTML-Game/offline/spacewaves.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Speedstars', url: 'https://magiilayt.github.io/HTML-Game/offline/speedstars.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Sprunki', url: 'https://magiilayt.github.io/HTML-Game/offline/sprunki.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Stack', url: 'https://magiilayt.github.io/HTML-Game/offline/stack.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Stacktris', url: 'https://magiilayt.github.io/HTML-Game/offline/stacktris.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Stateio', url: 'https://magiilayt.github.io/HTML-Game/offline/stateio.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Stickarchersbattle', url: 'https://magiilayt.github.io/HTML-Game/offline/stickarchersbattle.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Stickfighter', url: 'https://magiilayt.github.io/HTML-Game/offline/stickfighter.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Stickmanhook', url: 'https://magiilayt.github.io/HTML-Game/offline/stickmanhook.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Stickmerge', url: 'https://magiilayt.github.io/HTML-Game/offline/stickmerge.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Subwaysurfersbeijing', url: 'https://magiilayt.github.io/HTML-Game/offline/subwaysurfersbeijing.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Subwaysurfershavana', url: 'https://magiilayt.github.io/HTML-Game/offline/subwaysurfershavana.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Subwaysurferssanfrancisco', url: 'https://magiilayt.github.io/HTML-Game/offline/subwaysurferssanfrancisco.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Superbikethechampion', url: 'https://magiilayt.github.io/HTML-Game/offline/superbikethechampion.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Superhot', url: 'https://magiilayt.github.io/HTML-Game/offline/superhot.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Superliquidsoccer', url: 'https://magiilayt.github.io/HTML-Game/offline/superliquidsoccer.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Superstarcar', url: 'https://magiilayt.github.io/HTML-Game/offline/superstarcar.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Tabletennisworldtour', url: 'https://magiilayt.github.io/HTML-Game/offline/tabletennisworldtour.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Tag', url: 'https://magiilayt.github.io/HTML-Game/offline/tag.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Taproad', url: 'https://magiilayt.github.io/HTML-Game/offline/taproad.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Templeofboom', url: 'https://magiilayt.github.io/HTML-Game/offline/templeofboom.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Templerun2', url: 'https://magiilayt.github.io/HTML-Game/offline/templerun2.htm', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Territorialio', url: 'https://magiilayt.github.io/HTML-Game/offline/territorialio.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Theimpossiblequiz', url: 'https://magiilayt.github.io/HTML-Game/offline/theimpossiblequiz.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Theimpossiblequiz2', url: 'https://magiilayt.github.io/HTML-Game/offline/theimpossiblequiz2.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Thereisnog', url: 'https://magiilayt.github.io/HTML-Game/offline/thereisnog.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Theyarecoming', url: 'https://magiilayt.github.io/HTML-Game/offline/theyarecoming.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Thisistheonlylevel', url: 'https://magiilayt.github.io/HTML-Game/offline/thisistheonlylevel.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Thisistheonlyleveltoo', url: 'https://magiilayt.github.io/HTML-Game/offline/thisistheonlyleveltoo.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Timeshooter2', url: 'https://magiilayt.github.io/HTML-Game/offline/timeshooter2.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Timeshooter3', url: 'https://magiilayt.github.io/HTML-Game/offline/timeshooter3.htm', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Tinyfishing', url: 'https://magiilayt.github.io/HTML-Game/offline/tinyfishing.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Tombofthemask', url: 'https://magiilayt.github.io/HTML-Game/offline/tombofthemask.htm', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Trapthecat', url: 'https://magiilayt.github.io/HTML-Game/offline/trapthecat.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Triviacrack', url: 'https://magiilayt.github.io/HTML-Game/offline/triviacrack.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Tubejumpers', url: 'https://magiilayt.github.io/HTML-Game/offline/tubejumpers.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Tunnelrush', url: 'https://magiilayt.github.io/HTML-Game/offline/tunnelrush.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Unicyclehero', url: 'https://magiilayt.github.io/HTML-Game/offline/unicyclehero.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Vex4', url: 'https://magiilayt.github.io/HTML-Game/offline/vex4.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Vex5', url: 'https://magiilayt.github.io/HTML-Game/offline/vex5.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Vex6', url: 'https://magiilayt.github.io/HTML-Game/offline/vex6.htm', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Vex7', url: 'https://magiilayt.github.io/HTML-Game/offline/vex7.htm', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Vex8', url: 'https://magiilayt.github.io/HTML-Game/offline/vex8.htm', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Vexx3m', url: 'https://magiilayt.github.io/HTML-Game/offline/vexx3m.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Vexx3m2', url: 'https://magiilayt.github.io/HTML-Game/offline/vexx3m2.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Volleyrandom', url: 'https://magiilayt.github.io/HTML-Game/offline/volleyrandom.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Wartheknights', url: 'https://magiilayt.github.io/HTML-Game/offline/wartheknights.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Webecomewhatwebehold', url: 'https://magiilayt.github.io/HTML-Game/offline/webecomewhatwebehold.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Wheeliebike', url: 'https://magiilayt.github.io/HTML-Game/offline/wheeliebike.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Wheely', url: 'https://magiilayt.github.io/HTML-Game/offline/wheely.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Wheely2', url: 'https://magiilayt.github.io/HTML-Game/offline/wheely2.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Wheely3', url: 'https://magiilayt.github.io/HTML-Game/offline/wheely3.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Wheely4', url: 'https://magiilayt.github.io/HTML-Game/offline/wheely4.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Wheely5', url: 'https://magiilayt.github.io/HTML-Game/offline/wheely5.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Wheely6', url: 'https://magiilayt.github.io/HTML-Game/offline/wheely6.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Wheely7', url: 'https://magiilayt.github.io/HTML-Game/offline/wheely7.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Wheely8', url: 'https://magiilayt.github.io/HTML-Game/offline/wheely8.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Wordleunlimited', url: 'https://magiilayt.github.io/HTML-Game/offline/wordleunlimited.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Worldshardestgame', url: 'https://magiilayt.github.io/HTML-Game/offline/worldshardestgame.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Worldshardestgame2', url: 'https://magiilayt.github.io/HTML-Game/offline/worldshardestgame2.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Worldshardestgame3', url: 'https://magiilayt.github.io/HTML-Game/offline/worldshardestgame3.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Wrestlebros', url: 'https://magiilayt.github.io/HTML-Game/offline/wrestlebros.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+            { name: 'Zombierush', url: 'https://magiilayt.github.io/HTML-Game/offline/zombierush.html', mode: 'external', icon: 'ri-gamepad-line', category: 'Game' },
+        ],
         };
 
         let currentItems = [];
@@ -2126,14 +2918,38 @@
         let isPlaying = false;
         let currentPlaylist = [];
 
+                function initSecretListener() {
+            // Secret key combo listener (placeholder)
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
+            var loadingScreen = document.getElementById('loadingScreen');
+            var loadingBar = document.getElementById('loadingBar');
+
+            // Simulate loading progress (~3 seconds)
+            var progress = 0;
+            var loadInterval = setInterval(function() {
+                progress += Math.random() * 4 + 2;
+                if (progress > 100) progress = 100;
+                loadingBar.style.width = progress + '%';
+
+                if (progress >= 100) {
+                    clearInterval(loadInterval);
+                    setTimeout(function() {
+                        loadingScreen.style.opacity = '0';
+                        setTimeout(function() {
+                            loadingScreen.style.display = 'none';
+                        }, 500);
+                    }, 300);
+                }
+            }, 80);
+
             initNav();
             initParticles();
             initEventListeners();
             initSecretListener();
             loadSavedSettings();
             showSection('home');
-            initMusicPlayer();
         });
 
         // YouTube API callback
@@ -2275,9 +3091,16 @@
                 var li = document.createElement('li');
                 li.className = 'nav-item';
                 li.dataset.section = section.id;
-                li.addEventListener('click', function() { showSection(section.id); });
                 li.innerHTML = '<i class="' + section.icon + '"></i><span class="nav-tooltip">' + section.name + '</span>';
                 navList.appendChild(li);
+            });
+
+            // Use event delegation for better reliability
+            navList.addEventListener('click', function(e) {
+                var li = e.target.closest('.nav-item');
+                if (li) {
+                    showSection(li.dataset.section);
+                }
             });
         }
 
@@ -2298,16 +3121,30 @@
             var savedCloak = localStorage.getItem('dropdead_cloak');
             var savedCustomTitle = localStorage.getItem('dropdead_custom_title');
             var savedCustomIcon = localStorage.getItem('dropdead_custom_icon');
-            
+
             if (savedTheme !== null) {
                 currentTheme = parseInt(savedTheme);
                 applyTheme(currentTheme);
+            } else {
+                // First visit: default to Cyberpunk (blue) theme
+                currentTheme = 0;
+                applyTheme(0);
             }
             if (savedCloak !== null) {
                 currentCloak = savedCloak;
                 if (savedCustomTitle) customCloakTitle = savedCustomTitle;
                 if (savedCustomIcon) customCloakIcon = savedCustomIcon;
                 applyCloak(currentCloak);
+            }
+            // Apply Doodle class on load if saved theme is Doodle
+            if (currentTheme === 30) {
+                var appContainer = document.getElementById('appContainer');
+                var loadingScreen = document.getElementById('loadingScreen');
+                if (appContainer) {
+                    appContainer.classList.add('doodle-active');
+                    document.body.classList.add('doodle-active');
+                }
+                if (loadingScreen) loadingScreen.classList.add('doodle-loading');
             }
         }
 
@@ -2341,13 +3178,10 @@
                     renderTVShows(container);
                     break;
                 case 'games':
-                    renderGames(container);
+                    loadGameCovers().then(function() { renderGames(container); });
                     break;
                 case 'sites':
                     renderSites(container);
-                    break;
-                case 'music':
-                    renderMusic(container);
                     break;
                 case 'ai':
                     renderAI(container);
@@ -2375,6 +3209,19 @@
                 p.style.boxShadow = '0 0 10px ' + theme.primary;
             });
             
+            // Toggle Doodle theme class
+            var appContainer = document.getElementById('appContainer');
+            var loadingScreen = document.getElementById('loadingScreen');
+            if (theme.name === 'Doodle') {
+                appContainer.classList.add('doodle-active');
+                document.body.classList.add('doodle-active');
+                if (loadingScreen) loadingScreen.classList.add('doodle-loading');
+            } else {
+                appContainer.classList.remove('doodle-active');
+                document.body.classList.remove('doodle-active');
+                if (loadingScreen) loadingScreen.classList.remove('doodle-loading');
+            }
+
             saveSettings();
         }
 
@@ -2585,883 +3432,94 @@
             await loadTVShows();
         }
 
-        function renderGames(container) {
-            container.innerHTML = 
-                '<div class="section-header">' +
-                    '<h2><i class="ri-gamepad-line"></i> Games</h2>' +
-                    '<p class="section-desc">HTML5 games run natively. External games open in a new tab.</p>' +
+        var gameCoverMap = new Map();
+var coversLoaded = false;
+
+async function loadGameCovers() {
+    if (coversLoaded) return;
+    try {
+        const response = await fetch('https://cdn.jsdelivr.net/npm/art-in-imgs/coversv4.zip');
+        if (!response.ok) throw new Error('Failed to fetch covers');
+        const blob = await response.blob();
+        const zip = await JSZip.loadAsync(blob);
+
+        for (const fileName of Object.keys(zip.files)) {
+            const file = zip.files[fileName];
+            if (!file.dir) {
+                const fileBlob = await file.async('blob');
+                const blobUrl = URL.createObjectURL(fileBlob);
+                // Store by filename without extension
+                const baseName = fileName.split('/').pop().replace(/\.[^/.]+$/, '');
+                gameCoverMap.set(baseName.toLowerCase(), blobUrl);
+            }
+        }
+        coversLoaded = true;
+    } catch (err) {
+        console.error('Error loading game covers:', err);
+    }
+}
+
+function getGameCoverUrl(gameName) {
+    const cleanName = gameName.toLowerCase().replace(/[^a-z0-9]/g, '');
+    for (const [key, url] of gameCoverMap) {
+        const cleanKey = key.toLowerCase().replace(/[^a-z0-9]/g, '');
+        if (cleanName.includes(cleanKey) || cleanKey.includes(cleanName)) {
+            return url;
+        }
+    }
+    return null;
+}
+
+function renderGames(container) {
+    container.innerHTML = 
+        '<div class="section-header">' +
+            '<h2><i class="ri-gamepad-line"></i> Games</h2>' +
+            '<p class="section-desc">' + CONFIG.games.length + ' games available. Click to play.</p>' +
+        '</div>' +
+        '<div class="cards-grid" id="gamesGrid"></div>';
+
+    var grid = document.getElementById('gamesGrid');
+    var html = '';
+
+    CONFIG.games.forEach(function(game, index) {
+        var coverUrl = getGameCoverUrl(game.name);
+        var bgStyle = coverUrl 
+            ? 'background-image: url(' + coverUrl + '); background-size: cover; background-position: center;' 
+            : 'background: linear-gradient(135deg, var(--dark), var(--card-bg));';
+        var iconDisplay = coverUrl ? 'display: none;' : '';
+
+        html += 
+            '<div class="content-card game-card-item" data-game-index="' + index + '" style="cursor: pointer;">' +
+                '<div style="width: 100%; height: 260px; ' + bgStyle + ' display: flex; align-items: center; justify-content: center; font-size: 64px; position: relative; overflow: hidden;">' +
+                    '<i class="' + game.icon + '" style="color: var(--accent-green); ' + iconDisplay + '"></i>' +
+                    '' +
                 '</div>' +
-                '<div class="cards-grid" id="gamesGrid"></div>';
-
-            var grid = document.getElementById('gamesGrid');
-            var html = '';
-
-            CONFIG.games.forEach(function(game, index) {
-                var modeBadge = game.mode === 'html5' 
-                    ? '<div class="card-badge" style="position: absolute; top: 12px; left: 12px; background: linear-gradient(135deg, var(--accent-green), #00cc66);">HTML5</div>'
-                    : '<div class="card-badge" style="position: absolute; top: 12px; left: 12px; background: linear-gradient(135deg, var(--accent-blue), #0066ff);">EXTERNAL</div>';
-
-                html += 
-                    '<div class="content-card game-card-item" data-game-index="' + index + '">' +
-                        '<div style="width: 100%; height: 260px; background: linear-gradient(135deg, var(--dark), var(--card-bg)); display: flex; align-items: center; justify-content: center; font-size: 64px; position: relative;">' +
-                            '<i class="' + game.icon + '" style="color: var(--accent-green);"></i>' +
-                            modeBadge +
-                            (game.popular ? '<div class="card-badge" style="position: absolute; top: 12px; right: 12px; background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));">POPULAR</div>' : '') +
-                        '</div>' +
-                        '<div class="card-info">' +
-                            '<div class="card-title">' + game.name + '</div>' +
-                            '<div class="card-meta">' +
-                                '<span style="color: var(--accent-green);">' + game.category + '</span>' +
-                                '<span><i class="ri-play-circle-line"></i> ' + (game.mode === 'html5' ? 'Play' : 'Open') + '</span>' +
-                            '</div>' +
-                        '</div>' +
-                    '</div>';
-            });
-
-            grid.innerHTML = html;
-
-            // Add click handlers
-            grid.querySelectorAll('.game-card-item').forEach(function(card) {
-                card.addEventListener('click', function() {
-                    var gameIndex = parseInt(this.dataset.gameIndex);
-                    openGameModal(CONFIG.games[gameIndex]);
-                });
-            });
-        }
-
-        function renderHTML5Game(gameId, container) {
-            container.innerHTML = '';
-            var canvas = document.createElement('canvas');
-            canvas.id = 'gameCanvas';
-            canvas.style.width = '100%';
-            canvas.style.height = '100%';
-            canvas.style.display = 'block';
-            container.appendChild(canvas);
-
-            // Set actual canvas size to match display size for crisp rendering
-            var rect = container.getBoundingClientRect();
-            canvas.width = rect.width || 800;
-            canvas.height = rect.height || 600;
-
-            var ctx = canvas.getContext('2d');
-            var animationId = null;
-            var gameLoop = null;
-            var cleanup = null;
-
-            // ========== SNAKE ==========
-            if (gameId === 'snake') {
-                var gridSize = 20;
-                var tileCountX = Math.floor(canvas.width / gridSize);
-                var tileCountY = Math.floor(canvas.height / gridSize);
-                var snake = [{x: 10, y: 10}];
-                var food = {x: 15, y: 15};
-                var dx = 1, dy = 0;
-                var score = 0;
-                var gameOver = false;
-                var speed = 100;
-                var lastTime = 0;
-
-                function placeFood() {
-                    food = {
-                        x: Math.floor(Math.random() * tileCountX),
-                        y: Math.floor(Math.random() * tileCountY)
-                    };
-                }
-
-                function updateSnake(timestamp) {
-                    if (gameOver) return;
-                    if (timestamp - lastTime < speed) {
-                        animationId = requestAnimationFrame(updateSnake);
-                        return;
-                    }
-                    lastTime = timestamp;
-
-                    var head = {x: snake[0].x + dx, y: snake[0].y + dy};
-
-                    if (head.x < 0 || head.x >= tileCountX || head.y < 0 || head.y >= tileCountY) {
-                        gameOver = true;
-                        return;
-                    }
-
-                    for (var i = 0; i < snake.length; i++) {
-                        if (head.x === snake[i].x && head.y === snake[i].y) {
-                            gameOver = true;
-                            return;
-                        }
-                    }
-
-                    snake.unshift(head);
-
-                    if (head.x === food.x && head.y === food.y) {
-                        score += 10;
-                        speed = Math.max(50, 100 - score);
-                        placeFood();
-                    } else {
-                        snake.pop();
-                    }
-
-                    drawSnake();
-                    animationId = requestAnimationFrame(updateSnake);
-                }
-
-                function drawSnake() {
-                    ctx.fillStyle = '#0f0f1a';
-                    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-                    ctx.fillStyle = '#00ff88';
-                    for (var i = 0; i < snake.length; i++) {
-                        ctx.fillRect(snake[i].x * gridSize, snake[i].y * gridSize, gridSize - 2, gridSize - 2);
-                    }
-
-                    ctx.fillStyle = '#ff6b6b';
-                    ctx.fillRect(food.x * gridSize, food.y * gridSize, gridSize - 2, gridSize - 2);
-
-                    ctx.fillStyle = '#fff';
-                    ctx.font = '20px Orbitron';
-                    ctx.fillText('Score: ' + score, 10, 30);
-
-                    if (gameOver) {
-                        ctx.fillStyle = 'rgba(0,0,0,0.7)';
-                        ctx.fillRect(0, 0, canvas.width, canvas.height);
-                        ctx.fillStyle = '#ff6b6b';
-                        ctx.font = '40px Orbitron';
-                        ctx.textAlign = 'center';
-                        ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 - 20);
-                        ctx.font = '20px Inter';
-                        ctx.fillStyle = '#fff';
-                        ctx.fillText('Score: ' + score, canvas.width / 2, canvas.height / 2 + 20);
-                        ctx.fillText('Press Space to restart', canvas.width / 2, canvas.height / 2 + 50);
-                        ctx.textAlign = 'left';
-                    }
-                }
-
-                var keyHandler = function(e) {
-                    if (gameOver && e.code === 'Space') {
-                        snake = [{x: 10, y: 10}];
-                        dx = 1; dy = 0;
-                        score = 0;
-                        gameOver = false;
-                        speed = 100;
-                        placeFood();
-                        animationId = requestAnimationFrame(updateSnake);
-                        return;
-                    }
-                    if (['ArrowUp','w','W'].includes(e.key) && dy === 0) { dx = 0; dy = -1; }
-                    else if (['ArrowDown','s','S'].includes(e.key) && dy === 0) { dx = 0; dy = 1; }
-                    else if (['ArrowLeft','a','A'].includes(e.key) && dx === 0) { dx = -1; dy = 0; }
-                    else if (['ArrowRight','d','D'].includes(e.key) && dx === 0) { dx = 1; dy = 0; }
-                };
-                document.addEventListener('keydown', keyHandler);
-                cleanup = function() { document.removeEventListener('keydown', keyHandler); };
-
-                placeFood();
-                animationId = requestAnimationFrame(updateSnake);
-            }
-
-            // ========== 2048 ==========
-            else if (gameId === 'game2048') {
-                var gridSize = 4;
-                var cellSize = Math.min(canvas.width, canvas.height) * 0.8 / gridSize;
-                var offsetX = (canvas.width - cellSize * gridSize) / 2;
-                var offsetY = (canvas.height - cellSize * gridSize) / 2;
-                var board = [];
-                var score = 0;
-                var gameOver = false;
-                var won = false;
-
-                var colors = {
-                    0: '#1a1a2e', 2: '#eee4da', 4: '#ede0c8', 8: '#f2b179',
-                    16: '#f59563', 32: '#f67c5f', 64: '#f65e3b', 128: '#edcf72',
-                    256: '#edcc61', 512: '#edc850', 1024: '#edc53f', 2048: '#edc22e'
-                };
-
-                function initBoard() {
-                    board = [];
-                    for (var i = 0; i < gridSize; i++) {
-                        board[i] = [];
-                        for (var j = 0; j < gridSize; j++) board[i][j] = 0;
-                    }
-                    addRandomTile();
-                    addRandomTile();
-                }
-
-                function addRandomTile() {
-                    var empty = [];
-                    for (var i = 0; i < gridSize; i++)
-                        for (var j = 0; j < gridSize; j++)
-                            if (board[i][j] === 0) empty.push({x: i, y: j});
-                    if (empty.length > 0) {
-                        var tile = empty[Math.floor(Math.random() * empty.length)];
-                        board[tile.x][tile.y] = Math.random() < 0.9 ? 2 : 4;
-                    }
-                }
-
-                function move(direction) {
-                    if (gameOver) return;
-                    var moved = false;
-                    var newBoard = JSON.parse(JSON.stringify(board));
-
-                    function slideLine(line) {
-                        var filtered = line.filter(function(v) { return v !== 0; });
-                        for (var i = 0; i < filtered.length - 1; i++) {
-                            if (filtered[i] === filtered[i + 1]) {
-                                filtered[i] *= 2;
-                                score += filtered[i];
-                                if (filtered[i] === 2048) won = true;
-                                filtered[i + 1] = 0;
-                            }
-                        }
-                        filtered = filtered.filter(function(v) { return v !== 0; });
-                        while (filtered.length < gridSize) filtered.push(0);
-                        return filtered;
-                    }
-
-                    if (direction === 'left') {
-                        for (var i = 0; i < gridSize; i++) {
-                            var oldLine = newBoard[i].slice();
-                            newBoard[i] = slideLine(newBoard[i]);
-                            if (oldLine.join(',') !== newBoard[i].join(',')) moved = true;
-                        }
-                    } else if (direction === 'right') {
-                        for (var i = 0; i < gridSize; i++) {
-                            var oldLine = newBoard[i].slice();
-                            newBoard[i] = slideLine(newBoard[i].reverse()).reverse();
-                            if (oldLine.join(',') !== newBoard[i].join(',')) moved = true;
-                        }
-                    } else if (direction === 'up') {
-                        for (var j = 0; j < gridSize; j++) {
-                            var col = [];
-                            for (var i = 0; i < gridSize; i++) col.push(newBoard[i][j]);
-                            var oldCol = col.slice();
-                            col = slideLine(col);
-                            for (var i = 0; i < gridSize; i++) newBoard[i][j] = col[i];
-                            if (oldCol.join(',') !== col.join(',')) moved = true;
-                        }
-                    } else if (direction === 'down') {
-                        for (var j = 0; j < gridSize; j++) {
-                            var col = [];
-                            for (var i = 0; i < gridSize; i++) col.push(newBoard[i][j]);
-                            var oldCol = col.slice();
-                            col = slideLine(col.reverse()).reverse();
-                            for (var i = 0; i < gridSize; i++) newBoard[i][j] = col[i];
-                            if (oldCol.join(',') !== col.join(',')) moved = true;
-                        }
-                    }
-
-                    if (moved) {
-                        board = newBoard;
-                        addRandomTile();
-                        checkGameOver();
-                    }
-                    draw2048();
-                }
-
-                function checkGameOver() {
-                    for (var i = 0; i < gridSize; i++)
-                        for (var j = 0; j < gridSize; j++)
-                            if (board[i][j] === 0) return;
-                    for (var i = 0; i < gridSize; i++)
-                        for (var j = 0; j < gridSize; j++) {
-                            if (j < gridSize - 1 && board[i][j] === board[i][j + 1]) return;
-                            if (i < gridSize - 1 && board[i][j] === board[i + 1][j]) return;
-                        }
-                    gameOver = true;
-                }
-
-                function draw2048() {
-                    ctx.fillStyle = '#0f0f1a';
-                    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-                    for (var i = 0; i < gridSize; i++) {
-                        for (var j = 0; j < gridSize; j++) {
-                            var val = board[i][j];
-                            ctx.fillStyle = colors[val] || '#3c3a32';
-                            ctx.fillRect(offsetX + j * cellSize + 4, offsetY + i * cellSize + 4, cellSize - 8, cellSize - 8);
-                            if (val !== 0) {
-                                ctx.fillStyle = val <= 4 ? '#776e65' : '#f9f6f2';
-                                ctx.font = 'bold ' + (cellSize * 0.4) + 'px Inter';
-                                ctx.textAlign = 'center';
-                                ctx.textBaseline = 'middle';
-                                ctx.fillText(val, offsetX + j * cellSize + cellSize / 2, offsetY + i * cellSize + cellSize / 2);
-                            }
-                        }
-                    }
-
-                    ctx.fillStyle = '#fff';
-                    ctx.font = '24px Orbitron';
-                    ctx.textAlign = 'left';
-                    ctx.textBaseline = 'alphabetic';
-                    ctx.fillText('Score: ' + score, 20, 40);
-
-                    if (won) {
-                        ctx.fillStyle = 'rgba(0,255,136,0.3)';
-                        ctx.fillRect(0, 0, canvas.width, canvas.height);
-                        ctx.fillStyle = '#00ff88';
-                        ctx.font = '50px Orbitron';
-                        ctx.textAlign = 'center';
-                        ctx.fillText('YOU WIN!', canvas.width / 2, canvas.height / 2);
-                    }
-
-                    if (gameOver) {
-                        ctx.fillStyle = 'rgba(0,0,0,0.7)';
-                        ctx.fillRect(0, 0, canvas.width, canvas.height);
-                        ctx.fillStyle = '#ff6b6b';
-                        ctx.font = '40px Orbitron';
-                        ctx.textAlign = 'center';
-                        ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2);
-                        ctx.font = '18px Inter';
-                        ctx.fillStyle = '#fff';
-                        ctx.fillText('Press Space to restart', canvas.width / 2, canvas.height / 2 + 40);
-                    }
-                    ctx.textAlign = 'left';
-                }
-
-                var keyHandler = function(e) {
-                    if (gameOver && e.code === 'Space') {
-                        initBoard();
-                        gameOver = false;
-                        won = false;
-                        score = 0;
-                        draw2048();
-                        return;
-                    }
-                    if (['ArrowLeft','a','A'].includes(e.key)) move('left');
-                    else if (['ArrowRight','d','D'].includes(e.key)) move('right');
-                    else if (['ArrowUp','w','W'].includes(e.key)) move('up');
-                    else if (['ArrowDown','s','S'].includes(e.key)) move('down');
-                };
-                document.addEventListener('keydown', keyHandler);
-                cleanup = function() { document.removeEventListener('keydown', keyHandler); };
-
-                initBoard();
-                draw2048();
-            }
-
-            // ========== TETRIS ==========
-            else if (gameId === 'tetris') {
-                var cols = 10, rows = 20;
-                var cellSize = Math.min(canvas.width / cols, canvas.height / rows);
-                var offsetX = (canvas.width - cols * cellSize) / 2;
-                var offsetY = (canvas.height - rows * cellSize) / 2;
-                var board = [];
-                var currentPiece = null;
-                var currentX = 0, currentY = 0;
-                var score = 0;
-                var lines = 0;
-                var gameOver = false;
-                var dropInterval = 800;
-                var lastDrop = 0;
-
-                var shapes = [
-                    [[1,1,1,1]],
-                    [[1,1],[1,1]],
-                    [[0,1,0],[1,1,1]],
-                    [[1,0,0],[1,1,1]],
-                    [[0,0,1],[1,1,1]],
-                    [[0,1,1],[1,1,0]],
-                    [[1,1,0],[0,1,1]]
-                ];
-                var shapeColors = ['#00d4ff','#ffd43b','#c77dff','#ff6b9d','#ff9e00','#00ff88','#ff6b6b'];
-
-                function newPiece() {
-                    var idx = Math.floor(Math.random() * shapes.length);
-                    currentPiece = {
-                        shape: shapes[idx],
-                        color: shapeColors[idx]
-                    };
-                    currentX = Math.floor((cols - currentPiece.shape[0].length) / 2);
-                    currentY = 0;
-                    if (!isValidPosition(currentX, currentY, currentPiece.shape)) {
-                        gameOver = true;
-                    }
-                }
-
-                function isValidPosition(x, y, shape) {
-                    for (var i = 0; i < shape.length; i++)
-                        for (var j = 0; j < shape[i].length; j++)
-                            if (shape[i][j]) {
-                                var nx = x + j, ny = y + i;
-                                if (nx < 0 || nx >= cols || ny >= rows) return false;
-                                if (ny >= 0 && board[ny][nx]) return false;
-                            }
-                    return true;
-                }
-
-                function mergePiece() {
-                    for (var i = 0; i < currentPiece.shape.length; i++)
-                        for (var j = 0; j < currentPiece.shape[i].length; j++)
-                            if (currentPiece.shape[i][j] && currentY + i >= 0)
-                                board[currentY + i][currentX + j] = currentPiece.color;
-                }
-
-                function clearLines() {
-                    var cleared = 0;
-                    for (var i = rows - 1; i >= 0; i--) {
-                        if (board[i].every(function(c) { return c !== 0; })) {
-                            board.splice(i, 1);
-                            board.unshift(new Array(cols).fill(0));
-                            cleared++;
-                            i++;
-                        }
-                    }
-                    if (cleared > 0) {
-                        lines += cleared;
-                        score += [0, 100, 300, 500, 800][cleared];
-                        dropInterval = Math.max(100, 800 - lines * 10);
-                    }
-                }
-
-                function rotatePiece() {
-                    var rows = currentPiece.shape.length;
-                    var cols = currentPiece.shape[0].length;
-                    var rotated = [];
-                    for (var j = 0; j < cols; j++) {
-                        rotated[j] = [];
-                        for (var i = rows - 1; i >= 0; i--) rotated[j].push(currentPiece.shape[i][j]);
-                    }
-                    if (isValidPosition(currentX, currentY, rotated)) currentPiece.shape = rotated;
-                }
-
-                function updateTetris(timestamp) {
-                    if (gameOver) return;
-                    if (timestamp - lastDrop > dropInterval) {
-                        lastDrop = timestamp;
-                        if (isValidPosition(currentX, currentY + 1, currentPiece.shape)) {
-                            currentY++;
-                        } else {
-                            mergePiece();
-                            clearLines();
-                            newPiece();
-                        }
-                    }
-                    drawTetris();
-                    animationId = requestAnimationFrame(updateTetris);
-                }
-
-                function drawTetris() {
-                    ctx.fillStyle = '#0f0f1a';
-                    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-                    for (var i = 0; i < rows; i++)
-                        for (var j = 0; j < cols; j++)
-                            if (board[i][j]) {
-                                ctx.fillStyle = board[i][j];
-                                ctx.fillRect(offsetX + j * cellSize, offsetY + i * cellSize, cellSize - 1, cellSize - 1);
-                            }
-
-                    if (currentPiece) {
-                        ctx.fillStyle = currentPiece.color;
-                        for (var i = 0; i < currentPiece.shape.length; i++)
-                            for (var j = 0; j < currentPiece.shape[i].length; j++)
-                                if (currentPiece.shape[i][j] && currentY + i >= 0)
-                                    ctx.fillRect(offsetX + (currentX + j) * cellSize, offsetY + (currentY + i) * cellSize, cellSize - 1, cellSize - 1);
-                    }
-
-                    ctx.fillStyle = '#fff';
-                    ctx.font = '20px Orbitron';
-                    ctx.fillText('Score: ' + score, 20, 30);
-                    ctx.fillText('Lines: ' + lines, 20, 55);
-
-                    if (gameOver) {
-                        ctx.fillStyle = 'rgba(0,0,0,0.7)';
-                        ctx.fillRect(0, 0, canvas.width, canvas.height);
-                        ctx.fillStyle = '#ff6b6b';
-                        ctx.font = '40px Orbitron';
-                        ctx.textAlign = 'center';
-                        ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 - 20);
-                        ctx.font = '18px Inter';
-                        ctx.fillStyle = '#fff';
-                        ctx.fillText('Score: ' + score, canvas.width / 2, canvas.height / 2 + 20);
-                        ctx.fillText('Press Space to restart', canvas.width / 2, canvas.height / 2 + 50);
-                        ctx.textAlign = 'left';
-                    }
-                }
-
-                var keyHandler = function(e) {
-                    if (gameOver && e.code === 'Space') {
-                        board = [];
-                        for (var i = 0; i < rows; i++) board.push(new Array(cols).fill(0));
-                        score = 0; lines = 0; dropInterval = 800; gameOver = false;
-                        newPiece();
-                        animationId = requestAnimationFrame(updateTetris);
-                        return;
-                    }
-                    if (gameOver) return;
-                    if (['ArrowLeft','a','A'].includes(e.key) && isValidPosition(currentX - 1, currentY, currentPiece.shape)) currentX--;
-                    else if (['ArrowRight','d','D'].includes(e.key) && isValidPosition(currentX + 1, currentY, currentPiece.shape)) currentX++;
-                    else if (['ArrowDown','s','S'].includes(e.key) && isValidPosition(currentX, currentY + 1, currentPiece.shape)) currentY++;
-                    else if (['ArrowUp','w','W'].includes(e.key)) rotatePiece();
-                };
-                document.addEventListener('keydown', keyHandler);
-                cleanup = function() { document.removeEventListener('keydown', keyHandler); };
-
-                for (var i = 0; i < rows; i++) board.push(new Array(cols).fill(0));
-                newPiece();
-                animationId = requestAnimationFrame(updateTetris);
-            }
-
-            // ========== PONG ==========
-            else if (gameId === 'pong') {
-                var paddleW = 15, paddleH = 100;
-                var ballSize = 15;
-                var playerY = canvas.height / 2 - paddleH / 2;
-                var aiY = canvas.height / 2 - paddleH / 2;
-                var ballX = canvas.width / 2, ballY = canvas.height / 2;
-                var ballDX = 5, ballDY = 3;
-                var playerScore = 0, aiScore = 0;
-                var upPressed = false, downPressed = false;
-                var gameOver = false;
-
-                function updatePong() {
-                    if (gameOver) return;
-
-                    if (upPressed && playerY > 0) playerY -= 6;
-                    if (downPressed && playerY < canvas.height - paddleH) playerY += 6;
-
-                    var aiCenter = aiY + paddleH / 2;
-                    if (aiCenter < ballY - 10) aiY += 4;
-                    else if (aiCenter > ballY + 10) aiY -= 4;
-                    aiY = Math.max(0, Math.min(canvas.height - paddleH, aiY));
-
-                    ballX += ballDX;
-                    ballY += ballDY;
-
-                    if (ballY <= 0 || ballY >= canvas.height - ballSize) ballDY = -ballDY;
-
-                    if (ballX <= paddleW && ballY + ballSize > playerY && ballY < playerY + paddleH) {
-                        ballDX = -ballDX * 1.05;
-                        ballDY += (ballY - (playerY + paddleH / 2)) * 0.1;
-                    }
-                    if (ballX >= canvas.width - paddleW - ballSize && ballY + ballSize > aiY && ballY < aiY + paddleH) {
-                        ballDX = -ballDX * 1.05;
-                        ballDY += (ballY - (aiY + paddleH / 2)) * 0.1;
-                    }
-
-                    if (ballX < 0) { aiScore++; resetBall(); }
-                    if (ballX > canvas.width) { playerScore++; resetBall(); }
-
-                    if (playerScore >= 10 || aiScore >= 10) gameOver = true;
-
-                    drawPong();
-                    animationId = requestAnimationFrame(updatePong);
-                }
-
-                function resetBall() {
-                    ballX = canvas.width / 2;
-                    ballY = canvas.height / 2;
-                    ballDX = (Math.random() > 0.5 ? 5 : -5);
-                    ballDY = (Math.random() - 0.5) * 6;
-                }
-
-                function drawPong() {
-                    ctx.fillStyle = '#0f0f1a';
-                    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-                    ctx.strokeStyle = '#2a2a40';
-                    ctx.setLineDash([10, 10]);
-                    ctx.beginPath();
-                    ctx.moveTo(canvas.width / 2, 0);
-                    ctx.lineTo(canvas.width / 2, canvas.height);
-                    ctx.stroke();
-                    ctx.setLineDash([]);
-
-                    ctx.fillStyle = '#00d4ff';
-                    ctx.fillRect(10, playerY, paddleW, paddleH);
-                    ctx.fillStyle = '#ff6b6b';
-                    ctx.fillRect(canvas.width - 10 - paddleW, aiY, paddleW, paddleH);
-
-                    ctx.fillStyle = '#fff';
-                    ctx.fillRect(ballX, ballY, ballSize, ballSize);
-
-                    ctx.font = '40px Orbitron';
-                    ctx.textAlign = 'center';
-                    ctx.fillText(playerScore, canvas.width / 4, 60);
-                    ctx.fillText(aiScore, canvas.width * 3 / 4, 60);
-
-                    if (gameOver) {
-                        ctx.fillStyle = 'rgba(0,0,0,0.7)';
-                        ctx.fillRect(0, 0, canvas.width, canvas.height);
-                        ctx.fillStyle = playerScore >= 10 ? '#00ff88' : '#ff6b6b';
-                        ctx.font = '40px Orbitron';
-                        ctx.fillText(playerScore >= 10 ? 'YOU WIN!' : 'AI WINS!', canvas.width / 2, canvas.height / 2 - 20);
-                        ctx.fillStyle = '#fff';
-                        ctx.font = '18px Inter';
-                        ctx.fillText('Press Space to restart', canvas.width / 2, canvas.height / 2 + 20);
-                    }
-                    ctx.textAlign = 'left';
-                }
-
-                var keyDown = function(e) {
-                    if (gameOver && e.code === 'Space') {
-                        playerScore = 0; aiScore = 0; gameOver = false;
-                        resetBall();
-                        animationId = requestAnimationFrame(updatePong);
-                        return;
-                    }
-                    if (['ArrowUp','w','W'].includes(e.key)) upPressed = true;
-                    if (['ArrowDown','s','S'].includes(e.key)) downPressed = true;
-                };
-                var keyUp = function(e) {
-                    if (['ArrowUp','w','W'].includes(e.key)) upPressed = false;
-                    if (['ArrowDown','s','S'].includes(e.key)) downPressed = false;
-                };
-                document.addEventListener('keydown', keyDown);
-                document.addEventListener('keyup', keyUp);
-                cleanup = function() { 
-                    document.removeEventListener('keydown', keyDown); 
-                    document.removeEventListener('keyup', keyUp); 
-                };
-
-                animationId = requestAnimationFrame(updatePong);
-            }
-
-            // ========== DINO RUN ==========
-            else if (gameId === 'dino') {
-                var dinoY = canvas.height - 100;
-                var dinoX = 80;
-                var dinoH = 50, dinoW = 40;
-                var velocityY = 0;
-                var gravity = 0.8;
-                var jumpPower = -15;
-                var groundY = canvas.height - 50;
-                var obstacles = [];
-                var score = 0;
-                var gameOver = false;
-                var speed = 6;
-                var frameCount = 0;
-
-                function spawnObstacle() {
-                    obstacles.push({
-                        x: canvas.width,
-                        y: groundY - 40,
-                        w: 30 + Math.random() * 20,
-                        h: 40 + Math.random() * 30
-                    });
-                }
-
-                function updateDino() {
-                    if (gameOver) return;
-                    frameCount++;
-
-                    velocityY += gravity;
-                    dinoY += velocityY;
-                    if (dinoY > groundY - dinoH) {
-                        dinoY = groundY - dinoH;
-                        velocityY = 0;
-                    }
-
-                    if (frameCount % 90 === 0) spawnObstacle();
-
-                    for (var i = obstacles.length - 1; i >= 0; i--) {
-                        obstacles[i].x -= speed;
-                        if (obstacles[i].x + obstacles[i].w < 0) {
-                            obstacles.splice(i, 1);
-                            score += 10;
-                            if (score % 100 === 0) speed += 0.5;
-                            continue;
-                        }
-                        if (dinoX < obstacles[i].x + obstacles[i].w &&
-                            dinoX + dinoW > obstacles[i].x &&
-                            dinoY < obstacles[i].y + obstacles[i].h &&
-                            dinoY + dinoH > obstacles[i].y) {
-                            gameOver = true;
-                        }
-                    }
-
-                    drawDino();
-                    animationId = requestAnimationFrame(updateDino);
-                }
-
-                function drawDino() {
-                    ctx.fillStyle = '#0f0f1a';
-                    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-                    ctx.fillStyle = '#2a2a40';
-                    ctx.fillRect(0, groundY, canvas.width, canvas.height - groundY);
-
-                    ctx.fillStyle = '#00ff88';
-                    ctx.fillRect(dinoX, dinoY, dinoW, dinoH);
-                    ctx.fillStyle = '#fff';
-                    ctx.fillRect(dinoX + 25, dinoY + 8, 6, 6);
-
-                    ctx.fillStyle = '#ff6b6b';
-                    for (var i = 0; i < obstacles.length; i++) {
-                        ctx.fillRect(obstacles[i].x, obstacles[i].y, obstacles[i].w, obstacles[i].h);
-                    }
-
-                    ctx.fillStyle = '#fff';
-                    ctx.font = '20px Orbitron';
-                    ctx.fillText('Score: ' + score, 20, 40);
-
-                    if (gameOver) {
-                        ctx.fillStyle = 'rgba(0,0,0,0.7)';
-                        ctx.fillRect(0, 0, canvas.width, canvas.height);
-                        ctx.fillStyle = '#ff6b6b';
-                        ctx.font = '40px Orbitron';
-                        ctx.textAlign = 'center';
-                        ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 - 20);
-                        ctx.font = '18px Inter';
-                        ctx.fillStyle = '#fff';
-                        ctx.fillText('Score: ' + score, canvas.width / 2, canvas.height / 2 + 20);
-                        ctx.fillText('Press Space to restart', canvas.width / 2, canvas.height / 2 + 50);
-                        ctx.textAlign = 'left';
-                    }
-                }
-
-                var keyHandler = function(e) {
-                    if (gameOver && e.code === 'Space') {
-                        dinoY = canvas.height - 100;
-                        velocityY = 0;
-                        obstacles = [];
-                        score = 0;
-                        speed = 6;
-                        frameCount = 0;
-                        gameOver = false;
-                        animationId = requestAnimationFrame(updateDino);
-                        return;
-                    }
-                    if ((e.code === 'Space' || e.code === 'ArrowUp') && dinoY >= groundY - dinoH - 2) {
-                        velocityY = jumpPower;
-                    }
-                };
-                document.addEventListener('keydown', keyHandler);
-                cleanup = function() { document.removeEventListener('keydown', keyHandler); };
-
-                animationId = requestAnimationFrame(updateDino);
-            }
-
-            // ========== FLAPPY BIRD ==========
-            else if (gameId === 'flappy') {
-                var birdX = 80;
-                var birdY = canvas.height / 2;
-                var birdSize = 24;
-                var velocity = 0;
-                var gravity = 0.4;
-                var jump = -7;
-                var pipes = [];
-                var score = 0;
-                var gameOver = false;
-                var pipeGap = 160;
-                var pipeWidth = 60;
-                var frame = 0;
-
-                function spawnPipe() {
-                    var minHeight = 50;
-                    var maxHeight = canvas.height - pipeGap - minHeight;
-                    var topHeight = Math.floor(Math.random() * (maxHeight - minHeight) + minHeight);
-                    pipes.push({
-                        x: canvas.width,
-                        topH: topHeight,
-                        bottomY: topHeight + pipeGap,
-                        passed: false
-                    });
-                }
-
-                function updateFlappy() {
-                    if (gameOver) return;
-                    frame++;
-
-                    velocity += gravity;
-                    birdY += velocity;
-
-                    if (frame % 120 === 0) spawnPipe();
-
-                    for (var i = pipes.length - 1; i >= 0; i--) {
-                        pipes[i].x -= 3;
-
-                        if (!pipes[i].passed && pipes[i].x + pipeWidth < birdX) {
-                            pipes[i].passed = true;
-                            score++;
-                        }
-
-                        if (pipes[i].x + pipeWidth < 0) {
-                            pipes.splice(i, 1);
-                            continue;
-                        }
-
-                        if (birdX + birdSize > pipes[i].x && birdX < pipes[i].x + pipeWidth) {
-                            if (birdY < pipes[i].topH || birdY + birdSize > pipes[i].bottomY) {
-                                gameOver = true;
-                            }
-                        }
-                    }
-
-                    if (birdY < 0 || birdY + birdSize > canvas.height) gameOver = true;
-
-                    drawFlappy();
-                    animationId = requestAnimationFrame(updateFlappy);
-                }
-
-                function drawFlappy() {
-                    ctx.fillStyle = '#0f0f1a';
-                    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-                    ctx.fillStyle = '#00ff88';
-                    ctx.fillRect(birdX, birdY, birdSize, birdSize);
-                    ctx.fillStyle = '#fff';
-                    ctx.fillRect(birdX + 16, birdY + 6, 5, 5);
-                    ctx.fillStyle = '#ff9e00';
-                    ctx.fillRect(birdX + 20, birdY + 12, 8, 5);
-
-                    ctx.fillStyle = '#00d4ff';
-                    for (var i = 0; i < pipes.length; i++) {
-                        ctx.fillRect(pipes[i].x, 0, pipeWidth, pipes[i].topH);
-                        ctx.fillRect(pipes[i].x, pipes[i].bottomY, pipeWidth, canvas.height - pipes[i].bottomY);
-                    }
-
-                    ctx.fillStyle = '#fff';
-                    ctx.font = '30px Orbitron';
-                    ctx.textAlign = 'center';
-                    ctx.fillText(score, canvas.width / 2, 60);
-
-                    if (gameOver) {
-                        ctx.fillStyle = 'rgba(0,0,0,0.7)';
-                        ctx.fillRect(0, 0, canvas.width, canvas.height);
-                        ctx.fillStyle = '#ff6b6b';
-                        ctx.font = '40px Orbitron';
-                        ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 - 20);
-                        ctx.font = '18px Inter';
-                        ctx.fillStyle = '#fff';
-                        ctx.fillText('Score: ' + score, canvas.width / 2, canvas.height / 2 + 20);
-                        ctx.fillText('Press Space to restart', canvas.width / 2, canvas.height / 2 + 50);
-                    }
-                    ctx.textAlign = 'left';
-                }
-
-                var keyHandler = function(e) {
-                    if (gameOver && e.code === 'Space') {
-                        birdY = canvas.height / 2;
-                        velocity = 0;
-                        pipes = [];
-                        score = 0;
-                        frame = 0;
-                        gameOver = false;
-                        animationId = requestAnimationFrame(updateFlappy);
-                        return;
-                    }
-                    if (e.code === 'Space' || e.code === 'ArrowUp') {
-                        velocity = jump;
-                    }
-                };
-                document.addEventListener('keydown', keyHandler);
-                cleanup = function() { document.removeEventListener('keydown', keyHandler); };
-
-                animationId = requestAnimationFrame(updateFlappy);
-            }
-
-            // Store cleanup on container for closeModal to call
-            container._gameCleanup = cleanup;
-        }
-function openGameModal(game) {
+                '<div class="card-info">' +
+                    '<div class="card-title">' + game.name + '</div>' +
+                    '<div class="card-meta">' +
+                        '<span style="color: var(--accent-green);">' + game.category + '</span>' +
+                        '<span><i class="ri-play-circle-line"></i> Play</span>' +
+                    '</div>' +
+                '</div>' +
+            '</div>';
+    });
+
+    grid.innerHTML = html;
+
+    // Add click handlers to open games in iframe modal
+    grid.querySelectorAll('.game-card-item').forEach(function(card) {
+        card.addEventListener('click', function() {
+            var gameIndex = parseInt(this.dataset.gameIndex);
+            var game = CONFIG.games[gameIndex];
+            openGameInIframe(game);
+        });
+    });
+}
+
+        function openGameInIframe(game) {
             currentGame = game;
             currentItem = null;
             currentSite = null;
-
-            // External link games open in new tab
-            if (game.mode === 'external') {
-                window.open(game.url, '_blank');
-                return;
-            }
 
             var modal = document.getElementById('movieModal');
             modal.classList.add('active');
@@ -3470,27 +3528,25 @@ function openGameModal(game) {
             document.getElementById('sourceSidebar').style.display = 'none';
 
             document.getElementById('modalTitle').textContent = game.name;
-            document.getElementById('modalPosterThumb').querySelector('img').src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="90"><rect fill="%2312121a" width="60" height="90"/><text x="50%" y="50%" font-size="30" fill="%2300ff88" text-anchor="middle" dominant-baseline="middle"><i class="' + game.icon + '"></i></text></svg>';
+            document.getElementById('modalPosterThumb').querySelector('img').src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="90"><rect fill="%2312121a" width="60" height="90"/><text x="50%" y="50%" font-size="24" fill="%2300d4ff" text-anchor="middle" dominant-baseline="middle">🎮</text></svg>';
 
             document.getElementById('modalMeta').innerHTML = 
                 '<span><i class="ri-gamepad-line"></i> ' + game.category + '</span>' +
-                '<span><i class="ri-code-box-line"></i> HTML5</span>';
+                '<span><i class="ri-window-line"></i> Iframe Mode</span>';
 
             var iframe = document.getElementById('playerFrame');
-            var gameContainer = document.getElementById('gameContainer');
             var loader = document.getElementById('iframeLoader');
 
-            // Show game container, hide iframe
-            iframe.style.display = 'none';
-            gameContainer.style.display = 'flex';
-
             loader.classList.add('active');
+            iframe.src = game.url;
 
-            // Render the HTML5 game
             setTimeout(function() {
-                renderHTML5Game(game.gameId, gameContainer);
                 loader.classList.remove('active');
-            }, 300);
+            }, 2000);
+        }
+
+        function openGameModal(game) {
+            openGameInIframe(game);
         }
 async function loadMovies() {
             try {
@@ -3777,27 +3833,10 @@ async function loadMovies() {
             var type = currentItem.type === 'movie' ? 'movie' : 'tv';
             var url;
             
-            // VidSrc Embed uses IMDB ID instead of TMDB ID
             if (source.name === 'VidSrc Embed' && currentItem.imdb_id) {
                 url = source.url + type + '/' + currentItem.imdb_id;
-            } else if (source.name === 'VidSrc Embed' && !currentItem.imdb_id) {
-                // VidSrc Embed uses IMDB ID instead of TMDB ID
-                if (source.name === 'VidSrc Embed' && currentItem.imdb_id) {
-                    url = source.url + type + '/' + currentItem.imdb_id;
-                } else if (source.name === 'VidSrc Embed' && !currentItem.imdb_id) {
-                    url = source.url + type + '/' + currentItem.id;
-                } else {
-                    url = source.url + type + '/' + currentItem.id;
-                }
             } else {
-                // VidSrc Embed uses IMDB ID instead of TMDB ID
-                if (source.name === 'VidSrc Embed' && currentItem.imdb_id) {
-                    url = source.url + type + '/' + currentItem.imdb_id;
-                } else if (source.name === 'VidSrc Embed' && !currentItem.imdb_id) {
-                    url = source.url + type + '/' + currentItem.id;
-                } else {
-                    url = source.url + type + '/' + currentItem.id;
-                }
+                url = source.url + type + '/' + currentItem.id;
             }
             
             iframe.src = url;
@@ -3808,16 +3847,7 @@ async function loadMovies() {
         }
 
         function reloadPlayer() {
-            if (currentGame && currentGame.mode === 'html5') {
-                var gameContainer = document.getElementById('gameContainer');
-                var loader = document.getElementById('iframeLoader');
-                loader.classList.add('active');
-                gameContainer.innerHTML = '';
-                setTimeout(function() {
-                    renderHTML5Game(currentGame.gameId, gameContainer);
-                    loader.classList.remove('active');
-                }, 300);
-            } else if (currentGame && currentGame.mode === 'external') {
+            if (currentGame) {
                 window.open(currentGame.url, '_blank');
             } else if (currentSite) {
                 var iframe = document.getElementById('playerFrame');
@@ -3845,27 +3875,10 @@ async function loadMovies() {
                 var type = currentItem.type === 'movie' ? 'movie' : 'tv';
                 var url;
                 
-                // VidSrc Embed uses IMDB ID instead of TMDB ID
-            if (source.name === 'VidSrc Embed' && currentItem.imdb_id) {
+                if (source.name === 'VidSrc Embed' && currentItem.imdb_id) {
                 url = source.url + type + '/' + currentItem.imdb_id;
-            } else if (source.name === 'VidSrc Embed' && !currentItem.imdb_id) {
-                // VidSrc Embed uses IMDB ID instead of TMDB ID
-                if (source.name === 'VidSrc Embed' && currentItem.imdb_id) {
-                    url = source.url + type + '/' + currentItem.imdb_id;
-                } else if (source.name === 'VidSrc Embed' && !currentItem.imdb_id) {
-                    url = source.url + type + '/' + currentItem.id;
-                } else {
-                    url = source.url + type + '/' + currentItem.id;
-                }
             } else {
-                // VidSrc Embed uses IMDB ID instead of TMDB ID
-                if (source.name === 'VidSrc Embed' && currentItem.imdb_id) {
-                    url = source.url + type + '/' + currentItem.imdb_id;
-                } else if (source.name === 'VidSrc Embed' && !currentItem.imdb_id) {
-                    url = source.url + type + '/' + currentItem.id;
-                } else {
-                    url = source.url + type + '/' + currentItem.id;
-                }
+                url = source.url + type + '/' + currentItem.id;
             }
                 
                 window.open(url, '_blank');
@@ -4296,8 +4309,499 @@ async function loadMovies() {
                             font-size: 18px;
                         }
                     </style>
-                </head>
+
+    <!-- Doodle CSS Theme Resources -->
+    <link href="https://fonts.googleapis.com/css2?family=Short+Stack&display=swap" rel="stylesheet">
+    <style id="doodleThemeStyle">
+        /* Doodle CSS - Notebook Paper Theme by chr15m */
+        .doodle-active {
+            font-family: 'Short Stack', cursive !important;
+            background-color: #F5F0E8 !important;
+            color: #3c3c3c !important;
+        }
+
+        /* Only apply hand-drawn font to text content, NOT icons */
+        .doodle-active body,
+        .doodle-active h1, .doodle-active h2, .doodle-active h3, .doodle-active h4, .doodle-active h5, .doodle-active h6,
+        .doodle-active p, .doodle-active span, .doodle-active div, .doodle-active a,
+        .doodle-active button, .doodle-active input, .doodle-active textarea, .doodle-active select,
+        .doodle-active label, .doodle-active li, .doodle-active td, .doodle-active th,
+        .doodle-active .card-title, .doodle-active .link-title, .doodle-active .ai-title,
+        .doodle-active .game-title, .doodle-active .source-name, .doodle-active .music-track-title,
+        .doodle-active .music-track-artist, .doodle-active .section-desc, .doodle-active .category-subtitle,
+        .doodle-active .update-item, .doodle-active .link-note, .doodle-active .source-desc,
+        .doodle-active .cloak-info h4, .doodle-active .cloak-info p,
+        .doodle-active .download-info h3, .doodle-active .download-info p,
+        .doodle-active .modal-title-info h2, .doodle-active .modal-meta,
+        .doodle-active .player-status, .doodle-active .search-info,
+        .doodle-active .music-player-info h3, .doodle-active .music-player-info p,
+        .doodle-active .music-time, .doodle-active .music-track-duration,
+        .doodle-active .secret-title, .doodle-active .secret-message {
+            font-family: 'Short Stack', cursive !important;
+        }
+
+        /* EXPLICITLY preserve remixicon for ALL icon elements */
+        .doodle-active [class^="ri-"],
+        .doodle-active [class*=" ri-"],
+        .doodle-active i,
+        .doodle-active .ri-search-line, .doodle-active .ri-home-4-line,
+        .doodle-active .ri-movie-2-line, .doodle-active .ri-tv-line,
+        .doodle-active .ri-gamepad-line, .doodle-active .ri-links-line,
+        .doodle-active .ri-music-2-line, .doodle-active .ri-brain-line,
+        .doodle-active .ri-settings-3-line, .doodle-active .ri-download-cloud-2-line,
+        .doodle-active .ri-close-line, .doodle-active .ri-refresh-line,
+        .doodle-active .ri-fullscreen-line, .doodle-active .ri-external-link-line,
+        .doodle-active .ri-list-radio, .doodle-active .ri-clapperboard-line,
+        .doodle-active .ri-link, .doodle-active .ri-vidicon-line,
+        .doodle-active .ri-film-line, .doodle-active .ri-star-fill,
+        .doodle-active .ri-calendar-line, .doodle-active .ri-play-circle-line,
+        .doodle-active .ri-error-warning-line, .doodle-active .ri-check-line,
+        .doodle-active .ri-pause-fill, .doodle-active .ri-play-fill,
+        .doodle-active .ri-skip-back-fill, .doodle-active .ri-skip-forward-fill,
+        .doodle-active .ri-album-fill, .doodle-active .ri-search-line,
+        .doodle-active .ri-volume-down-line, .doodle-active .ri-volume-up-line,
+        .doodle-active .ri-robot-2-line, .doodle-active .ri-robot-line,
+        .doodle-active .ri-shield-user-line, .doodle-active .ri-eye-line,
+        .doodle-active .ri-palette-line, .doodle-active .ri-edit-line,
+        .doodle-active .ri-google-fill, .doodle-active .ri-youtube-fill,
+        .doodle-active .ri-skull-line, .doodle-active .ri-flashlight-line,
+        .doodle-active .ri-global-line, .doodle-active .ri-folder-3-line,
+        .doodle-active .ri-archive-line, .doodle-active .ri-window-line,
+        .doodle-active .ri-gamepad-line, .doodle-active .ri-external-link-line,
+        .doodle-active .ri-link, .doodle-active .ri-check-line,
+        .doodle-active .ri-spy-line, .doodle-active .ri-brain-line,
+        .doodle-active .ri-music-2-line, .doodle-active .ri-settings-3-line,
+        .doodle-active .ri-home-4-line, .doodle-active .ri-movie-2-line,
+        .doodle-active .ri-tv-line, .doodle-active .ri-links-line,
+        .doodle-active .ri-download-cloud-line, .doodle-active .ri-download-cloud-2-line {
+            font-family: 'remixicon' !important;
+        }
+
+        /* Nav items keep Inter font */
+        .doodle-active .nav-item,
+        .doodle-active .nav-tooltip,
+        .doodle-active .side-action-btn {
+            font-family: 'Inter', sans-serif !important;
+        }
+
+        /* NOTEBOOK PAPER BACKGROUND */
+        .doodle-active .main-content {
+            background-color: #FFFFFF !important;
+            background-image: 
+                linear-gradient(#C8D4E0 1px, transparent 1px) !important;
+            background-size: 100% 32px !important;
+            background-position: 0 0 !important;
+        }
+
+        /* Red margin line - the vertical line separating nav from content */
+        .doodle-active .main-content::before {
+            content: '' !important;
+            position: absolute !important;
+            left: 80px !important;
+            top: 0 !important;
+            width: 2px !important;
+            height: 100% !important;
+            background: linear-gradient(to bottom, 
+                transparent 0%, 
+                #E74C3C 5%, 
+                #E74C3C 95%, 
+                transparent 100%) !important;
+            z-index: 50 !important;
+            pointer-events: none !important;
+        }
+
+        /* Content area transparent so lines show through */
+        .doodle-active .content-area {
+            background: transparent !important;
+            position: relative !important;
+            z-index: 1 !important;
+        }
+
+        /* Top bar - sits on top of lines */
+        .doodle-active .top-bar {
+            background: #FFFFFF !important;
+            border-bottom: 2px solid #3c3c3c !important;
+            border-image: none !important;
+            backdrop-filter: none !important;
+            position: relative !important;
+            z-index: 10 !important;
+        }
+
+        /* Nav sidebar - left margin area of notebook */
+        .doodle-active .nav-container {
+            background-color: #F5F0E8 !important;
+            border-right: none !important;
+            border-image: none !important;
+            position: relative !important;
+        }
+
+        /* Cards and containers with hand-drawn borders */
+        .doodle-active .content-card,
+        .doodle-active .game-card,
+        .doodle-active .link-card,
+        .doodle-active .ai-card,
+        .doodle-active .settings-card,
+        .doodle-active .source-item,
+        .doodle-active .music-track,
+        .doodle-active .download-option,
+        .doodle-active .cloak-option,
+        .doodle-active .search-box,
+        .doodle-active .modal-content,
+        .doodle-active .modal-header,
+        .doodle-active .player-controls,
+        .doodle-active .source-sidebar,
+        .doodle-active .source-header,
+        .doodle-active .music-player-container,
+        .doodle-active .music-player-header,
+        .doodle-active .music-player-body,
+        .doodle-active .top-btn,
+        .doodle-active .control-btn,
+        .doodle-active .modal-close,
+        .doodle-active .clear-search-btn,
+        .doodle-active .music-control-btn,
+        .doodle-active .music-search-btn,
+        .doodle-active .music-search-input,
+        .doodle-active .custom-cloak-input,
+        .doodle-active .music-volume-slider,
+        .doodle-active .music-progress-bar,
+        .doodle-active .secret-heart,
+        .doodle-active .version-badge,
+        .doodle-active .updates,
+        .doodle-active .KnownBugs,
+        .doodle-active .api-status,
+        .doodle-active .card-badges,
+        .doodle-active .card-badge,
+        .doodle-active .game-badge,
+        .doodle-active .download-icon,
+        .doodle-active .cloak-icon,
+        .doodle-active .music-player-art,
+        .doodle-active .music-track-number,
+        .doodle-active .music-track-play,
+        .doodle-active .modal-poster-thumb {
+            background-color: #FFFFFF !important;
+            color: #3c3c3c !important;
+            border-color: #3c3c3c !important;
+            border-style: solid !important;
+            border-width: 2px !important;
+            border-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMCIgaGVpZ2h0PSIzMCIgdmlld0JveD0iMCAwIDMwIDMwIj48cGF0aCBkPSJNMTAsMyBRMTUsMiAyMCwzIiBmaWxsPSJub25lIiBzdHJva2U9IiMzYzNjM2MiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNMTAsMjcgUTE1LDI4IDIwLDI3IiBmaWxsPSJub25lIiBzdHJva2U9IiMzYzNjM2MiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNMywxMCBRMiwxNSAzLDIwIiBmaWxsPSJub25lIiBzdHJva2U9IiMzYzNjM2MiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNMjcsMTAgUTI4LDE1IDI3LDIwIiBmaWxsPSJub25lIiBzdHJva2U9IiMzYzNjM2MiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNMywxMCBRMiw1IDMsMyBRNSwyIDEwLDMiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzNjM2MzNjYiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cGF0aCBkPSJNMTAsMyBRMTUsMiAyMCwzIiBmaWxsPSJub25lIiBzdHJva2U9IiMzYzNjM2MiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNMTAsMjcgUTE1LDI4IDIwLDI3IiBmaWxsPSJub25lIiBzdHJva2U9IiMzYzNjM2MiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNMywxMCBRMiwxNSAzLDIwIiBmaWxsPSJub25lIiBzdHJva2U9IiMzYzNjM2MiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNMjcsMTAgUTI4LDE1IDI3LDIwIiBmaWxsPSJub25lIiBzdHJva2U9IiMzYzNjM2MiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNMywxMCBRMiw1IDMsMyBRNSwyIDEwLDMiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzNjM2MzNjYiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L3N2Zz4=') 10 10 10 10 stretch stretch !important;
+            border-radius: 3px !important;
+            box-shadow: none !important;
+        }
+
+        /* Active/hover states */
+        .doodle-active .nav-item:hover,
+        .doodle-active .nav-item.active,
+        .doodle-active .source-item.active,
+        .doodle-active .source-item:hover,
+        .doodle-active .theme-option.active,
+        .doodle-active .cloak-option.active,
+        .doodle-active .music-track.active,
+        .doodle-active .music-track:hover,
+        .doodle-active .link-card:hover,
+        .doodle-active .ai-card:hover,
+        .doodle-active .content-card:hover,
+        .doodle-active .game-card:hover,
+        .doodle-active .download-option:hover,
+        .doodle-active .top-btn.primary,
+        .doodle-active .control-btn:hover,
+        .doodle-active .side-action-btn:hover,
+        .doodle-active .modal-close:hover,
+        .doodle-active .clear-search-btn:hover,
+        .doodle-active .music-control-btn:hover,
+        .doodle-active .music-search-btn:hover {
+            background-color: #FFF8F0 !important;
+            border-color: #3c3c3c !important;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .doodle-active .top-btn.primary {
+            background: #3c3c3c !important;
+            color: #FFFFFF !important;
+        }
+
+        /* Text styling */
+        .doodle-active .section-header h2,
+        .doodle-active .category h3,
+        .doodle-active .settings-card h3,
+        .doodle-active .source-header h3,
+        .doodle-active .music-player-info h3,
+        .doodle-active .secret-title,
+        .doodle-active .download-header h2,
+        .doodle-active .modal-title-info h2 {
+            background: none !important;
+            -webkit-text-fill-color: #3c3c3c !important;
+            color: #3c3c3c !important;
+            font-family: 'Short Stack', cursive !important;
+        }
+
+        /* Badges */
+        .doodle-active .card-badge.rating,
+        .doodle-active .card-badge.bogge,
+        .doodle-active .card-badge.popular,
+        .doodle-active .game-badge.popular {
+            background: #3c3c3c !important;
+            color: #FFFFFF !important;
+            border-image: none !important;
+        }
+
+        /* Muted text */
+        .doodle-active .link-url,
+        .doodle-active .ai-url,
+        .doodle-active .category-subtitle,
+        .doodle-active .section-desc,
+        .doodle-active .card-meta,
+        .doodle-active .text-muted,
+        .doodle-active .source-desc,
+        .doodle-active .music-track-artist,
+        .doodle-active .music-track-duration,
+        .doodle-active .music-time,
+        .doodle-active .player-status,
+        .doodle-active .search-info,
+        .doodle-active .update-item,
+        .doodle-active .link-note,
+        .doodle-active .cloak-info p,
+        .doodle-active .download-info p,
+        .doodle-active .download-note,
+        .doodle-active .music-player-info p {
+            color: #6b6b6b !important;
+        }
+
+        /* Nav icons */
+        .doodle-active .nav-item i,
+        .doodle-active .nav-item.active i,
+        .doodle-active .nav-item:hover i {
+            color: #3c3c3c !important;
+            text-shadow: none !important;
+        }
+
+        /* Scrollbar */
+        .doodle-active .content-area::-webkit-scrollbar-track {
+            background: #F0EEE8 !important;
+        }
+        .doodle-active .content-area::-webkit-scrollbar-thumb {
+            background: #3c3c3c !important;
+            border-radius: 3px !important;
+        }
+
+        /* Particles */
+        .doodle-active .particle {
+            background: #3c3c3c !important;
+            box-shadow: none !important;
+        }
+
+        /* Loaders */
+        .doodle-active .iframe-loader,
+        .doodle-active .loading-spinner {
+            color: #3c3c3c !important;
+        }
+
+        /* Nav tooltip */
+        .doodle-active .nav-tooltip {
+            background: #FFFFFF !important;
+            border: 2px solid #3c3c3c !important;
+            color: #3c3c3c !important;
+            border-radius: 3px !important;
+        }
+
+        /* Player */
+        .doodle-active .player-frame,
+        .doodle-active #gameContainer {
+            background: #FFFFFF !important;
+        }
+
+        /* Modal overlay */
+        .doodle-active .modal-overlay {
+            background: rgba(245, 240, 232, 0.98) !important;
+        }
+
+        /* Secret modal */
+        .doodle-active .secret-heart {
+            color: #3c3c3c !important;
+        }
+        .doodle-active .secret-message {
+            background: none !important;
+            -webkit-text-fill-color: #3c3c3c !important;
+            color: #3c3c3c !important;
+        }
+
+        /* Version badge */
+        .doodle-active .version-badge {
+            background: #FFFFFF !important;
+            border: 2px solid #3c3c3c !important;
+            color: #3c3c3c !important;
+            animation: none !important;
+            box-shadow: none !important;
+        }
+
+        /* Updates/Known Bugs boxes */
+        .doodle-active .updates,
+        .doodle-active .KnownBugs {
+            background: #FFFFFF !important;
+            border: 2px solid #3c3c3c !important;
+            border-left-width: 2px !important;
+            backdrop-filter: none !important;
+        }
+        .doodle-active .updates h3,
+        .doodle-active .KnownBugs h3 {
+            color: #3c3c3c !important;
+        }
+
+        /* Subcategory */
+        .doodle-active .subcategory {
+            color: #3c3c3c !important;
+            border-left-color: #3c3c3c !important;
+        }
+
+        /* Inputs */
+        .doodle-active input,
+        .doodle-active textarea,
+        .doodle-active select {
+            background-color: unset !important;
+            font-family: 'Short Stack', cursive !important;
+            color: #3c3c3c !important;
+        }
+
+        /* Focus states */
+        .doodle-active .search-box:focus-within,
+        .doodle-active .music-search-input:focus {
+            border-color: #3c3c3c !important;
+            box-shadow: none !important;
+        }
+
+        /* Theme options */
+        .doodle-active .theme-option {
+            border-width: 2px !important;
+        }
+        .doodle-active .theme-option.active::after {
+            color: #3c3c3c !important;
+            text-shadow: none !important;
+        }
+
+        /* Links */
+        .doodle-active a {
+            color: #1c1c1c !important;
+            font-weight: bold !important;
+        }
+
+        /* Nav items specific */
+        .doodle-active .nav-item {
+            background-color: transparent !important;
+            border: 2px solid transparent !important;
+            border-image: none !important;
+            border-radius: 14px !important;
+            font-family: 'Inter', sans-serif !important;
+        }
+        .doodle-active .nav-item:hover,
+        .doodle-active .nav-item.active {
+            background-color: #FFF8F0 !important;
+            border-color: #3c3c3c !important;
+            border-image: none !important;
+            transform: translateX(4px) !important;
+        }
+        .doodle-active .nav-item.active::before {
+            background: #E74C3C !important;
+            border-image: none !important;
+        }
+        .doodle-active .nav-logo {
+            background-color: #FFFFFF !important;
+            border: 2px solid #3c3c3c !important;
+            border-image: none !important;
+            box-shadow: none !important;
+        }
+        .doodle-active .nav-logo:hover {
+            box-shadow: none !important;
+            transform: scale(1.1) rotate(5deg) !important;
+        }
+        .doodle-active .side-action-btn {
+            background-color: transparent !important;
+            border: 2px solid #3c3c3c !important;
+            border-image: none !important;
+            color: #3c3c3c !important;
+            font-family: 'Inter', sans-serif !important;
+        }
+        .doodle-active .side-action-btn:hover {
+            background-color: #FFF8F0 !important;
+            border-color: #3c3c3c !important;
+            color: #3c3c3c !important;
+            transform: rotate(180deg) !important;
+        }
+
+        /* Active indicator line - red like notebook margin */
+        .doodle-active .nav-item.active::before {
+            background: #E74C3C !important;
+        }
+
+        /* Doodle HR */
+        .doodle-active .doodle-hr {
+            border-style: solid !important;
+            border-width: 0px 3px 6px 3px !important;
+            border-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMCIgaGVpZ2h0PSIzMCIgdmlld0JveD0iMCAwIDMwIDMwIj48cGF0aCBkPSJNMywyNCBRMTUsMjMgMjcsMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzNjM2MzNjIiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNMCwyNCBRMS41LDIzIDMsMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzNjM2MzNjYiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNMjcsMjQgUTI4LjUsMjMgMzAsMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzNjM2MzNjYiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L3N2Zz4=') 0 3 6 3 stretch stretch !important;
+        }
+    </style>
+</head>
                 <body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" style="position:fixed;top:0;left:0;width:100%;height:100%;background:var(--darker);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.5s ease;">
+        <div id="loadingLogo" style="width:120px;height:120px;margin-bottom:30px;position:relative;">
+            <img src="https://boredaf.synergize.co/BoredAF.png" alt="BoredAF" style="width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 20px var(--primary));animation:pulse-logo 1.5s ease-in-out infinite;">
+        </div>
+        <div id="loadingText" style="font-family:'Orbitron',monospace;font-size:1.5rem;color:var(--primary);letter-spacing:4px;text-transform:uppercase;animation:glow-text 1.5s ease-in-out infinite alternate;">Loading BoredAF</div>
+        <div id="loadingBarContainer" style="width:200px;height:4px;background:var(--card-bg);border-radius:2px;margin-top:20px;overflow:hidden;border:1px solid var(--border);">
+            <div id="loadingBar" style="width:0%;height:100%;background:var(--gradient-1);border-radius:2px;transition:width 0.3s ease;"></div>
+        </div>
+    </div>
+    <style>
+        @keyframes pulse-logo {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 20px var(--primary)); }
+            50% { transform: scale(1.05); filter: drop-shadow(0 0 40px var(--primary)); }
+        }
+        @keyframes glow-text {
+            from { text-shadow: 0 0 10px var(--primary); opacity: 0.7; }
+            to { text-shadow: 0 0 30px var(--primary), 0 0 60px var(--accent-purple); opacity: 1; }
+        }
+        /* Doodle theme loading screen */
+        .doodle-loading {
+            background: #F5F0E8 !important;
+            font-family: 'Short Stack', cursive !important;
+        }
+        .doodle-loading #loadingLogo img {
+            filter: none !important;
+            animation: doodle-bounce 1s ease-in-out infinite !important;
+            border: 3px solid #3c3c3c !important;
+            border-radius: 12px !important;
+            padding: 8px !important;
+            background: #FFFFFF !important;
+        }
+        @keyframes doodle-bounce {
+            0%, 100% { transform: rotate(-3deg) scale(1); }
+            50% { transform: rotate(3deg) scale(1.05); }
+        }
+        .doodle-loading #loadingText {
+            font-family: 'Short Stack', cursive !important;
+            color: #3c3c3c !important;
+            text-shadow: none !important;
+            animation: doodle-wiggle 2s ease-in-out infinite !important;
+            letter-spacing: 2px !important;
+            text-transform: none !important;
+        }
+        @keyframes doodle-wiggle {
+            0%, 100% { transform: rotate(-1deg); }
+            25% { transform: rotate(1deg); }
+            50% { transform: rotate(-1deg); }
+            75% { transform: rotate(1deg); }
+        }
+        .doodle-loading #loadingBarContainer {
+            background: #FFFFFF !important;
+            border: 2px solid #3c3c3c !important;
+            border-radius: 3px !important;
+            height: 8px !important;
+        }
+        .doodle-loading #loadingBar {
+            background: #3c3c3c !important;
+            border-radius: 2px !important;
+        }
+    </style>
                     <div class="loading" id="loading">Loading site...</div>
                     <iframe src="${url}" onload="document.getElementById('loading').style.display='none'"></iframe>
                 </body>
@@ -4551,6 +5055,5 @@ async function loadMovies() {
     }
 })();
 </script>
-</div>
 </body>
 </html>
