@@ -2296,6 +2296,7 @@
             border-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMCIgaGVpZ2h0PSIzMCIgdmlld0JveD0iMCAwIDMwIDMwIj48cGF0aCBkPSJNMywyNCBRMTUsMjMgMjcsMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzNjM2MzNjIiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNMCwyNCBRMS41LDIzIDMsMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzNjM2MzNjYiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNMjcsMjQgUTI4LjUsMjMgMzAsMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzNjM2MzNjYiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L3N2Zz4=') 0 3 6 3 stretch stretch !important;
         }
     </style>
+
 <base target="_blank">
 </head>
 <body>
@@ -2462,6 +2463,8 @@
                     </div>
                 </div>
     </div>
+  </div>
+</div>
 
     <!-- Hidden YouTube Player for Music -->
     <div id="youtubePlayerContainer" class="hidden-youtube-player"></div>
@@ -2518,10 +2521,10 @@
 
             sections: [
                 { id: 'home', name: 'Home', icon: 'ri-home-4-line' },
-                { id: 'movies', name: 'Movies', icon: 'ri-movie-2-line' },
-                { id: 'tv', name: 'TV Shows', icon: 'ri-tv-line' },
+                { id: 'movies-tv', name: 'Movies & TV', icon: 'ri-movie-2-line' },
                 { id: 'games', name: 'Games', icon: 'ri-gamepad-line' },
                 { id: 'sites', name: 'Sites', icon: 'ri-links-line' },
+                { id: 'browser', name: 'BoredAF Browser', icon: 'ri-global-line' },
                 { id: 'ai', name: 'AI 101', icon: 'ri-brain-line' },
                 { id: 'settings', name: 'Settings', icon: 'ri-settings-3-line' }
             ],
@@ -3169,19 +3172,18 @@
                 case 'home':
                     renderHome(container);
                     break;
-                case 'movies':
+                case 'movies-tv':
                     currentType = 'movie';
-                    renderMovies(container);
-                    break;
-                case 'tv':
-                    currentType = 'tv';
-                    renderTVShows(container);
+                    renderMoviesAndTV(container);
                     break;
                 case 'games':
                     loadGameCovers().then(function() { renderGames(container); });
                     break;
                 case 'sites':
                     renderSites(container);
+                    break;
+                case 'browser':
+                    renderBrowser(container);
                     break;
                 case 'ai':
                     renderAI(container);
@@ -3385,7 +3387,6 @@
                     '<div class="update-item">V1: Made site rename</div>' +
                     '<div class="update-item">Updated Movie/TV Shows Thing</div>' +
                 '</div>' +
-                '</div>' +
                 
                 '<div class="KnownBugs">' +
                     '<h3><i></i> Known Bugs </h3>' +
@@ -3400,36 +3401,139 @@
                 '</div>';
         }
 
-        async function renderMovies(container) {
+        async function renderMoviesAndTV(container) {
             container.innerHTML = 
                 '<div class="section-header">' +
-                    '<h2><i class="ri-movie-2-line"></i> Popular Movies</h2>' +
+                    '<h2><i class="ri-movie-2-line"></i> Movies & TV Shows</h2>' +
                     '<p class="section-desc">Sorry Theres Ads I Cant Remove Them.</p>' +
                 '</div>' +
-                '<div class="cards-grid" id="itemsGrid">' +
-                    '<div class="loading-container">' +
-                        '<i class="ri-loader-4-line loading-spinner"></i>' +
-                        '<p>Loading Movies...</p>' +
+                '<div class="category">' +
+                    '<div class="category-header">' +
+                        '<div class="category-icon"><i class="ri-movie-2-line cat-icon-white"></i></div>' +
+                        '<h3>Popular Movies</h3>' +
+                    '</div>' +
+                    '<div class="cards-grid" id="moviesGrid">' +
+                        '<div class="loading-container">' +
+                            '<i class="ri-loader-4-line loading-spinner"></i>' +
+                            '<p>Loading Movies...</p>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="category" style="margin-top: 3rem;">' +
+                    '<div class="category-header">' +
+                        '<div class="category-icon"><i class="ri-tv-line cat-icon-white"></i></div>' +
+                        '<h3>Popular TV Shows</h3>' +
+                    '</div>' +
+                    '<div class="cards-grid" id="tvGrid">' +
+                        '<div class="loading-container">' +
+                            '<i class="ri-loader-4-line loading-spinner"></i>' +
+                            '<p>Loading TV Shows...</p>' +
+                        '</div>' +
                     '</div>' +
                 '</div>';
-            
-            await loadMovies();
+
+            currentItems = [];
+
+            // Load movies
+            try {
+                var response = await fetch(
+                    CONFIG.TMDB_BASE_URL + '/movie/popular?api_key=' + CONFIG.TMDB_API_KEY + '&page=1'
+                );
+                if (!response.ok) throw new Error('TMDB API error: ' + response.status);
+                var data = await response.json();
+
+                var movies = data.results.map(function(movie) {
+                    return {
+                        id: movie.id,
+                        title: movie.title,
+                        year: movie.release_date ? movie.release_date.split('-')[0] : 'N/A',
+                        rating: movie.vote_average.toFixed(1),
+                        image: movie.poster_path ? CONFIG.TMDB_IMAGE_URL + '/w500' + movie.poster_path : null,
+                        backdrop: movie.backdrop_path ? CONFIG.TMDB_IMAGE_URL + '/original' + movie.backdrop_path : null,
+                        overview: movie.overview,
+                        type: 'movie'
+                    };
+                });
+
+                currentItems = currentItems.concat(movies);
+                renderItemsToGrid(movies, 'moviesGrid');
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('moviesGrid').innerHTML = 
+                    '<div class="error-container">' +
+                        '<i class="ri-error-warning-line error-icon"></i>' +
+                        '<p class="error-title">Failed to load movies</p>' +
+                        '<p class="error-desc">Check your connection and try again.</p>' +
+                    '</div>';
+            }
+
+            // Load TV shows
+            try {
+                var response = await fetch(
+                    CONFIG.TMDB_BASE_URL + '/tv/popular?api_key=' + CONFIG.TMDB_API_KEY + '&page=1'
+                );
+                if (!response.ok) throw new Error('TMDB API error: ' + response.status);
+                var data = await response.json();
+
+                var shows = data.results.map(function(show) {
+                    return {
+                        id: show.id,
+                        title: show.name,
+                        year: show.first_air_date ? show.first_air_date.split('-')[0] : 'N/A',
+                        rating: show.vote_average.toFixed(1),
+                        image: show.poster_path ? CONFIG.TMDB_IMAGE_URL + '/w500' + show.poster_path : null,
+                        backdrop: show.backdrop_path ? CONFIG.TMDB_IMAGE_URL + '/original' + show.backdrop_path : null,
+                        overview: show.overview,
+                        type: 'tv'
+                    };
+                });
+
+                currentItems = currentItems.concat(shows);
+                renderItemsToGrid(shows, 'tvGrid');
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('tvGrid').innerHTML = 
+                    '<div class="error-container">' +
+                        '<i class="ri-error-warning-line error-icon"></i>' +
+                        '<p class="error-title">Failed to load TV shows</p>' +
+                        '<p class="error-desc">Check your connection and try again.</p>' +
+                    '</div>';
+            }
         }
 
-        async function renderTVShows(container) {
-            container.innerHTML = 
-                '<div class="section-header">' +
-                    '<h2><i class="ri-tv-line"></i> Popular TV Shows</h2>' +
-                    '<p class="section-desc">Sorry Theres Ads I Cant Remove Them.</p>' +
-                '</div>' +
-                '<div class="cards-grid" id="itemsGrid">' +
-                    '<div class="loading-container">' +
-                        '<i class="ri-loader-4-line loading-spinner"></i>' +
-                        '<p>LoadingTV Shows...</p>' +
-                    '</div>' +
-                '</div>';
-            
-            await loadTVShows();
+        function renderItemsToGrid(items, gridId) {
+            var grid = document.getElementById(gridId);
+            var html = '';
+            for (var i = 0; i < items.length; i++) {
+                var item = items[i];
+                var imgSrc = item.image || 'https://via.placeholder.com/250x400/12121a/00d4ff?text=' + encodeURIComponent(item.title);
+                var typeLabel = item.type === 'movie' ? 'Movie' : 'TV';
+                html += 
+                    '<div class="content-card" data-item-id="' + item.id + '" data-item-type="' + item.type + '">' +
+                        '<img src="' + imgSrc + '" class="card-image" alt="' + item.title + '" loading="lazy">' +
+                        '<div class="card-badges">' +
+                            '<div class="card-badge rating">★ ' + item.rating + '</div>' +
+                            '<div class="card-badge bogge">' + typeLabel + '</div>' +
+                        '</div>' +
+                        '<div class="card-info">' +
+                            '<div class="card-title">' + item.title + '</div>' +
+                            '<div class="card-meta">' +
+                                '<span><i class="ri-calendar-line"></i> ' + item.year + '</span>' +
+                                '<span><i class="ri-play-circle-line"></i> Watch</span>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>';
+            }
+            grid.innerHTML = html;
+
+            var cards = grid.querySelectorAll('.content-card');
+            for (var j = 0; j < cards.length; j++) {
+                (function(card) {
+                    card.addEventListener('click', function() { 
+                        openItemModal(parseInt(card.dataset.itemId), card.dataset.itemType); 
+                    });
+                })(cards[j]);
+            }
         }
 
         var gameCoverMap = new Map();
@@ -3548,6 +3652,10 @@ function renderGames(container) {
         function openGameModal(game) {
             openGameInIframe(game);
         }
+
+
+        
+
 async function loadMovies() {
             try {
                 var response = await fetch(
@@ -3616,16 +3724,18 @@ async function loadMovies() {
 
         function displayItems() {
             var grid = document.getElementById('itemsGrid');
+            if (!grid) return;
             var html = '';
             for (var i = 0; i < currentItems.length; i++) {
                 var item = currentItems[i];
                 var imgSrc = item.image || 'https://via.placeholder.com/250x400/12121a/00d4ff?text=' + encodeURIComponent(item.title);
+                var typeLabel = item.type === 'movie' ? 'Movie' : 'TV';
                 html += 
-                    '<div class="content-card" data-item-id="' + item.id + '">' +
+                    '<div class="content-card" data-item-id="' + item.id + '" data-item-type="' + item.type + '">' +
                         '<img src="' + imgSrc + '" class="card-image" alt="' + item.title + '" loading="lazy">' +
                         '<div class="card-badges">' +
                             '<div class="card-badge rating">★ ' + item.rating + '</div>' +
-                            '<div class="card-badge bogge">Cinema</div>' +
+                            '<div class="card-badge bogge">' + typeLabel + '</div>' +
                         '</div>' +
                         '<div class="card-info">' +
                             '<div class="card-title">' + item.title + '</div>' +
@@ -3637,18 +3747,18 @@ async function loadMovies() {
                     '</div>';
             }
             grid.innerHTML = html;
-            
+
             var cards = grid.querySelectorAll('.content-card');
             for (var j = 0; j < cards.length; j++) {
                 (function(card) {
                     card.addEventListener('click', function() { 
-                        openItemModal(parseInt(card.dataset.itemId)); 
+                        openItemModal(parseInt(card.dataset.itemId), card.dataset.itemType); 
                     });
                 })(cards[j]);
             }
         }
 
-        async function handleSearch(e) {
+async function handleSearch(e) {
             if (e.key === 'Enter') {
                 var query = document.getElementById('searchInput').value.trim();
                 if (query) {
@@ -3660,19 +3770,17 @@ async function loadMovies() {
         async function performSearch(query) {
             isSearchResults = true;
             lastSearchQuery = query;
-            
-            if (currentSection !== 'movies' && currentSection !== 'tv') {
-                currentSection = 'movies';
+
+            if (currentSection !== 'movies-tv') {
+                currentSection = 'movies-tv';
                 currentType = 'movie';
             }
 
             var container = document.getElementById('contentArea');
-            var typeLabel = currentType === 'movie' ? 'Movies' : 'TV Shows';
-            var typeIcon = currentType === 'movie' ? 'ri-movie-2-line' : 'ri-tv-line';
-            
+
             container.innerHTML = 
                 '<div class="section-header">' +
-                    '<h2><i class="' + typeIcon + '"></i> Search Results</h2>' +
+                    '<h2><i class="ri-movie-2-line"></i> Search Results</h2>' +
                     '<div class="search-header">' +
                         '<p class="search-info">Searching for: <span>"' + escapeHtml(query) + '"</span></p>' +
                         '<button class="clear-search-btn" id="clearSearchBtn">' +
@@ -3683,48 +3791,67 @@ async function loadMovies() {
                 '<div class="cards-grid" id="itemsGrid">' +
                     '<div class="loading-container">' +
                         '<i class="ri-loader-4-line loading-spinner"></i>' +
-                        '<p>Searching TMDB for ' + typeLabel.toLowerCase() + '...</p>' +
+                        '<p>Searching Movies & TV Shows...</p>' +
                     '</div>' +
                 '</div>';
 
             document.getElementById('clearSearchBtn').addEventListener('click', function() {
                 document.getElementById('searchInput').value = '';
-                showSection(currentType === 'movie' ? 'movies' : 'tv');
+                showSection('movies-tv');
             });
 
             try {
-                var endpoint = currentType === 'movie' ? '/search/movie' : '/search/tv';
-                var response = await fetch(
-                    CONFIG.TMDB_BASE_URL + endpoint + '?api_key=' + CONFIG.TMDB_API_KEY + '&query=' + encodeURIComponent(query) + '&page=1'
-                );
-                if (!response.ok) throw new Error('Search failed: ' + response.status);
-                var data = await response.json();
-                
-                if (data.results && data.results.length > 0) {
-                    currentItems = data.results.map(function(item) {
-                        var title = currentType === 'movie' ? item.title : item.name;
-                        var date = currentType === 'movie' ? item.release_date : item.first_air_date;
+                var moviePromise = fetch(CONFIG.TMDB_BASE_URL + '/search/movie?api_key=' + CONFIG.TMDB_API_KEY + '&query=' + encodeURIComponent(query) + '&page=1');
+                var tvPromise = fetch(CONFIG.TMDB_BASE_URL + '/search/tv?api_key=' + CONFIG.TMDB_API_KEY + '&query=' + encodeURIComponent(query) + '&page=1');
+
+                var responses = await Promise.all([moviePromise, tvPromise]);
+                var movieData = await responses[0].json();
+                var tvData = await responses[1].json();
+
+                var allResults = [];
+
+                if (movieData.results) {
+                    allResults = allResults.concat(movieData.results.map(function(item) {
                         return {
                             id: item.id,
-                            title: title,
-                            year: date ? date.split('-')[0] : 'N/A',
+                            title: item.title,
+                            year: item.release_date ? item.release_date.split('-')[0] : 'N/A',
                             rating: item.vote_average ? item.vote_average.toFixed(1) : 'N/A',
                             image: item.poster_path ? CONFIG.TMDB_IMAGE_URL + '/w500' + item.poster_path : null,
                             backdrop: item.backdrop_path ? CONFIG.TMDB_IMAGE_URL + '/original' + item.backdrop_path : null,
                             overview: item.overview,
-                            type: currentType
+                            type: 'movie'
                         };
-                    });
-                    
+                    }));
+                }
+
+                if (tvData.results) {
+                    allResults = allResults.concat(tvData.results.map(function(item) {
+                        return {
+                            id: item.id,
+                            title: item.name,
+                            year: item.first_air_date ? item.first_air_date.split('-')[0] : 'N/A',
+                            rating: item.vote_average ? item.vote_average.toFixed(1) : 'N/A',
+                            image: item.poster_path ? CONFIG.TMDB_IMAGE_URL + '/w500' + item.poster_path : null,
+                            backdrop: item.backdrop_path ? CONFIG.TMDB_IMAGE_URL + '/original' + item.backdrop_path : null,
+                            overview: item.overview,
+                            type: 'tv'
+                        };
+                    }));
+                }
+
+                currentItems = allResults;
+
+                if (currentItems.length > 0) {
                     displayItems();
-                    
+
                     var header = container.querySelector('.section-header h2');
-                    header.innerHTML = '<i class="' + typeIcon + '"></i> Search Results (' + currentItems.length + ' found)';
+                    header.innerHTML = '<i class="ri-movie-2-line"></i> Search Results (' + currentItems.length + ' found)';
                 } else {
                     document.getElementById('itemsGrid').innerHTML = 
                         '<div class="error-container">' +
                             '<i class="ri-search-line error-icon" style="color: var(--accent-yellow);"></i>' +
-                            '<p style="color: var(--text); font-weight: 600; margin-bottom: 8px;">No ' + typeLabel.toLowerCase() + ' found</p>' +
+                            '<p style="color: var(--text); font-weight: 600; margin-bottom: 8px;">No results found</p>' +
                             '<p>No results for "' + escapeHtml(query) + '". Try a different search term.</p>' +
                         '</div>';
                 }
@@ -3745,13 +3872,13 @@ async function loadMovies() {
             return div.innerHTML;
         }
 
-        async function openItemModal(itemId) {
+        async function openItemModal(itemId, itemType) {
             currentItem = null;
             currentGame = null;
             currentSite = null;
             
             for (var i = 0; i < currentItems.length; i++) {
-                if (currentItems[i].id === itemId) {
+                if (currentItems[i].id === itemId && currentItems[i].type === itemType) {
                     currentItem = currentItems[i];
                     break;
                 }
@@ -4257,6 +4384,196 @@ async function loadMovies() {
             });
         }
 
+        function renderBrowser(container) {
+            container.innerHTML = 
+                '<div class="section-header">' +
+                    '<h2><i class="ri-global-line"></i> BoredAF Browser</h2>' +
+                    '<p class="section-desc">Browse the web through our proxy. Some sites may still be blocked.</p>' +
+                '</div>' +
+                '<div class="browser-container" style="background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; height: calc(100vh - 200px);">' +
+                    '<div class="browser-toolbar" style="display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: var(--dark); border-bottom: 1px solid var(--border);">' +
+                        '<button id="browserBack" class="control-btn" style="padding: 8px 12px;" disabled><i class="ri-arrow-left-line"></i></button>' +
+                        '<button id="browserForward" class="control-btn" style="padding: 8px 12px;" disabled><i class="ri-arrow-right-line"></i></button>' +
+                        '<button id="browserReload" class="control-btn" style="padding: 8px 12px;"><i class="ri-refresh-line"></i></button>' +
+                        '<button id="browserHome" class="control-btn" style="padding: 8px 12px;"><i class="ri-home-4-line"></i></button>' +
+                        '<div style="flex: 1; display: flex; align-items: center; background: var(--darker); border: 1px solid var(--border); border-radius: 10px; padding: 8px 14px; gap: 8px;">' +
+                            '<i class="ri-lock-line" style="color: var(--accent-green); font-size: 14px;"></i>' +
+                            '<input type="text" id="browserAddressBar" placeholder="Search or enter URL..." style="flex: 1; background: transparent; border: none; color: var(--text); font-size: 14px; outline: none; font-family: Inter, sans-serif;" value="">' +
+                        '</div>' +
+                        '<button id="browserGo" class="top-btn primary" style="padding: 8px 20px;">Go</button>' +
+                    '</div>' +
+                    '<div style="flex: 1; position: relative; background: #000;">' +
+                        '<iframe id="browserFrame" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-top-navigation-by-user-activation" style="width: 100%; height: 100%; border: none; background: white;"></iframe>' +
+                        '<div id="browserLoading" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--darker); display: none; flex-direction: column; align-items: center; justify-content: center; gap: 16px; z-index: 10;">' +
+                            '<i class="ri-loader-4-line" style="font-size: 48px; color: var(--primary); animation: spin 1s linear infinite;"></i>' +
+                            '<p style="color: var(--text-muted); font-size: 14px;">Loading...</p>' +
+                        '</div>' +
+                        '<div id="browserError" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--darker); display: none; flex-direction: column; align-items: center; justify-content: center; gap: 12px; z-index: 20;">' +
+                            '<i class="ri-error-warning-line" style="font-size: 48px; color: var(--accent-red);"></i>' +
+                            '<h2 style="color: var(--accent-red);">Can\'t Load</h2>' +
+                            '<p id="browserErrorMsg" style="color: var(--text-muted); max-width: 400px; text-align: center;">Unable to load this page.</p>' +
+                            '<button id="browserErrorDismiss" class="top-btn secondary">Dismiss</button>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div style="background: var(--dark); border-top: 1px solid var(--border); padding: 6px 16px; font-size: 12px; color: var(--text-muted); display: flex; justify-content: space-between;">' +
+                        '<span id="browserStatus">Ready</span>' +
+                        '<span id="browserUrlDisplay" style="color: var(--primary);">about:blank</span>' +
+                    '</div>' +
+                '</div>';
+
+            var BACKEND = 'https://qwertyuiop-dm2v.onrender.com';
+            var browserHistory = [];
+            var historyIdx = -1;
+            var browserFrame = document.getElementById('browserFrame');
+            var addressBar = document.getElementById('browserAddressBar');
+            var loading = document.getElementById('browserLoading');
+            var status = document.getElementById('browserStatus');
+            var urlDisplay = document.getElementById('browserUrlDisplay');
+            var backBtn = document.getElementById('browserBack');
+            var fwdBtn = document.getElementById('browserForward');
+
+            // Ping backend
+            fetch(BACKEND + '/').catch(function(){});
+
+            function isUrl(input) {
+                return /^https?:\/\//i.test(input) || (input.includes('.') && !input.includes(' ') && input.length > 4);
+            }
+
+            function isYouTube(url) {
+                return /(youtube\.com|youtu\.be)/i.test(url);
+            }
+
+            function wrap(target) {
+                return BACKEND + '/proxy?url=' + encodeURIComponent(target);
+            }
+
+            function navigate(url, displayUrl, save) {
+                hideBrowserError();
+                loading.style.display = 'flex';
+                status.textContent = 'Loading...';
+
+                browserFrame.src = url;
+                addressBar.value = displayUrl;
+                urlDisplay.textContent = displayUrl;
+
+                var loaded = false;
+                browserFrame.onload = function() {
+                    loaded = true;
+                    loading.style.display = 'none';
+                    status.textContent = 'Done';
+                    if (save) addBrowserHistory(displayUrl);
+                };
+
+                browserFrame.onerror = function() {
+                    loading.style.display = 'none';
+                    showBrowserError('Failed to load.');
+                };
+
+                setTimeout(function() {
+                    if (loading.style.display !== 'none') {
+                        loading.style.display = 'none';
+                        status.textContent = loaded ? 'Done' : 'Timeout';
+                        if (save && !loaded) addBrowserHistory(displayUrl);
+                    }
+                }, 20000);
+            }
+
+            function addBrowserHistory(url) {
+                if (historyIdx < browserHistory.length - 1) browserHistory = browserHistory.slice(0, historyIdx + 1);
+                if (browserHistory[browserHistory.length - 1] !== url) {
+                    browserHistory.push(url);
+                    if (browserHistory.length > 50) browserHistory.shift();
+                    historyIdx = browserHistory.length - 1;
+                }
+                updateBrowserButtons();
+            }
+
+            function updateBrowserButtons() {
+                backBtn.disabled = historyIdx <= 0;
+                fwdBtn.disabled = historyIdx >= browserHistory.length - 1;
+            }
+
+            function goBrowserBack() {
+                if (historyIdx > 0) {
+                    historyIdx--;
+                    loadBrowserFromHistory(browserHistory[historyIdx]);
+                }
+            }
+
+            function goBrowserForward() {
+                if (historyIdx < browserHistory.length - 1) {
+                    historyIdx++;
+                    loadBrowserFromHistory(browserHistory[historyIdx]);
+                }
+            }
+
+            function loadBrowserFromHistory(url) {
+                if (url.indexOf('Search:') === 0) {
+                    var query = url.replace('Search: ', '');
+                    navigate(BACKEND + '/ddg?q=' + encodeURIComponent(query), url, false);
+                } else if (isYouTube(url)) {
+                    var ytPath = url.replace(/^https?:\/\//, '');
+                    navigate(BACKEND + '/youtube/' + ytPath, url, false);
+                } else {
+                    navigate(wrap(url), url, false);
+                }
+            }
+
+            function reloadBrowser() {
+                if (historyIdx >= 0) loadBrowserFromHistory(browserHistory[historyIdx]);
+            }
+
+            function goBrowserHome() {
+                addressBar.value = '';
+                urlDisplay.textContent = 'BoredAF Browser';
+                status.textContent = 'Ready';
+                browserFrame.src = 'data:text/html;base64,PCFET0NUWVBFIGh0bWw+CjxodG1sPjxoZWFkPjxtZXRhIGNoYXJzZXQ9IlVURi04Ij48dGl0bGU+Qm9yZWRBRiBCcm93c2VyPC90aXRsZT4KPHN0eWxlPgoqIHsgbWFyZ2luOiAwOyBwYWRkaW5nOiAwOyBib3gtc2l6aW5nOiBib3JkZXItYm94OyB9CmJvZHkgeyAKICAgIGZvbnQtZmFtaWx5OiAnT3JiaXRyb24nLCBtb25vc3BhY2UsIC1hcHBsZS1zeXN0ZW0sIEJsaW5rTWFjU3lzdGVtRm9udCwgc2Fucy1zZXJpZjsgCiAgICBiYWNrZ3JvdW5kOiAjMDUwNTEwOyAKICAgIGNvbG9yOiAjZTZmN2ZmOyAKICAgIGhlaWdodDogMTAwdmg7IAogICAgZGlzcGxheTogZmxleDsgCiAgICBmbGV4LWRpcmVjdGlvbjogY29sdW1uOyAKICAgIGFsaWduLWl0ZW1zOiBjZW50ZXI7IAogICAganVzdGlmeS1jb250ZW50OiBjZW50ZXI7IAogICAgb3ZlcmZsb3c6IGhpZGRlbjsgCiAgICBwb3NpdGlvbjogcmVsYXRpdmU7IAp9CiNjYW52YXMgeyAKICAgIHBvc2l0aW9uOiBhYnNvbHV0ZTsgCiAgICB0b3A6IDA7IAogICAgbGVmdDogMDsgCiAgICB3aWR0aDogMTAwJTsgCiAgICBoZWlnaHQ6IDEwMCU7IAogICAgei1pbmRleDogMTsgCn0KLmxvZ28tY29udGFpbmVyIHsgCiAgICBwb3NpdGlvbjogcmVsYXRpdmU7IAogICAgei1pbmRleDogMjsgCiAgICB0ZXh0LWFsaWduOiBjZW50ZXI7IAogICAgbWFyZ2luLWJvdHRvbTogNDBweDsgCiAgICBwb2ludGVyLWV2ZW50czogbm9uZTsKfQoubG9nby10ZXh0IHsgCiAgICBmb250LWZhbWlseTogJ09yYml0cm9uJywgbW9ub3NwYWNlOyAKICAgIGZvbnQtc2l6ZTogMy41cmVtOyAKICAgIGZvbnQtd2VpZ2h0OiA5MDA7IAogICAgYmFja2dyb3VuZDogbGluZWFyLWdyYWRpZW50KDEzNWRlZywgI2ZmZiAwJSwgIzAwZDRmZiA1MCUsICM5ZDRlZGQgMTAwJSk7IAogICAgLXdlYmtpdC1iYWNrZ3JvdW5kLWNsaXA6IHRleHQ7IAogICAgLXdlYmtpdC10ZXh0LWZpbGwtY29sb3I6IHRyYW5zcGFyZW50OyAKICAgIGJhY2tncm91bmQtY2xpcDogdGV4dDsgCiAgICBsZXR0ZXItc3BhY2luZzogNHB4OyAKICAgIG1hcmdpbi1ib3R0b206IDhweDsgCiAgICBhbmltYXRpb246IGdsb3ctdGV4dCAycyBlYXNlLWluLW91dCBpbmZpbml0ZSBhbHRlcm5hdGU7IAp9Ci50YWdsaW5lIHsgCiAgICBjb2xvcjogIzg4OTlhNjsgCiAgICBmb250LXNpemU6IDEuMXJlbTsgCiAgICBsZXR0ZXItc3BhY2luZzogMnB4OyAKICAgIG1hcmdpbi1ib3R0b206IDQwcHg7IAp9Ci5zZWFyY2gtYm94IHsgCiAgICBkaXNwbGF5OiBmbGV4OyAKICAgIGFsaWduLWl0ZW1zOiBjZW50ZXI7IAogICAgYmFja2dyb3VuZDogcmdiYSgxOCwgMTgsIDI2LCAwLjgpOyAKICAgIGJvcmRlcjogMXB4IHNvbGlkICMyYTJhNDA7IAogICAgYm9yZGVyLXJhZGl1czogMTRweDsgCiAgICBwYWRkaW5nOiAxNHB4IDI0cHg7IAogICAgd2lkdGg6IDUwMHB4OyAKICAgIG1heC13aWR0aDogOTAlOyAKICAgIGJhY2tkcm9wLWZpbHRlcjogYmx1cigxMHB4KTsgCiAgICB0cmFuc2l0aW9uOiBhbGwgMC4zczsgCiAgICBwb3NpdGlvbjogcmVsYXRpdmU7IAogICAgei1pbmRleDogMjsgCn0KLnNlYXJjaC1ib3g6Zm9jdXMtd2l0aGluIHsgCiAgICBib3JkZXItY29sb3I6ICMwMGQ0ZmY7IAogICAgYm94LXNoYWRvdzogMCAwIDIwcHggcmdiYSgwLCAyMTIsIDI1NSwgMC4zKTsgCn0KLnNlYXJjaC1ib3ggaW5wdXQgeyAKICAgIGJhY2tncm91bmQ6IHRyYW5zcGFyZW50OyAKICAgIGJvcmRlcjogbm9uZTsgCiAgICBjb2xvcjogI2ZmZjsgCiAgICBmb250LXNpemU6IDE2cHg7IAogICAgb3V0bGluZTogbm9uZTsgCiAgICB3aWR0aDogMTAwJTsgCiAgICBmb250LWZhbWlseTogaW5oZXJpdDsgCn0KLnNlYXJjaC1ib3ggaW5wdXQ6OnBsYWNlaG9sZGVyIHsgCiAgICBjb2xvcjogIzg4OTlhNjsgCn0KLnNlYXJjaC1ib3ggYnV0dG9uIHsgCiAgICBiYWNrZ3JvdW5kOiBsaW5lYXItZ3JhZGllbnQoMTM1ZGVnLCAjMDBkNGZmLCAjOWQ0ZWRkKTsgCiAgICBib3JkZXI6IG5vbmU7IAogICAgY29sb3I6IHdoaXRlOyAKICAgIHBhZGRpbmc6IDEwcHggMjRweDsgCiAgICBib3JkZXItcmFkaXVzOiAxMHB4OyAKICAgIGN1cnNvcjogcG9pbnRlcjsgCiAgICBmb250LXdlaWdodDogNjAwOyAKICAgIGZvbnQtc2l6ZTogMTRweDsgCiAgICB0cmFuc2l0aW9uOiBhbGwgMC4zczsgCn0KLnNlYXJjaC1ib3ggYnV0dG9uOmhvdmVyIHsgCiAgICB0cmFuc2Zvcm06IHRyYW5zbGF0ZVkoLTJweCk7IAogICAgYm94LXNoYWRvdzogMCAxMHB4IDIwcHggcmdiYSgwLCAyMTIsIDI1NSwgMC4zKTsgCn0KLnNob3J0Y3V0cyB7IAogICAgZGlzcGxheTogZmxleDsgCiAgICBnYXA6IDE2cHg7IAogICAgbWFyZ2luLXRvcDogNDBweDsgCiAgICBmbGV4LXdyYXA6IHdyYXA7IAogICAganVzdGlmeS1jb250ZW50OiBjZW50ZXI7IAogICAgcG9zaXRpb246IHJlbGF0aXZlOyAKICAgIHotaW5kZXg6IDI7IAp9Ci5zaG9ydGN1dCB7IAogICAgZGlzcGxheTogZmxleDsgCiAgICBmbGV4LWRpcmVjdGlvbjogY29sdW1uOyAKICAgIGFsaWduLWl0ZW1zOiBjZW50ZXI7IAogICAgZ2FwOiA4cHg7IAogICAgcGFkZGluZzogMTZweCAyNHB4OyAKICAgIGJhY2tncm91bmQ6IHJnYmEoMTgsIDE4LCAyNiwgMC42KTsgCiAgICBib3JkZXI6IDFweCBzb2xpZCAjMmEyYTQwOyAKICAgIGJvcmRlci1yYWRpdXM6IDEycHg7IAogICAgY3Vyc29yOiBwb2ludGVyOyAKICAgIHRyYW5zaXRpb246IGFsbCAwLjNzOyAKICAgIHRleHQtZGVjb3JhdGlvbjogbm9uZTsgCiAgICBjb2xvcjogaW5oZXJpdDsgCiAgICBtaW4td2lkdGg6IDEwMHB4OyAKICAgIHotaW5kZXg6IDI7Cn0KLnNob3J0Y3V0OmhvdmVyIHsgCiAgICBib3JkZXItY29sb3I6ICMwMGQ0ZmY7IAogICAgdHJhbnNmb3JtOiB0cmFuc2xhdGVZKC00cHgpOyAKICAgIGJveC1zaGFkb3c6IDAgMTBweCAzMHB4IHJnYmEoMCwgMjEyLCAyNTUsIDAuMik7IAp9Ci5zaG9ydGN1dC1pY29uIHsgCiAgICBmb250LXNpemU6IDI4cHg7IAp9Ci5zaG9ydGN1dC1sYWJlbCB7IAogICAgZm9udC1zaXplOiAxMnB4OyAKICAgIGNvbG9yOiAjODg5OWE2OyAKfQoudmVyc2lvbiB7IAogICAgcG9zaXRpb246IGFic29sdXRlOyAKICAgIGJvdHRvbTogMjBweDsgCiAgICBjb2xvcjogIzJhMmE0MDsgCiAgICBmb250LXNpemU6IDEycHg7IAogICAgbGV0dGVyLXNwYWNpbmc6IDJweDsgCiAgICB6LWluZGV4OiAyOyAKfQpAa2V5ZnJhbWVzIGdsb3ctdGV4dCB7IAogICAgZnJvbSB7IHRleHQtc2hhZG93OiAwIDAgMTBweCByZ2JhKDAsIDIxMiwgMjU1LCAwLjUpOyBvcGFjaXR5OiAwLjc7IH0gCiAgICB0byB7IHRleHQtc2hhZG93OiAwIDAgMzBweCByZ2JhKDAsIDIxMiwgMjU1LCAwLjgpLCAwIDAgNjBweCByZ2JhKDE1NywgNzgsIDIyMSwgMC40KTsgb3BhY2l0eTogMTsgfSAKfQo8L3N0eWxlPgo8bGluayBocmVmPSJodHRwczovL2ZvbnRzLmdvb2dsZWFwaXMuY29tL2NzczI/ZmFtaWx5PU9yYml0cm9uOndnaHRANDAwOzcwMDs5MDAmZGlzcGxheT1zd2FwIiByZWw9InN0eWxlc2hlZXQiPgo8L2hlYWQ+PGJvZHk+CjxjYW52YXMgaWQ9ImNhbnZhcyI+PC9jYW52YXM+CjxkaXYgY2xhc3M9ImxvZ28tY29udGFpbmVyIj4KICAgIDxkaXYgY2xhc3M9ImxvZ28tdGV4dCI+Qm9yZWRBRjwvZGl2PgogICAgPGRpdiBjbGFzcz0idGFnbGluZSI+QlJPV1NFUjwvZGl2Pgo8L2Rpdj4KPGRpdiBjbGFzcz0ic2VhcmNoLWJveCI+CiAgICA8c3BhbiBzdHlsZT0iY29sb3I6ICM4ODk5YTY7IGZvbnQtc2l6ZTogMjBweDsgbWFyZ2luLXJpZ2h0OiAxMnB4OyI+JiMxMjgyNjk7PC9zcGFuPgogICAgPGlucHV0IHR5cGU9InRleHQiIGlkPSJob21lU2VhcmNoIiBwbGFjZWhvbGRlcj0iU2VhcmNoIHRoZSB3ZWIuLi4iIGF1dG9mb2N1cz4KICAgIDxidXR0b24gb25jbGljaz0iZG9TZWFyY2goKSI+R288L2J1dHRvbj4KPC9kaXY+CjxkaXYgY2xhc3M9InNob3J0Y3V0cyI+CiAgICA8YSBjbGFzcz0ic2hvcnRjdXQiIGhyZWY9Imh0dHBzOi8vd3d3Lmdvb2dsZS5jb20iIHRhcmdldD0iX3RvcCI+PHNwYW4gY2xhc3M9InNob3J0Y3V0LWljb24iPiYjMTI4MjY5Ozwvc3Bhbj48c3BhbiBjbGFzcz0ic2hvcnRjdXQtbGFiZWwiPkdvb2dsZTwvc3Bhbj48L2E+CiAgICA8YSBjbGFzcz0ic2hvcnRjdXQiIGhyZWY9Imh0dHBzOi8vd3d3LnlvdXR1YmUuY29tIiB0YXJnZXQ9Il90b3AiPjxzcGFuIGNsYXNzPSJzaG9ydGN1dC1pY29uIj4mIzEyODI1MDs8L3NwYW4+PHNwYW4gY2xhc3M9InNob3J0Y3V0LWxhYmVsIj5Zb3VUdWJlPC9zcGFuPjwvYT4KICAgIDxhIGNsYXNzPSJzaG9ydGN1dCIgaHJlZj0iaHR0cHM6Ly93d3cucmVkZGl0LmNvbSIgdGFyZ2V0PSJfdG9wIj48c3BhbiBjbGFzcz0ic2hvcnRjdXQtaWNvbiI+JiMxMjkzMDI7PC9zcGFuPjxzcGFuIGNsYXNzPSJzaG9ydGN1dC1sYWJlbCI+UmVkZGl0PC9zcGFuPjwvYT4KICAgIDxhIGNsYXNzPSJzaG9ydGN1dCIgaHJlZj0iaHR0cHM6Ly93d3cuZGlzY29yZC5jb20iIHRhcmdldD0iX3RvcCI+PHNwYW4gY2xhc3M9InNob3J0Y3V0LWljb24iPiYjMTI4MTcyOzwvc3Bhbj48c3BhbiBjbGFzcz0ic2hvcnRjdXQtbGFiZWwiPkRpc2NvcmQ8L3NwYW4+PC9hPgogICAgPGEgY2xhc3M9InNob3J0Y3V0IiBocmVmPSJodHRwczovL3d3dy50d2l0Y2gudHYiIHRhcmdldD0iX3RvcCI+PHNwYW4gY2xhc3M9InNob3J0Y3V0LWljb24iPiYjMTI3OTE4Ozwvc3Bhbj48c3BhbiBjbGFzcz0ic2hvcnRjdXQtbGFiZWwiPlR3aXRjaDwvc3Bhbj48L2E+CjwvZGl2Pgo8ZGl2IGNsYXNzPSJ2ZXJzaW9uIj5Cb3JlZEFGIEJyb3dzZXIgVjE8L2Rpdj4KPHNjcmlwdD4KY29uc3QgY2FudmFzID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ2NhbnZhcycpOwpjb25zdCBjdHggPSBjYW52YXMuZ2V0Q29udGV4dCgnMmQnKTsKbGV0IHdpZHRoLCBoZWlnaHQ7CmxldCBwYXJ0aWNsZXMgPSBbXTsKbGV0IG1vdXNlID0geyB4OiAtMTAwMCwgeTogLTEwMDAgfTsKCmZ1bmN0aW9uIHJlc2l6ZSgpIHsKICAgIHdpZHRoID0gY2FudmFzLndpZHRoID0gd2luZG93LmlubmVyV2lkdGg7CiAgICBoZWlnaHQgPSBjYW52YXMuaGVpZ2h0ID0gd2luZG93LmlubmVySGVpZ2h0Owp9CndpbmRvdy5hZGRFdmVudExpc3RlbmVyKCdyZXNpemUnLCByZXNpemUpOwpyZXNpemUoKTsKCmNsYXNzIFBhcnRpY2xlIHsKICAgIGNvbnN0cnVjdG9yKHgsIHksIHRhcmdldFgsIHRhcmdldFkpIHsKICAgICAgICB0aGlzLnggPSBNYXRoLnJhbmRvbSgpICogd2lkdGg7CiAgICAgICAgdGhpcy55ID0gTWF0aC5yYW5kb20oKSAqIGhlaWdodDsKICAgICAgICB0aGlzLnRhcmdldFggPSB0YXJnZXRYOwogICAgICAgIHRoaXMudGFyZ2V0WSA9IHRhcmdldFk7CiAgICAgICAgdGhpcy52eCA9IDA7CiAgICAgICAgdGhpcy52eSA9IDA7CiAgICAgICAgdGhpcy5zaXplID0gTWF0aC5yYW5kb20oKSAqIDIgKyAxOwogICAgICAgIHRoaXMuc3BlZWQgPSBNYXRoLnJhbmRvbSgpICogMC4wMiArIDAuMDE7CiAgICAgICAgdGhpcy5hbmdsZSA9IE1hdGgucmFuZG9tKCkgKiBNYXRoLlBJICogMjsKICAgICAgICB0aGlzLm9yYml0UmFkaXVzID0gTWF0aC5yYW5kb20oKSAqIDMwICsgMTA7CiAgICAgICAgdGhpcy5vcmJpdFNwZWVkID0gTWF0aC5yYW5kb20oKSAqIDAuMDIgKyAwLjAxOwogICAgICAgIHRoaXMuaHVlID0gTWF0aC5yYW5kb20oKSAqIDYwICsgMTgwOwogICAgfQoKICAgIHVwZGF0ZSgpIHsKICAgICAgICB0aGlzLmFuZ2xlICs9IHRoaXMub3JiaXRTcGVlZDsKICAgICAgICBjb25zdCBvcmJpdFggPSBNYXRoLmNvcyh0aGlzLmFuZ2xlKSAqIHRoaXMub3JiaXRSYWRpdXM7CiAgICAgICAgY29uc3Qgb3JiaXRZID0gTWF0aC5zaW4odGhpcy5hbmdsZSkgKiB0aGlzLm9yYml0UmFkaXVzOwogICAgICAgIGNvbnN0IHR4ID0gdGhpcy50YXJnZXRYICsgb3JiaXRYOwogICAgICAgIGNvbnN0IHR5ID0gdGhpcy50YXJnZXRZICsgb3JiaXRZOwogICAgICAgIHRoaXMudnggKz0gKHR4IC0gdGhpcy54KSAqIHRoaXMuc3BlZWQ7CiAgICAgICAgdGhpcy52eSArPSAodHkgLSB0aGlzLnkpICogdGhpcy5zcGVlZDsKICAgICAgICBjb25zdCBkeCA9IHRoaXMueCAtIG1vdXNlLng7CiAgICAgICAgY29uc3QgZHkgPSB0aGlzLnkgLSBtb3VzZS55OwogICAgICAgIGNvbnN0IGRpc3QgPSBNYXRoLnNxcnQoZHggKiBkeCArIGR5ICogZHkpOwogICAgICAgIGlmIChkaXN0IDwgMTUwKSB7CiAgICAgICAgICAgIGNvbnN0IGZvcmNlID0gKDE1MCAtIGRpc3QpIC8gMTUwOwogICAgICAgICAgICB0aGlzLnZ4ICs9IChkeCAvIGRpc3QpICogZm9yY2UgKiAzOwogICAgICAgICAgICB0aGlzLnZ5ICs9IChkeSAvIGRpc3QpICogZm9yY2UgKiAzOwogICAgICAgIH0KICAgICAgICB0aGlzLnZ4ICo9IDAuOTU7CiAgICAgICAgdGhpcy52eSAqPSAwLjk1OwogICAgICAgIHRoaXMueCArPSB0aGlzLnZ4OwogICAgICAgIHRoaXMueSArPSB0aGlzLnZ5OwogICAgfQoKICAgIGRyYXcoKSB7CiAgICAgICAgY3R4LmJlZ2luUGF0aCgpOwogICAgICAgIGN0eC5hcmModGhpcy54LCB0aGlzLnksIHRoaXMuc2l6ZSwgMCwgTWF0aC5QSSAqIDIpOwogICAgICAgIGN0eC5maWxsU3R5bGUgPSAnaHNsYSgnICsgdGhpcy5odWUgKyAnLCA4MCUsIDYwJSwgMC44KSc7CiAgICAgICAgY3R4LmZpbGwoKTsKICAgICAgICBjdHguYmVnaW5QYXRoKCk7CiAgICAgICAgY3R4LmFyYyh0aGlzLngsIHRoaXMueSwgdGhpcy5zaXplICogMywgMCwgTWF0aC5QSSAqIDIpOwogICAgICAgIGN0eC5maWxsU3R5bGUgPSAnaHNsYSgnICsgdGhpcy5odWUgKyAnLCA4MCUsIDYwJSwgMC4xKSc7CiAgICAgICAgY3R4LmZpbGwoKTsKICAgIH0KfQoKZnVuY3Rpb24gY3JlYXRlVGV4dFBhcnRpY2xlcygpIHsKICAgIHBhcnRpY2xlcyA9IFtdOwogICAgY29uc3QgdGV4dCA9ICdCb3JlZEFGJzsKICAgIGNvbnN0IGZvbnRTaXplID0gTWF0aC5taW4od2lkdGggLyA1LCAxMjApOwogICAgY29uc3Qgb2ZmQ2FudmFzID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgnY2FudmFzJyk7CiAgICBjb25zdCBvZmZDdHggPSBvZmZDYW52YXMuZ2V0Q29udGV4dCgnMmQnKTsKICAgIG9mZkNhbnZhcy53aWR0aCA9IHdpZHRoOwogICAgb2ZmQ2FudmFzLmhlaWdodCA9IGhlaWdodDsKICAgIG9mZkN0eC5mb250ID0gJzkwMCAnICsgZm9udFNpemUgKyAncHggT3JiaXRyb24sIG1vbm9zcGFjZSc7CiAgICBvZmZDdHguZmlsbFN0eWxlID0gJ3doaXRlJzsKICAgIG9mZkN0eC50ZXh0QWxpZ24gPSAnY2VudGVyJzsKICAgIG9mZkN0eC50ZXh0QmFzZWxpbmUgPSAnbWlkZGxlJzsKICAgIG9mZkN0eC5maWxsVGV4dCh0ZXh0LCB3aWR0aCAvIDIsIGhlaWdodCAvIDIgLSA1MCk7CiAgICBjb25zdCBpbWFnZURhdGEgPSBvZmZDdHguZ2V0SW1hZ2VEYXRhKDAsIDAsIHdpZHRoLCBoZWlnaHQpOwogICAgY29uc3QgZGF0YSA9IGltYWdlRGF0YS5kYXRhOwogICAgY29uc3Qgc3RlcCA9IDQ7CiAgICBmb3IgKGxldCB5ID0gMDsgeSA8IGhlaWdodDsgeSArPSBzdGVwKSB7CiAgICAgICAgZm9yIChsZXQgeCA9IDA7IHggPCB3aWR0aDsgeCArPSBzdGVwKSB7CiAgICAgICAgICAgIGNvbnN0IGkgPSAoeSAqIHdpZHRoICsgeCkgKiA0OwogICAgICAgICAgICBpZiAoZGF0YVtpICsgM10gPiAxMjgpIHsKICAgICAgICAgICAgICAgIHBhcnRpY2xlcy5wdXNoKG5ldyBQYXJ0aWNsZSh4LCB5LCB4LCB5KSk7CiAgICAgICAgICAgIH0KICAgICAgICB9CiAgICB9Cn0KCmZ1bmN0aW9uIGFuaW1hdGUoKSB7CiAgICBjdHguZmlsbFN0eWxlID0gJ3JnYmEoNSwgNSwgMTYsIDAuMSknOwogICAgY3R4LmZpbGxSZWN0KDAsIDAsIHdpZHRoLCBoZWlnaHQpOwogICAgcGFydGljbGVzLmZvckVhY2goZnVuY3Rpb24ocCkgewogICAgICAgIHAudXBkYXRlKCk7CiAgICAgICAgcC5kcmF3KCk7CiAgICB9KTsKICAgIHJlcXVlc3RBbmltYXRpb25GcmFtZShhbmltYXRlKTsKfQoKY2FudmFzLmFkZEV2ZW50TGlzdGVuZXIoJ21vdXNlbW92ZScsIGZ1bmN0aW9uKGUpIHsKICAgIG1vdXNlLnggPSBlLmNsaWVudFg7CiAgICBtb3VzZS55ID0gZS5jbGllbnRZOwp9KTsKCmNyZWF0ZVRleHRQYXJ0aWNsZXMoKTsKYW5pbWF0ZSgpOwoKd2luZG93LmFkZEV2ZW50TGlzdGVuZXIoJ3Jlc2l6ZScsIGZ1bmN0aW9uKCkgewogICAgcmVzaXplKCk7CiAgICBjcmVhdGVUZXh0UGFydGljbGVzKCk7Cn0pOwoKZnVuY3Rpb24gZG9TZWFyY2goKSB7CiAgICB2YXIgcSA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdob21lU2VhcmNoJykudmFsdWUudHJpbSgpOwogICAgaWYgKHEpIHdpbmRvdy50b3AubG9jYXRpb24uaHJlZiA9ICdodHRwczovL3d3dy5nb29nbGUuY29tL3NlYXJjaD9xPScgKyBlbmNvZGVVUklDb21wb25lbnQocSk7Cn0KZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ2hvbWVTZWFyY2gnKS5hZGRFdmVudExpc3RlbmVyKCdrZXlwcmVzcycsIGZ1bmN0aW9uKGUpIHsKICAgIGlmIChlLmtleSA9PT0gJ0VudGVyJykgZG9TZWFyY2goKTsKfSk7Cjwvc2NyaXB0PjwvYm9keT48L2h0bWw+';
+            }
+
+            function showBrowserError(msg) {
+                document.getElementById('browserErrorMsg').textContent = msg;
+                document.getElementById('browserError').style.display = 'flex';
+            }
+
+            function hideBrowserError() {
+                document.getElementById('browserError').style.display = 'none';
+            }
+
+            function loadBrowserUrl() {
+                var input = addressBar.value.trim();
+                if (!input) return;
+
+                var target;
+                if (isUrl(input)) {
+                    target = input.match(/^https?:\/\//i) ? input : 'https://' + input;
+                } else {
+                    target = BACKEND + '/ddg?q=' + encodeURIComponent(input);
+                    navigate(target, 'Search: ' + input, true);
+                    return;
+                }
+
+                if (isYouTube(target)) {
+                    var ytPath = target.replace(/^https?:\/\//, '');
+                    navigate(BACKEND + '/youtube/' + ytPath, target, true);
+                    return;
+                }
+
+                navigate(wrap(target), target, true);
+            }
+
+            document.getElementById('browserGo').addEventListener('click', loadBrowserUrl);
+            addressBar.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') loadBrowserUrl();
+            });
+            document.getElementById('browserReload').addEventListener('click', reloadBrowser);
+            document.getElementById('browserBack').addEventListener('click', goBrowserBack);
+            document.getElementById('browserForward').addEventListener('click', goBrowserForward);
+            document.getElementById('browserHome').addEventListener('click', goBrowserHome);
+            document.getElementById('browserErrorDismiss').addEventListener('click', hideBrowserError);
+
+            addressBar.focus();
+        }
+
         function openSiteInStealthMode(url, title) {
             currentSite = { url: url, title: title };
             currentItem = null;
@@ -4281,532 +4598,13 @@ async function loadMovies() {
             loader.classList.add('active');
             
             // Create about:blank page with the site embedded
-            var blankPageContent = `
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>about:blank</title>
-                    <style>
-                        * { margin: 0; padding: 0; box-sizing: border-box; }
-                        body { 
-                            width: 100vw; 
-                            height: 100vh; 
-                            overflow: hidden;
-                            background: #0f0f1a;
-                        }
-                        iframe {
-                            width: 100%;
-                            height: 100%;
-                            border: none;
-                        }
-                        .loading {
-                            position: absolute;
-                            top: 50%;
-                            left: 50%;
-                            transform: translate(-50%, -50%);
-                            color: #00d4ff;
-                            font-family: sans-serif;
-                            font-size: 18px;
-                        }
-                    </style>
-
-    <!-- Doodle CSS Theme Resources -->
-    <link href="https://fonts.googleapis.com/css2?family=Short+Stack&display=swap" rel="stylesheet">
-    <style id="doodleThemeStyle">
-        /* Doodle CSS - Notebook Paper Theme by chr15m */
-        .doodle-active {
-            font-family: 'Short Stack', cursive !important;
-            background-color: #F5F0E8 !important;
-            color: #3c3c3c !important;
-        }
-
-        /* Only apply hand-drawn font to text content, NOT icons */
-        .doodle-active body,
-        .doodle-active h1, .doodle-active h2, .doodle-active h3, .doodle-active h4, .doodle-active h5, .doodle-active h6,
-        .doodle-active p, .doodle-active span, .doodle-active div, .doodle-active a,
-        .doodle-active button, .doodle-active input, .doodle-active textarea, .doodle-active select,
-        .doodle-active label, .doodle-active li, .doodle-active td, .doodle-active th,
-        .doodle-active .card-title, .doodle-active .link-title, .doodle-active .ai-title,
-        .doodle-active .game-title, .doodle-active .source-name, .doodle-active .music-track-title,
-        .doodle-active .music-track-artist, .doodle-active .section-desc, .doodle-active .category-subtitle,
-        .doodle-active .update-item, .doodle-active .link-note, .doodle-active .source-desc,
-        .doodle-active .cloak-info h4, .doodle-active .cloak-info p,
-        .doodle-active .download-info h3, .doodle-active .download-info p,
-        .doodle-active .modal-title-info h2, .doodle-active .modal-meta,
-        .doodle-active .player-status, .doodle-active .search-info,
-        .doodle-active .music-player-info h3, .doodle-active .music-player-info p,
-        .doodle-active .music-time, .doodle-active .music-track-duration,
-        .doodle-active .secret-title, .doodle-active .secret-message {
-            font-family: 'Short Stack', cursive !important;
-        }
-
-        /* EXPLICITLY preserve remixicon for ALL icon elements */
-        .doodle-active [class^="ri-"],
-        .doodle-active [class*=" ri-"],
-        .doodle-active i,
-        .doodle-active .ri-search-line, .doodle-active .ri-home-4-line,
-        .doodle-active .ri-movie-2-line, .doodle-active .ri-tv-line,
-        .doodle-active .ri-gamepad-line, .doodle-active .ri-links-line,
-        .doodle-active .ri-music-2-line, .doodle-active .ri-brain-line,
-        .doodle-active .ri-settings-3-line, .doodle-active .ri-download-cloud-2-line,
-        .doodle-active .ri-close-line, .doodle-active .ri-refresh-line,
-        .doodle-active .ri-fullscreen-line, .doodle-active .ri-external-link-line,
-        .doodle-active .ri-list-radio, .doodle-active .ri-clapperboard-line,
-        .doodle-active .ri-link, .doodle-active .ri-vidicon-line,
-        .doodle-active .ri-film-line, .doodle-active .ri-star-fill,
-        .doodle-active .ri-calendar-line, .doodle-active .ri-play-circle-line,
-        .doodle-active .ri-error-warning-line, .doodle-active .ri-check-line,
-        .doodle-active .ri-pause-fill, .doodle-active .ri-play-fill,
-        .doodle-active .ri-skip-back-fill, .doodle-active .ri-skip-forward-fill,
-        .doodle-active .ri-album-fill, .doodle-active .ri-search-line,
-        .doodle-active .ri-volume-down-line, .doodle-active .ri-volume-up-line,
-        .doodle-active .ri-robot-2-line, .doodle-active .ri-robot-line,
-        .doodle-active .ri-shield-user-line, .doodle-active .ri-eye-line,
-        .doodle-active .ri-palette-line, .doodle-active .ri-edit-line,
-        .doodle-active .ri-google-fill, .doodle-active .ri-youtube-fill,
-        .doodle-active .ri-skull-line, .doodle-active .ri-flashlight-line,
-        .doodle-active .ri-global-line, .doodle-active .ri-folder-3-line,
-        .doodle-active .ri-archive-line, .doodle-active .ri-window-line,
-        .doodle-active .ri-gamepad-line, .doodle-active .ri-external-link-line,
-        .doodle-active .ri-link, .doodle-active .ri-check-line,
-        .doodle-active .ri-spy-line, .doodle-active .ri-brain-line,
-        .doodle-active .ri-music-2-line, .doodle-active .ri-settings-3-line,
-        .doodle-active .ri-home-4-line, .doodle-active .ri-movie-2-line,
-        .doodle-active .ri-tv-line, .doodle-active .ri-links-line,
-        .doodle-active .ri-download-cloud-line, .doodle-active .ri-download-cloud-2-line {
-            font-family: 'remixicon' !important;
-        }
-
-        /* Nav items keep Inter font */
-        .doodle-active .nav-item,
-        .doodle-active .nav-tooltip,
-        .doodle-active .side-action-btn {
-            font-family: 'Inter', sans-serif !important;
-        }
-
-        /* NOTEBOOK PAPER BACKGROUND */
-        .doodle-active .main-content {
-            background-color: #FFFFFF !important;
-            background-image: 
-                linear-gradient(#C8D4E0 1px, transparent 1px) !important;
-            background-size: 100% 32px !important;
-            background-position: 0 0 !important;
-        }
-
-        /* Red margin line - the vertical line separating nav from content */
-        .doodle-active .main-content::before {
-            content: '' !important;
-            position: absolute !important;
-            left: 80px !important;
-            top: 0 !important;
-            width: 2px !important;
-            height: 100% !important;
-            background: linear-gradient(to bottom, 
-                transparent 0%, 
-                #E74C3C 5%, 
-                #E74C3C 95%, 
-                transparent 100%) !important;
-            z-index: 50 !important;
-            pointer-events: none !important;
-        }
-
-        /* Content area transparent so lines show through */
-        .doodle-active .content-area {
-            background: transparent !important;
-            position: relative !important;
-            z-index: 1 !important;
-        }
-
-        /* Top bar - sits on top of lines */
-        .doodle-active .top-bar {
-            background: #FFFFFF !important;
-            border-bottom: 2px solid #3c3c3c !important;
-            border-image: none !important;
-            backdrop-filter: none !important;
-            position: relative !important;
-            z-index: 10 !important;
-        }
-
-        /* Nav sidebar - left margin area of notebook */
-        .doodle-active .nav-container {
-            background-color: #F5F0E8 !important;
-            border-right: none !important;
-            border-image: none !important;
-            position: relative !important;
-        }
-
-        /* Cards and containers with hand-drawn borders */
-        .doodle-active .content-card,
-        .doodle-active .game-card,
-        .doodle-active .link-card,
-        .doodle-active .ai-card,
-        .doodle-active .settings-card,
-        .doodle-active .source-item,
-        .doodle-active .music-track,
-        .doodle-active .download-option,
-        .doodle-active .cloak-option,
-        .doodle-active .search-box,
-        .doodle-active .modal-content,
-        .doodle-active .modal-header,
-        .doodle-active .player-controls,
-        .doodle-active .source-sidebar,
-        .doodle-active .source-header,
-        .doodle-active .music-player-container,
-        .doodle-active .music-player-header,
-        .doodle-active .music-player-body,
-        .doodle-active .top-btn,
-        .doodle-active .control-btn,
-        .doodle-active .modal-close,
-        .doodle-active .clear-search-btn,
-        .doodle-active .music-control-btn,
-        .doodle-active .music-search-btn,
-        .doodle-active .music-search-input,
-        .doodle-active .custom-cloak-input,
-        .doodle-active .music-volume-slider,
-        .doodle-active .music-progress-bar,
-        .doodle-active .secret-heart,
-        .doodle-active .version-badge,
-        .doodle-active .updates,
-        .doodle-active .KnownBugs,
-        .doodle-active .api-status,
-        .doodle-active .card-badges,
-        .doodle-active .card-badge,
-        .doodle-active .game-badge,
-        .doodle-active .download-icon,
-        .doodle-active .cloak-icon,
-        .doodle-active .music-player-art,
-        .doodle-active .music-track-number,
-        .doodle-active .music-track-play,
-        .doodle-active .modal-poster-thumb {
-            background-color: #FFFFFF !important;
-            color: #3c3c3c !important;
-            border-color: #3c3c3c !important;
-            border-style: solid !important;
-            border-width: 2px !important;
-            border-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMCIgaGVpZ2h0PSIzMCIgdmlld0JveD0iMCAwIDMwIDMwIj48cGF0aCBkPSJNMTAsMyBRMTUsMiAyMCwzIiBmaWxsPSJub25lIiBzdHJva2U9IiMzYzNjM2MiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNMTAsMjcgUTE1LDI4IDIwLDI3IiBmaWxsPSJub25lIiBzdHJva2U9IiMzYzNjM2MiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNMywxMCBRMiwxNSAzLDIwIiBmaWxsPSJub25lIiBzdHJva2U9IiMzYzNjM2MiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNMjcsMTAgUTI4LDE1IDI3LDIwIiBmaWxsPSJub25lIiBzdHJva2U9IiMzYzNjM2MiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNMywxMCBRMiw1IDMsMyBRNSwyIDEwLDMiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzNjM2MzNjYiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cGF0aCBkPSJNMTAsMyBRMTUsMiAyMCwzIiBmaWxsPSJub25lIiBzdHJva2U9IiMzYzNjM2MiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNMTAsMjcgUTE1LDI4IDIwLDI3IiBmaWxsPSJub25lIiBzdHJva2U9IiMzYzNjM2MiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNMywxMCBRMiwxNSAzLDIwIiBmaWxsPSJub25lIiBzdHJva2U9IiMzYzNjM2MiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNMjcsMTAgUTI4LDE1IDI3LDIwIiBmaWxsPSJub25lIiBzdHJva2U9IiMzYzNjM2MiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNMywxMCBRMiw1IDMsMyBRNSwyIDEwLDMiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzNjM2MzNjYiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L3N2Zz4=') 10 10 10 10 stretch stretch !important;
-            border-radius: 3px !important;
-            box-shadow: none !important;
-        }
-
-        /* Active/hover states */
-        .doodle-active .nav-item:hover,
-        .doodle-active .nav-item.active,
-        .doodle-active .source-item.active,
-        .doodle-active .source-item:hover,
-        .doodle-active .theme-option.active,
-        .doodle-active .cloak-option.active,
-        .doodle-active .music-track.active,
-        .doodle-active .music-track:hover,
-        .doodle-active .link-card:hover,
-        .doodle-active .ai-card:hover,
-        .doodle-active .content-card:hover,
-        .doodle-active .game-card:hover,
-        .doodle-active .download-option:hover,
-        .doodle-active .top-btn.primary,
-        .doodle-active .control-btn:hover,
-        .doodle-active .side-action-btn:hover,
-        .doodle-active .modal-close:hover,
-        .doodle-active .clear-search-btn:hover,
-        .doodle-active .music-control-btn:hover,
-        .doodle-active .music-search-btn:hover {
-            background-color: #FFF8F0 !important;
-            border-color: #3c3c3c !important;
-            transform: none !important;
-            box-shadow: none !important;
-        }
-
-        .doodle-active .top-btn.primary {
-            background: #3c3c3c !important;
-            color: #FFFFFF !important;
-        }
-
-        /* Text styling */
-        .doodle-active .section-header h2,
-        .doodle-active .category h3,
-        .doodle-active .settings-card h3,
-        .doodle-active .source-header h3,
-        .doodle-active .music-player-info h3,
-        .doodle-active .secret-title,
-        .doodle-active .download-header h2,
-        .doodle-active .modal-title-info h2 {
-            background: none !important;
-            -webkit-text-fill-color: #3c3c3c !important;
-            color: #3c3c3c !important;
-            font-family: 'Short Stack', cursive !important;
-        }
-
-        /* Badges */
-        .doodle-active .card-badge.rating,
-        .doodle-active .card-badge.bogge,
-        .doodle-active .card-badge.popular,
-        .doodle-active .game-badge.popular {
-            background: #3c3c3c !important;
-            color: #FFFFFF !important;
-            border-image: none !important;
-        }
-
-        /* Muted text */
-        .doodle-active .link-url,
-        .doodle-active .ai-url,
-        .doodle-active .category-subtitle,
-        .doodle-active .section-desc,
-        .doodle-active .card-meta,
-        .doodle-active .text-muted,
-        .doodle-active .source-desc,
-        .doodle-active .music-track-artist,
-        .doodle-active .music-track-duration,
-        .doodle-active .music-time,
-        .doodle-active .player-status,
-        .doodle-active .search-info,
-        .doodle-active .update-item,
-        .doodle-active .link-note,
-        .doodle-active .cloak-info p,
-        .doodle-active .download-info p,
-        .doodle-active .download-note,
-        .doodle-active .music-player-info p {
-            color: #6b6b6b !important;
-        }
-
-        /* Nav icons */
-        .doodle-active .nav-item i,
-        .doodle-active .nav-item.active i,
-        .doodle-active .nav-item:hover i {
-            color: #3c3c3c !important;
-            text-shadow: none !important;
-        }
-
-        /* Scrollbar */
-        .doodle-active .content-area::-webkit-scrollbar-track {
-            background: #F0EEE8 !important;
-        }
-        .doodle-active .content-area::-webkit-scrollbar-thumb {
-            background: #3c3c3c !important;
-            border-radius: 3px !important;
-        }
-
-        /* Particles */
-        .doodle-active .particle {
-            background: #3c3c3c !important;
-            box-shadow: none !important;
-        }
-
-        /* Loaders */
-        .doodle-active .iframe-loader,
-        .doodle-active .loading-spinner {
-            color: #3c3c3c !important;
-        }
-
-        /* Nav tooltip */
-        .doodle-active .nav-tooltip {
-            background: #FFFFFF !important;
-            border: 2px solid #3c3c3c !important;
-            color: #3c3c3c !important;
-            border-radius: 3px !important;
-        }
-
-        /* Player */
-        .doodle-active .player-frame,
-        .doodle-active #gameContainer {
-            background: #FFFFFF !important;
-        }
-
-        /* Modal overlay */
-        .doodle-active .modal-overlay {
-            background: rgba(245, 240, 232, 0.98) !important;
-        }
-
-        /* Secret modal */
-        .doodle-active .secret-heart {
-            color: #3c3c3c !important;
-        }
-        .doodle-active .secret-message {
-            background: none !important;
-            -webkit-text-fill-color: #3c3c3c !important;
-            color: #3c3c3c !important;
-        }
-
-        /* Version badge */
-        .doodle-active .version-badge {
-            background: #FFFFFF !important;
-            border: 2px solid #3c3c3c !important;
-            color: #3c3c3c !important;
-            animation: none !important;
-            box-shadow: none !important;
-        }
-
-        /* Updates/Known Bugs boxes */
-        .doodle-active .updates,
-        .doodle-active .KnownBugs {
-            background: #FFFFFF !important;
-            border: 2px solid #3c3c3c !important;
-            border-left-width: 2px !important;
-            backdrop-filter: none !important;
-        }
-        .doodle-active .updates h3,
-        .doodle-active .KnownBugs h3 {
-            color: #3c3c3c !important;
-        }
-
-        /* Subcategory */
-        .doodle-active .subcategory {
-            color: #3c3c3c !important;
-            border-left-color: #3c3c3c !important;
-        }
-
-        /* Inputs */
-        .doodle-active input,
-        .doodle-active textarea,
-        .doodle-active select {
-            background-color: unset !important;
-            font-family: 'Short Stack', cursive !important;
-            color: #3c3c3c !important;
-        }
-
-        /* Focus states */
-        .doodle-active .search-box:focus-within,
-        .doodle-active .music-search-input:focus {
-            border-color: #3c3c3c !important;
-            box-shadow: none !important;
-        }
-
-        /* Theme options */
-        .doodle-active .theme-option {
-            border-width: 2px !important;
-        }
-        .doodle-active .theme-option.active::after {
-            color: #3c3c3c !important;
-            text-shadow: none !important;
-        }
-
-        /* Links */
-        .doodle-active a {
-            color: #1c1c1c !important;
-            font-weight: bold !important;
-        }
-
-        /* Nav items specific */
-        .doodle-active .nav-item {
-            background-color: transparent !important;
-            border: 2px solid transparent !important;
-            border-image: none !important;
-            border-radius: 14px !important;
-            font-family: 'Inter', sans-serif !important;
-        }
-        .doodle-active .nav-item:hover,
-        .doodle-active .nav-item.active {
-            background-color: #FFF8F0 !important;
-            border-color: #3c3c3c !important;
-            border-image: none !important;
-            transform: translateX(4px) !important;
-        }
-        .doodle-active .nav-item.active::before {
-            background: #E74C3C !important;
-            border-image: none !important;
-        }
-        .doodle-active .nav-logo {
-            background-color: #FFFFFF !important;
-            border: 2px solid #3c3c3c !important;
-            border-image: none !important;
-            box-shadow: none !important;
-        }
-        .doodle-active .nav-logo:hover {
-            box-shadow: none !important;
-            transform: scale(1.1) rotate(5deg) !important;
-        }
-        .doodle-active .side-action-btn {
-            background-color: transparent !important;
-            border: 2px solid #3c3c3c !important;
-            border-image: none !important;
-            color: #3c3c3c !important;
-            font-family: 'Inter', sans-serif !important;
-        }
-        .doodle-active .side-action-btn:hover {
-            background-color: #FFF8F0 !important;
-            border-color: #3c3c3c !important;
-            color: #3c3c3c !important;
-            transform: rotate(180deg) !important;
-        }
-
-        /* Active indicator line - red like notebook margin */
-        .doodle-active .nav-item.active::before {
-            background: #E74C3C !important;
-        }
-
-        /* Doodle HR */
-        .doodle-active .doodle-hr {
-            border-style: solid !important;
-            border-width: 0px 3px 6px 3px !important;
-            border-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMCIgaGVpZ2h0PSIzMCIgdmlld0JveD0iMCAwIDMwIDMwIj48cGF0aCBkPSJNMywyNCBRMTUsMjMgMjcsMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzNjM2MzNjIiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNMCwyNCBRMS41LDIzIDMsMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzNjM2MzNjYiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNMjcsMjQgUTI4LjUsMjMgMzAsMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzNjM2MzNjYiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L3N2Zz4=') 0 3 6 3 stretch stretch !important;
-        }
-    </style>
-</head>
-                <body>
-    <!-- Loading Screen -->
-    <div id="loadingScreen" style="position:fixed;top:0;left:0;width:100%;height:100%;background:var(--darker);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.5s ease;">
-        <div id="loadingLogo" style="width:120px;height:120px;margin-bottom:30px;position:relative;">
-            <img src="https://boredaf.synergize.co/BoredAF.png" alt="BoredAF" style="width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 20px var(--primary));animation:pulse-logo 1.5s ease-in-out infinite;">
-        </div>
-        <div id="loadingText" style="font-family:'Orbitron',monospace;font-size:1.5rem;color:var(--primary);letter-spacing:4px;text-transform:uppercase;animation:glow-text 1.5s ease-in-out infinite alternate;">Loading BoredAF</div>
-        <div id="loadingBarContainer" style="width:200px;height:4px;background:var(--card-bg);border-radius:2px;margin-top:20px;overflow:hidden;border:1px solid var(--border);">
-            <div id="loadingBar" style="width:0%;height:100%;background:var(--gradient-1);border-radius:2px;transition:width 0.3s ease;"></div>
-        </div>
-    </div>
-    <style>
-        @keyframes pulse-logo {
-            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 20px var(--primary)); }
-            50% { transform: scale(1.05); filter: drop-shadow(0 0 40px var(--primary)); }
-        }
-        @keyframes glow-text {
-            from { text-shadow: 0 0 10px var(--primary); opacity: 0.7; }
-            to { text-shadow: 0 0 30px var(--primary), 0 0 60px var(--accent-purple); opacity: 1; }
-        }
-        /* Doodle theme loading screen */
-        .doodle-loading {
-            background: #F5F0E8 !important;
-            font-family: 'Short Stack', cursive !important;
-        }
-        .doodle-loading #loadingLogo img {
-            filter: none !important;
-            animation: doodle-bounce 1s ease-in-out infinite !important;
-            border: 3px solid #3c3c3c !important;
-            border-radius: 12px !important;
-            padding: 8px !important;
-            background: #FFFFFF !important;
-        }
-        @keyframes doodle-bounce {
-            0%, 100% { transform: rotate(-3deg) scale(1); }
-            50% { transform: rotate(3deg) scale(1.05); }
-        }
-        .doodle-loading #loadingText {
-            font-family: 'Short Stack', cursive !important;
-            color: #3c3c3c !important;
-            text-shadow: none !important;
-            animation: doodle-wiggle 2s ease-in-out infinite !important;
-            letter-spacing: 2px !important;
-            text-transform: none !important;
-        }
-        @keyframes doodle-wiggle {
-            0%, 100% { transform: rotate(-1deg); }
-            25% { transform: rotate(1deg); }
-            50% { transform: rotate(-1deg); }
-            75% { transform: rotate(1deg); }
-        }
-        .doodle-loading #loadingBarContainer {
-            background: #FFFFFF !important;
-            border: 2px solid #3c3c3c !important;
-            border-radius: 3px !important;
-            height: 8px !important;
-        }
-        .doodle-loading #loadingBar {
-            background: #3c3c3c !important;
-            border-radius: 2px !important;
-        }
-    </style>
-                    <div class="loading" id="loading">Loading site...</div>
-                    <iframe src="${url}" onload="document.getElementById('loading').style.display='none'"></iframe>
-                </body>
-                </html>
-            `;
+            var blankPageContent = `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>about:blank</title>
+<style>*{margin:0;padding:0;box-sizing:border-box}body{width:100vw;height:100vh;overflow:hidden;background:#0f0f1a}</style>
+</head><body>
+<div id="loading" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#0f0f1a;display:flex;align-items:center;justify-content:center;color:#00d4ff;font-family:sans-serif;z-index:9999">Loading site...</div>
+<iframe src="${url}" style="width:100%;height:100%;border:none" onload="document.getElementById('loading').style.display='none'"></iframe>
+</body></html>`;
             
             var blob = new Blob([blankPageContent], { type: 'text/html' });
             var blobUrl = URL.createObjectURL(blob);
